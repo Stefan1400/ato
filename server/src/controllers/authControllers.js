@@ -74,17 +74,27 @@ const loginController = async (req, res, next) => {
       );
 
       res.cookie('jwt', token, {
-
-      })
-
-      return res.status(200).json(
-         
-      );
-
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+         maxAge: 7 * 24 * 60 * 60 * 1000
+      });
       
-   }
-}
+      const { password_hash, ...userData } = emailExists;
+
+      return res.status(200).json({
+         message: 'user successfully logged in',
+         user: userData
+      });
+
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: err });
+      next();
+   };
+};
 
 module.exports = {
    registerController,
+   loginController,
 };
