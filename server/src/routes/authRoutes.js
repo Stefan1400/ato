@@ -5,17 +5,17 @@ const { registerController, loginController } = require('../controllers/authCont
 const authMiddleware = require('../middleware/auth');
 const requireRole = require('../middleware/requireRole');
 const validate = require('../middleware/validateRequest');
-const authSchemas = require('../schemas/authSchemas');
+const { registerSchema, loginSchema } = require('../schemas/authSchemas');
 
 router.post(
    '/register', 
-   validate(authSchemas),
+   validate(registerSchema),
    registerController
 );
 
 router.post(
    '/login',
-   validate(authSchemas),
+   validate(loginSchema),
    loginController
 )
 
