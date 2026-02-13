@@ -3,8 +3,10 @@ const pool = require('./config/db');
 const apiLimiter = require('./middleware/rateLimiter');
 const cors = require('cors');
 const corsOptions = require('./middleware/corsOptions');
+const notFound = require('./middleware/notFound');
 
 const authRoutes = require('./routes/authRoutes');
+
 
 const app = express();
 app.use(express.json());
@@ -21,5 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/users', authRoutes);
+
+app.use(notFound);
 
 module.exports = app;
