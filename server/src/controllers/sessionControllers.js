@@ -4,9 +4,6 @@ const addSessionController = async (req, res, next) => {
    
    const sessionStarted = new Date(req.body.session_started);
    const sessionEnded = new Date(req.body.session_ended);
-
-   console.log(typeof sessionStarted, sessionStarted);
-   
    
    const userId = req.user.id;
 
@@ -37,7 +34,7 @@ const addSessionController = async (req, res, next) => {
 const getSessionsController = async (req, res, next) => {
    const date = new Date(req.query.date);
    const userId = req.user.id;
-   
+
    try {
 
       if (!date) {
@@ -75,7 +72,47 @@ const getSessionsController = async (req, res, next) => {
    };
 };
 
+const editSessionController = async (req, res, next) => {
+   const newSessionStart = new Date(req.body.new_session_started);
+   const newSessionEnd = new Date(req.body.new_session_ended);
+   const userId = req.user.id;
+   const { sessionId } = req.params;
+
+   try {
+
+      if (!sessionId) {
+         return res.status(400).json({ message: 'Session required to edit' });
+      };
+
+      if (isNaN(newSessionStart.getTime() || newSessionEnd.getTime())) {
+         return res.status(400).json({ message: "Invalid date format" });
+      };
+
+      if (newSessionEnd <= newSessionStart) {
+         return res.status(400).json({ message: 'Session end must be after session start' });
+      };
+
+      const editedSession = await Session.editSession(userId, sessionId, newSessionStart, newSessionEnd);
+
+      if (editedSession.length === 0) {
+         return res.status(404).json({ message: 'Session not found' });
+      };
+
+      return res.status(200).json({
+         message: 'Session successfully edited',
+         editedSession: editedSession
+      });
+      
+      
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+      next(err);
+   };
+};
+
 module.exports = {
    addSessionController,
-   getSessionsController
+   getSessionsController,
+   editSessionController,
 }

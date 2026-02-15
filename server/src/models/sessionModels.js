@@ -25,7 +25,23 @@ const getSessionsByDate = async (userId, start, end) => {
    return result.rows || null;
 };
 
+const editSession = async (userId, sessionId, newSessionStart, newSessionEnd) => {
+   
+   const result = await db.query(
+      `
+      UPDATE sessions
+      SET session_started = $1, session_ended = $2
+      WHERE user_id = $3 AND id = $4
+      RETURNING *
+      `,
+      [newSessionStart, newSessionEnd, userId, sessionId]
+   );
+
+   return result.rows[0] || null;
+};
+
 module.exports = {
    addSession,
    getSessionsByDate,
+   editSession,
 };
