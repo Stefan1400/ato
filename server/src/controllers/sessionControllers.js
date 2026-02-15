@@ -111,8 +111,36 @@ const editSessionController = async (req, res, next) => {
    };
 };
 
+const deleteSessionController = async (req, res, next) => {
+   const userId = req.user.id;
+   const { sessionId } = req.params; 
+
+   try {
+
+      if (!sessionId) {
+         return res.status(400).json({ message: 'Session required to delete.'});
+      };
+
+      const deletedSession = await Session.deleteSession(userId, sessionId);
+
+      if (deletedSession.length === 0) {
+         return res.status(404).json({ message: 'Session not found' });
+      };
+
+      return res.status(200).json({
+         message: 'Session successfully deleted',
+         deletedSession: deletedSession
+      });
+
+   } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+   };
+};
+
 module.exports = {
    addSessionController,
    getSessionsController,
    editSessionController,
-}
+   deleteSessionController,
+};
