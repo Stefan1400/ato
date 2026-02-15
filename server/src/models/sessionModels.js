@@ -13,7 +13,19 @@ const addSession = async (userId, sessionStarted, sessionEnded) => {
    return result.rows[0] || null;
 };
 
+const getSessionsByDate = async (userId, start, end) => {
+   const result = await db.query(
+      `
+      SELECT * FROM sessions 
+      WHERE user_id = $1 
+      AND session_started BETWEEN $2 AND $3`,
+      [userId, start, end]
+   );
+
+   return result.rows || null;
+};
+
 module.exports = {
    addSession,
-
-}
+   getSessionsByDate,
+};

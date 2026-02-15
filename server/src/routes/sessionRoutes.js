@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addSessionController } = require('../controllers/sessionControllers');
+const { addSessionController, getSessionsController } = require('../controllers/sessionControllers');
 
 const authMiddleware = require('../middleware/auth');
 const validateRequest = require('../middleware/validateRequest');
@@ -12,6 +12,12 @@ router.post(
    authMiddleware,
    validateRequest(addSessionSchema),
    addSessionController
+);
+
+router.get(
+   '/',
+   authMiddleware,
+   getSessionsController
 );
 
 module.exports = router;
