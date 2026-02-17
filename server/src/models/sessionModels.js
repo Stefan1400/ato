@@ -13,13 +13,15 @@ const addSession = async (userId, sessionStarted, sessionEnded) => {
    return result.rows[0] || null;
 };
 
-const getSessionsByDate = async (userId, start, end) => {
+const getSessionsByDate = async (userId, dayStart, dayEnd) => {
    const result = await db.query(
       `
       SELECT * FROM sessions 
       WHERE user_id = $1 
-      AND session_started BETWEEN $2 AND $3`,
-      [userId, start, end]
+         AND session_started < $2
+         AND session_ended > $3
+      `,
+      [userId, dayEnd, dayStart]
    );
 
    return result.rows || null;
@@ -53,9 +55,24 @@ const deleteSession = async (userId, sessionId) => {
    return result.rows[0] || null;
 };
 
+const checkSessionExists = async (userId, sessionStarted, sessionEnded) => {
+   const result = await db.query(
+      `
+      SELECT * FROM sessions
+      WHERE user_id = $1 
+         AND session_started < $2
+         AND session_ended > $3
+      `,
+      [userId, sessionEnded, sessionStarted]
+   );
+
+   return result.rows[0];
+};
+
 module.exports = {
    addSession,
    getSessionsByDate,
    editSession,
    deleteSession,
+   checkSessionExists
 };

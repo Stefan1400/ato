@@ -10,7 +10,13 @@ const addSessionController = async (req, res, next) => {
    try {
 
       if (!userId || !sessionStarted || !sessionEnded) {
-         return res.status(401).json({ message: 'Invalid data. Please try again' });
+         return res.status(400).json({ message: 'Invalid data. Please try again' });
+      };
+
+      const sessionAlreadyExists = await Session.checkSessionExists(userId, sessionStarted, sessionEnded);
+
+      if (sessionAlreadyExists) {
+         return res.status(400).json({ message: 'Session already exists.' });
       };
 
       const addedSession = await Session.addSession(userId, sessionStarted, sessionEnded);
@@ -25,8 +31,6 @@ const addSessionController = async (req, res, next) => {
       });
 
    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err });
       next(err);
    };
 };
@@ -42,13 +46,13 @@ const getSessionsController = async (req, res, next) => {
       };
 
       const start = new Date(date);
+      start.setHours(0, 0, 0, 0);
       const end = new Date(date);
+      end.setHours(23, 59, 59, 999);
 
       if (isNaN(start.getTime())) {
          return res.status(400).json({ message: "Invalid date format" });
       }
-
-      end.setUTCHours(23, 59, 59, 999);
 
       const fetchedSessions = await Session.getSessionsByDate(
          userId, 
@@ -66,8 +70,6 @@ const getSessionsController = async (req, res, next) => {
       });
 
    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: err });
       next(err);
    };
 };
@@ -105,8 +107,6 @@ const editSessionController = async (req, res, next) => {
       
       
    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: err });
       next(err);
    };
 };
@@ -133,8 +133,7 @@ const deleteSessionController = async (req, res, next) => {
       });
 
    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: err });
+      next(err);
    };
 };
 
