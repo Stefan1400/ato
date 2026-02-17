@@ -9,18 +9,20 @@ const registerController = async (req, res, next) => {
    try {
 
       if (!email || !password) {
-         return res.status(400).json({ message: 'Email or password does not exist'});
+         return res.status(401).json({ message: 'Email and password are required'});
       };
 
-      const userExists = await User.checkEmailExists(email);
+      const normalizedEmail = email.toLowerCase().trim();
+
+      const userExists = await User.checkEmailExists(normalizedEmail);
 
       if (userExists) {
-         return res.status(401).json({ message: 'User already exists' });
+         return res.status(409).json({ message: 'Invalid credentials' });
       };
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const createdUser = await User.registerUser(email, hashedPassword);
+      const createdUser = await User.registerUser(normalizedEmail, hashedPassword);
 
       if (!createdUser) {
          return res.status(409).json({ message: 'There was a problem creating an account' });
@@ -29,7 +31,7 @@ const registerController = async (req, res, next) => {
       const token = jwt.sign(
          { id: createdUser.id, email: createdUser.email },
          process.env.JWT_SECRET,
-         { 'expiresIn': '7d' }
+         { expiresIn: '7d' }
       );
 
       res.cookie('jwt', token, {
@@ -47,9 +49,7 @@ const registerController = async (req, res, next) => {
       });
 
    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err });
-      next();
+      next(err);
    };
 };
 
@@ -57,20 +57,29 @@ const loginController = async (req, res, next) => {
    const { email, password } = req.body;
 
    try {
+
       if (!email || !password) {
-         return res.status(401).json({ message: 'Email or password does not exist '});
+         return res.status(400).json({ message: 'Email and password are required'});
       };
 
-      const emailExists = await User.checkEmailExists(email);
+      const normalizedEmail = email.toLowerCase().trim();
+
+      const emailExists = await User.checkEmailExists(normalizedEmail);
 
       if (!emailExists) {
-         return res.status(404).json({ message: 'Email does not exist' });
+         return res.status(404).json({ message: 'Invalid credentials' });
+      };
+
+      const isMatch = await bcrypt.compare(password, emailExists.password_hash);
+
+      if (!isMatch) {
+         return res.status(400).json({ message: 'Invalid credentials'});
       };
 
       const token = jwt.sign(
          { id: emailExists.id, email: emailExists.email },
          process.env.JWT_SECRET,
-         { 'expiresIn': '7d' }
+         { expiresIn: '7d' }
       );
 
       res.cookie('jwt', token, {
@@ -88,9 +97,7 @@ const loginController = async (req, res, next) => {
       });
 
    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: err });
-      next();
+      next(err);
    };
 };
 
