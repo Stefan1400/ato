@@ -13,13 +13,20 @@ const addSessionController = async (req, res, next) => {
          return res.status(400).json({ message: 'Invalid data. Please try again' });
       };
 
-      const sessionAlreadyExists = await Session.checkSessionExists(userId, sessionStarted, sessionEnded);
+      const sessionStartedLocal = new Date(req.body.session_started);
+      const sessionEndedLocal   = new Date(req.body.session_ended);
+
+      if (isNaN(sessionStartedLocal.getTime()) || isNaN(sessionEndedLocal.getTime())) {
+         return res.status(400).json({ message: 'Invalid date format' });
+      };
+
+      const sessionAlreadyExists = await Session.checkSessionExists(userId, sessionStartedLocal, sessionEndedLocal);
 
       if (sessionAlreadyExists) {
          return res.status(400).json({ message: 'Session already exists.' });
       };
 
-      const addedSession = await Session.addSession(userId, sessionStarted, sessionEnded);
+      const addedSession = await Session.addSession(userId, sessionStartedLocal, sessionEndedLocal);
 
       if (!addedSession) {
          return res.status(409).json({ message: 'There was a problem adding session. Please try again. '});
@@ -36,42 +43,33 @@ const addSessionController = async (req, res, next) => {
 };
 
 const getSessionsController = async (req, res, next) => {
-   const date = new Date(req.query.date);
-   const userId = req.user.id;
+  const { date } = req.query;
+  const userId = req.user.id;
 
-   try {
+  try {
+    if (!date) return res.status(400).json({ message: 'Date is required.' });
 
-      if (!date) {
-         return res.status(400).json({ message: 'Date is required.' });
-      };
+    const userDate = new Date(date);
 
-      const start = new Date(date);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(date);
-      end.setHours(23, 59, 59, 999);
+    const dayStartUTC = new Date(userDate);
+    dayStartUTC.setUTCHours(0, 0, 0, 0);
 
-      if (isNaN(start.getTime())) {
-         return res.status(400).json({ message: "Invalid date format" });
-      }
+    const dayEndUTC = new Date(userDate);
+    dayEndUTC.setUTCHours(23, 59, 59, 999);
 
-      const fetchedSessions = await Session.getSessionsByDate(
-         userId, 
-         start,
-         end
-      );
+    const fetchedSessions = await Session.getSessionsByDate(userId, dayStartUTC, dayEndUTC);
 
-      if (fetchedSessions.length === 0) {
-         return res.status(404).json({ message: `Sessions not found for date: ${date}` });
-      };
+    if (!fetchedSessions || fetchedSessions.length === 0) {
+      return res.status(404).json({ message: `Sessions not found for date: ${date}` });
+    }
 
-      return res.status(200).json({
-         message: 'sessions successfully fetched',
-         fetchedSessions: fetchedSessions
-      });
-
-   } catch (err) {
-      next(err);
-   };
+    return res.status(200).json({
+      message: 'sessions successfully fetched',
+      fetchedSessions,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const editSessionController = async (req, res, next) => {
@@ -86,7 +84,7 @@ const editSessionController = async (req, res, next) => {
          return res.status(400).json({ message: 'Session required to edit' });
       };
 
-      if (isNaN(newSessionStart.getTime() || newSessionEnd.getTime())) {
+      if (isNaN(newSessionStart.getTime() || isNaN(newSessionEnd.getTime()))) {
          return res.status(400).json({ message: "Invalid date format" });
       };
 
