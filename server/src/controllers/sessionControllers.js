@@ -136,7 +136,7 @@ const deleteSessionController = async (req, res, next) => {
 
       const deletedSession = await Session.deleteSession(userId, sessionId);
 
-      if (deletedSession.length === 0) {
+      if (!deletedSession) {
          return res.status(404).json({ message: 'Session not found' });
       };
 
