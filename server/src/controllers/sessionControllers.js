@@ -84,17 +84,33 @@ const editSessionController = async (req, res, next) => {
          return res.status(400).json({ message: 'Session required to edit' });
       };
 
-      if (isNaN(newSessionStart.getTime() || isNaN(newSessionEnd.getTime()))) {
-         return res.status(400).json({ message: "Invalid date format" });
+      if (
+         isNaN(newSessionStart.getTime()) || 
+         isNaN(newSessionEnd.getTime())
+      ) {
+         return res.status(400).json({ message: 'Invalid date format' });
       };
 
       if (newSessionEnd <= newSessionStart) {
          return res.status(400).json({ message: 'Session end must be after session start' });
       };
 
+      const sessionAlreadyExists = await Session.getSessionById(userId, sessionId);
+
+      if (!sessionAlreadyExists) {
+         return res.status(404).json({ message: 'Session does not exist.' });
+      };
+      
+      if (
+         sessionAlreadyExists.session_started.getTime() === newSessionStart.getTime() || 
+         sessionAlreadyExists.session_ended.getTime() === newSessionEnd.getTime()
+      ) {
+         return res.status(409).json({ message: 'Cannot edit the same time' });
+      };
+
       const editedSession = await Session.editSession(userId, sessionId, newSessionStart, newSessionEnd);
 
-      if (editedSession.length === 0) {
+      if (!editedSession) {
          return res.status(404).json({ message: 'Session not found' });
       };
 
@@ -102,7 +118,6 @@ const editSessionController = async (req, res, next) => {
          message: 'Session successfully edited',
          editedSession: editedSession
       });
-      
       
    } catch (err) {
       next(err);

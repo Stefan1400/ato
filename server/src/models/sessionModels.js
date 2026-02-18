@@ -39,7 +39,7 @@ const editSession = async (userId, sessionId, newSessionStart, newSessionEnd) =>
       [newSessionStart, newSessionEnd, userId, sessionId]
    );
 
-   return result.rows[0] || null;
+   return result.rows[0];
 };
 
 const deleteSession = async (userId, sessionId) => {
@@ -69,10 +69,23 @@ const checkSessionExists = async (userId, sessionStarted, sessionEnded) => {
    return result.rows[0];
 };
 
+const getSessionById = async (userId, sessionId) => {
+   const result = await db.query(
+      `
+      SELECT * FROM sessions
+      WHERE user_id = $1 AND id = $2
+      `,
+      [userId, sessionId]
+   );
+
+   return result.rows[0];
+};
+
 module.exports = {
    addSession,
    getSessionsByDate,
    editSession,
    deleteSession,
-   checkSessionExists
+   checkSessionExists,
+   getSessionById,
 };
