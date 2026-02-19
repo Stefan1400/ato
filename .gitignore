@@ -4,7 +4,7 @@ server/node_modules/
 
 # environment
 .env
-.env.*
+server/.env
 
 # logs
 logs
