@@ -135,8 +135,40 @@ const logoutController = async (req, res, next) => {
    };
 };
 
+const deleteUserController = async (req, res, next) => {
+   const userId = req.user.id;
+   const email = req.user.email;
+
+   try {
+
+      if (!userId) {
+         return res.status(401).json({ messsage: 'Invalid Credentials' });
+      };
+
+      const userAlreadyExists = await User.checkEmailExists(email);
+
+      if (!userAlreadyExists) {
+         return res.status(404).json({ message: 'User doesnt exist' });
+      };
+
+      const deletedUser = await User.deleteUser(userId);
+
+      if (deletedUser.length === 0) {
+         return res.status(400).json({ message: 'User deletion unsuccessful' });
+      };
+
+      return res.status(200).json({
+         message: 'User successfully deleted',
+      });
+
+   } catch (err) {
+      next(err);
+   };
+};
+
 module.exports = {
    registerController,
    loginController,
    logoutController,
+   deleteUserController,
 };

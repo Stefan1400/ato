@@ -26,7 +26,21 @@ const registerUser = async (email, hashedPassword) => {
    }
 };
 
+const deleteUser = async (userId) => {
+   const result = await db.query(
+      `
+      DELETE FROM users
+      WHERE id = $1
+      RETURNING *
+      `,
+      [userId]
+   );
+
+   return result.rows;
+};
+
 module.exports = {
    checkEmailExists,
    registerUser,
+   deleteUser,
 };
