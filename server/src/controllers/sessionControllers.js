@@ -102,7 +102,7 @@ const editSessionController = async (req, res, next) => {
       };
       
       if (
-         sessionAlreadyExists.session_started.getTime() === newSessionStart.getTime() || 
+         sessionAlreadyExists.session_started.getTime() === newSessionStart.getTime() &&
          sessionAlreadyExists.session_ended.getTime() === newSessionEnd.getTime()
       ) {
          return res.status(409).json({ message: 'Cannot edit the same time' });

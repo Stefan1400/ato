@@ -1,6 +1,8 @@
 const User = require('../models/authModels');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { generateAccessToken, generateRefreshToken } = require('../utils/tokens');
+const { saveRefreshToken } = require('../models/refreshTokenModel');
 
 const registerController = async (req, res, next) => {
    
@@ -28,13 +30,13 @@ const registerController = async (req, res, next) => {
          return res.status(409).json({ message: 'There was a problem creating an account' });
       };
 
-      const token = jwt.sign(
-         { id: createdUser.id, email: createdUser.email },
-         process.env.JWT_SECRET,
-         { expiresIn: '7d' }
-      );
+      const accessToken = generateAccessToken(createdUser);
+      const refreshToken = generateRefreshToken();
 
-      res.cookie('jwt', token, {
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await saveRefreshToken(createdUser.id, refreshToken, expiresAt);
+
+      res.cookie('refreshToken', refreshToken, {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
          sameSite: 'Strict',
@@ -46,6 +48,7 @@ const registerController = async (req, res, next) => {
       return res.status(201).json({
          message: 'user successfully created',
          user: userData,
+         accessToken
       });
 
    } catch (err) {
@@ -76,13 +79,13 @@ const loginController = async (req, res, next) => {
          return res.status(400).json({ message: 'Invalid credentials'});
       };
 
-      const token = jwt.sign(
-         { id: emailExists.id, email: emailExists.email },
-         process.env.JWT_SECRET,
-         { expiresIn: '7d' }
-      );
+      const accessToken = generateAccessToken(emailExists);
+      const refreshToken = generateRefreshToken();
 
-      res.cookie('jwt', token, {
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      await saveRefreshToken(emailExists.id, refreshToken, expiresAt);
+
+      res.cookie('refreshToken', refreshToken, {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
          sameSite: 'Strict',
@@ -93,7 +96,8 @@ const loginController = async (req, res, next) => {
 
       return res.status(200).json({
          message: 'user successfully logged in',
-         user: userData
+         user: userData,
+         accessToken
       });
 
    } catch (err) {
