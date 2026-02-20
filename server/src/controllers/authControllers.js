@@ -1,8 +1,7 @@
 const User = require('../models/authModels');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokens');
-const { saveRefreshToken } = require('../models/refreshTokenModel');
+const { saveRefreshToken, findRefreshToken, revokeRefreshToken } = require('../models/refreshTokenModel');
 
 const registerController = async (req, res, next) => {
    
@@ -105,7 +104,39 @@ const loginController = async (req, res, next) => {
    };
 };
 
+const logoutController = async (req, res, next) => {
+   try {
+      const recievedRefreshToken = req.cookies?.refreshToken;
+
+      if (!recievedRefreshToken) {
+         return res.status(401).json({ message: 'Refresh token is required' });
+      };
+
+      const refreshTokenExists = await findRefreshToken(recievedRefreshToken);
+
+      if (!refreshTokenExists) {
+         return res.status(401).json({ message: 'Refresh token is required' });
+      };
+
+      await revokeRefreshToken(recievedRefreshToken);
+
+      res.clearCookie('refreshToken', {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+      });
+
+      return res.status(200).json({
+         message: 'Successfully logged out'
+      });
+
+   } catch (err) {
+      next(err);
+   };
+};
+
 module.exports = {
    registerController,
    loginController,
+   logoutController,
 };
