@@ -10,4 +10,9 @@ const loginSchema = z.object({
   password: z.string().min(6).max(72),
 });
 
-module.exports = { registerSchema, loginSchema };
+const changePasswordSchema = z.object({
+  current_password: z.string().min(6).max(72),
+  new_password: z.string().min(6).max(72)
+});
+
+module.exports = { registerSchema, loginSchema, changePasswordSchema };

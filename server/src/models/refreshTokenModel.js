@@ -50,8 +50,23 @@ const revokeRefreshToken = async (token) => {
    return result.rows[0];
 };
 
+const revokeAllRefreshTokens = async (userId) => {
+   const result = await db.query(
+      `
+      UPDATE refresh_tokens
+      SET revoked = true
+      WHERE user_id = $1
+      RETURNING *
+      `,
+      [userId]
+   );
+
+   return result.rowCount || null;
+};
+
 module.exports = {
    saveRefreshToken,
    findRefreshToken,
-   revokeRefreshToken
+   revokeRefreshToken,
+   revokeAllRefreshTokens
 };

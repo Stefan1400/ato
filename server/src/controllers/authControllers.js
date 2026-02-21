@@ -1,7 +1,7 @@
 const User = require('../models/authModels');
 const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokens');
-const { saveRefreshToken, findRefreshToken, revokeRefreshToken } = require('../models/refreshTokenModel');
+const { saveRefreshToken, findRefreshToken, revokeRefreshToken, revokeAllRefreshTokens } = require('../models/refreshTokenModel');
 
 const registerController = async (req, res, next) => {
    
@@ -166,9 +166,56 @@ const deleteUserController = async (req, res, next) => {
    };
 };
 
+const changePasswordController = async (req, res, next) => {
+   const userId = req.user.id;
+   const currentPassword = req.body.current_password;
+   const newPassword = req.body.new_password;
+   
+   try {
+
+      if (!currentPassword || !newPassword) {
+         return res.status(400).json({ message: 'Invalid credentials' });
+      };
+
+      if (currentPassword === newPassword) {
+         return res.status(400).json({ message: 'Please submit a new password' });
+      };
+
+      const userExists = await User.findUserById(userId);
+
+      if (!userExists) {
+         return res.status(400).json({ message: 'Invalid request' });
+      };
+
+      const passwordMatches = await bcrypt.compare(currentPassword, userExists.password_hash);
+
+      if (!passwordMatches) {
+         return res.status(400).json({ message: 'Invalid credentials' });
+      };
+
+      const newHashedPassword = await bcrypt.hash(newPassword, 10);
+
+      const changedPassword = await User.changePassword(userId, newHashedPassword);
+
+      if (!changedPassword) {
+         return res.status(409).json({ message: 'Password change unsuccessful' });
+      };
+
+      await revokeAllRefreshTokens(userId);
+
+      return res.status(200).json({
+         message: 'Password Successfully changed'
+      });
+
+   } catch (err) {
+      next(err);
+   };
+};
+
 module.exports = {
    registerController,
    loginController,
    logoutController,
    deleteUserController,
+   changePasswordController,
 };

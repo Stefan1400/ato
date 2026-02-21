@@ -39,8 +39,36 @@ const deleteUser = async (userId) => {
    return result.rows;
 };
 
+const changePassword = async (userId, newPassword) => {
+   const result = await db.query(
+      `
+      UPDATE users
+      SET password_hash = $2
+      WHERE id = $1
+      RETURNING *
+      `,
+      [userId, newPassword]
+   );
+
+   return result.rows[0];
+};
+
+const findUserById = async (userId) => {
+   const result = await db.query(
+      `
+      SELECT * FROM users
+      WHERE id = $1
+      `,
+      [userId]
+   );
+
+   return result.rows[0] || null; 
+};
+
 module.exports = {
    checkEmailExists,
    registerUser,
    deleteUser,
+   changePassword,
+   findUserById,
 };
