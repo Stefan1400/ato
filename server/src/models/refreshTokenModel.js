@@ -1,10 +1,8 @@
 const db = require('../config/db');
-const bcrypt = require('bcrypt');
-
-const SALT_ROUNDS = 10;
+const { hashValue, compareValue } = require('../utils/hash');
 
 const saveRefreshToken = async (userId, token, expiresAt) => {
-   const hashedToken = await bcrypt.hash(token, SALT_ROUNDS);
+   const hashedToken = await hashValue(token);
    const result = await db.query(
       `
       INSERT INTO refresh_tokens (user_id, token, expires_at)
@@ -26,7 +24,7 @@ const findRefreshToken = async (token) => {
    );
 
    for (const row of result.rows) {
-      const match = await bcrypt.compare(token, row.token);
+      const match = await compareValue(token, row.token);
       if (match) return row;
    };
 
