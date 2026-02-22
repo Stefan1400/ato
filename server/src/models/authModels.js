@@ -36,7 +36,7 @@ const deleteUser = async (userId) => {
       [userId]
    );
 
-   return result.rows;
+   return result.rows[0] || null;
 };
 
 const changePassword = async (userId, newPassword) => {

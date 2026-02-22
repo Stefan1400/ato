@@ -137,25 +137,20 @@ const logoutController = async (req, res, next) => {
 
 const deleteUserController = async (req, res, next) => {
    const userId = req.user.id;
-   const email = req.user.email;
 
    try {
 
-      if (!userId) {
-         return res.status(401).json({ messsage: 'Invalid Credentials' });
-      };
-
-      const userAlreadyExists = await User.checkEmailExists(email);
-
-      if (!userAlreadyExists) {
-         return res.status(404).json({ message: 'User doesnt exist' });
-      };
-
       const deletedUser = await User.deleteUser(userId);
 
-      if (deletedUser.length === 0) {
+      if (!deletedUser) {
          return res.status(400).json({ message: 'User deletion unsuccessful' });
       };
+
+      res.clearCookie('refreshToken', {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+      });
 
       return res.status(200).json({
          message: 'User successfully deleted',
@@ -202,6 +197,12 @@ const changePasswordController = async (req, res, next) => {
       };
 
       await revokeAllRefreshTokens(userId);
+
+      res.clearCookie('refreshToken', {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+      });
 
       return res.status(200).json({
          message: 'Password Successfully changed'
