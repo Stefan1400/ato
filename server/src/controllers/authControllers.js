@@ -1,7 +1,7 @@
 const User = require('../models/authModels');
-const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokens');
 const { saveRefreshToken, findRefreshToken, revokeRefreshToken, revokeAllRefreshTokens } = require('../models/refreshTokenModel');
+const { hashValue, compareValue } = require('../utils/hash');
 
 const registerController = async (req, res, next) => {
    
@@ -21,7 +21,7 @@ const registerController = async (req, res, next) => {
          return res.status(409).json({ message: 'Invalid credentials' });
       };
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await hashValue(password);
 
       const createdUser = await User.registerUser(normalizedEmail, hashedPassword);
 
@@ -72,7 +72,7 @@ const loginController = async (req, res, next) => {
          return res.status(404).json({ message: 'Invalid credentials' });
       };
 
-      const isMatch = await bcrypt.compare(password, emailExists.password_hash);
+      const isMatch = await compareValue(password, emailExists.password_hash);
 
       if (!isMatch) {
          return res.status(400).json({ message: 'Invalid credentials'});
@@ -182,13 +182,13 @@ const changePasswordController = async (req, res, next) => {
          return res.status(400).json({ message: 'Invalid request' });
       };
 
-      const passwordMatches = await bcrypt.compare(currentPassword, userExists.password_hash);
+      const passwordMatches = await compareValue(currentPassword, userExists.password_hash);
 
       if (!passwordMatches) {
          return res.status(400).json({ message: 'Invalid credentials' });
       };
 
-      const newHashedPassword = await bcrypt.hash(newPassword, 10);
+      const newHashedPassword = await hashValue(newPassword, 10);
 
       const changedPassword = await User.changePassword(userId, newHashedPassword);
 
