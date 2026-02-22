@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const pool = require('./config/db');
 const apiLimiter = require('./middleware/rateLimiter');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -15,10 +14,6 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(apiLimiter);
-
-app.get('/health', (req, res) => {
-   res.send('welcome to server backend');
-});
 
 app.use((req, res, next) => {
   console.log(req.method, req.path);

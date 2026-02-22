@@ -1,5 +1,3 @@
-require('dotenv').config({ path: '../.env' });
-
 const PORT = 5000;
 
 const app = require('./app.js');
