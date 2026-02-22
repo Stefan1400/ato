@@ -5,7 +5,8 @@ const {
    loginController, 
    logoutController, 
    deleteUserController, 
-   changePasswordController 
+   changePasswordController,
+   getUserController,
 } = require('../controllers/authControllers');
 const validate = require('../middleware/validateRequest');
 const { registerSchema, loginSchema, changePasswordSchema } = require('../schemas/authSchemas');
@@ -52,6 +53,12 @@ router.patch(
    authMiddleware,
    validateRequest(changePasswordSchema),
    changePasswordController
+);
+
+router.get(
+   '/',
+   authMiddleware,
+   getUserController
 );
 
 module.exports = router;

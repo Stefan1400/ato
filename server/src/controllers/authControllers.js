@@ -212,10 +212,34 @@ const changePasswordController = async (req, res, next) => {
    };
 };
 
+const getUserController = async (req, res, next) => {
+   const userId = req.user.id;
+
+   try {
+
+      const fetchedUser = await User.findUserById(userId);
+
+      if (!fetchedUser) {
+         return res.status(404).json({ message: 'Invalid request' });
+      };
+
+      const { password_hash, ...userData } = fetchedUser;
+
+      return res.status(200).json({
+         message: 'Successfully fetched User',
+         fetchedUser: userData
+      });
+
+   } catch (err) {
+      next(err);
+   };
+};
+
 module.exports = {
    registerController,
    loginController,
    logoutController,
    deleteUserController,
    changePasswordController,
+   getUserController
 };
