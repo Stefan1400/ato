@@ -9,6 +9,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 const authRoutes = require('./routes/authRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use('/api/users', authRoutes);
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
