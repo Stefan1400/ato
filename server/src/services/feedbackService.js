@@ -1,6 +1,6 @@
-const formatDuration = require("../utils/formatDuration");
 const Session = require('../models/sessionModels');
 const analyzeSessions = require('../utils/analyzeSessions');
+const buildDay = require("../utils/buildDay");
 
 const feedbackService = async (userId) => {
 
@@ -46,58 +46,46 @@ const feedbackService = async (userId) => {
       endOfTodayUTC
    );
 
-   //CALCULATING ANALYTICS
+   // calculating analytics
 
    const yesterdayAnalytics = analyzeSessions(yesterdaySessions);
    const todayAnalytics = analyzeSessions(todaySessions);
+
+   // storing analytics into their own object; converting to minutes
+
+   const yesterday = buildDay(yesterdayAnalytics);
+   const today = buildDay(todayAnalytics);
    
-
-   
-   // CONVERTING ALL ANALYTICS TO MINUTES
-
-   //yesterday
-   const yesterdayTotalMinutes = formatDuration(yesterdayAnalytics.total);
-   const yesterdayLongestMinutes = formatDuration(yesterdayAnalytics.longest);
-   const yesterdayAverageMinutes = formatDuration(yesterdayAnalytics.average);
-
-   //today
-   const todayTotalMinutes = formatDuration(todayAnalytics.total);
-   const todayLongestMinutes = formatDuration(todayAnalytics.longest);
-   const todayAverageMinutes = formatDuration(todayAnalytics.average);
-   
-
-   let response;
    
    // both sessions from Y & T
-   if (yesterdayAnalytics.count > 0 && todayAnalytics.count > 0) {
-      if (todayAnalytics.total > yesterdayAnalytics.total) {
-         response = `Your total study time today is ${todayTotalMinutes} compared to yesterday's study time (${yesterdayTotalMinutes}). Heck yeah!`
-      } else if (todayAnalytics.longest > yesterdayAnalytics.longest) {
-         response = `Your longest session today is ${todayLongestMinutes} compared to yesterday's longest session (${yesterdayLongestMinutes}). Awesome job!`
-      } else if (todayAnalytics.average > yesterdayAnalytics.average) {
-         response = `Your average session time today is ${todayAverageMinutes} compared to yesterday's average session time (${yesterdayAverageMinutes}). Great work!`
+   if (yesterday.count > 0 && today.count > 0) {
+      if (today.totalMs > yesterday.totalMs) {
+         return `Your total focused time today is ${today.total} compared to yesterday's focused time (${yesterday.total}). Heck yeah!`
+      } else if (today.totalMs === yesterday.totalMs) {
+         return `That's a first. Your total focused time today (${today.total}) is tied with your total focused time yesterday (${yesterday.total}). Wanna beat it?`;
+      } else if (today.longestMs > yesterday.longestMs) {
+         return `Your longest session today is ${today.longest} compared to yesterday's longest session (${yesterday.longest}). Awesome job!`
+      } else if (today.averageMs > yesterday.averageMs) {
+         return `Your average session time today is ${today.average} compared to yesterday's average session time (${yesterday.average}). Great work!`
       } else {
-         response = `Your total study time today is ${todayTotalMinutes}. Keep it up!`;
+         return `Your total focused time today is ${today.total}. Keep it up!`;
       }
    } 
    
    // sessions from T but none from Y
-   else if (yesterdayAnalytics.count === 0 && todayAnalytics.count > 0) {
-      response = `Your total study time today is ${todayTotalMinutes}. Let's keep it up!`;
-   } 
+   else if (yesterday.count === 0 && today.count > 0) {
+      return `Your total focused time today is ${today.total}. Let's keep it up!`;
+   }
    
    // sessions from Y but none from T
-   else if (yesterdayAnalytics.count > 0 && todayAnalytics.count === 0) {
-      response = `Your total study time yesterday was ${yesterdayTotalMinutes}. Let's hit it even harder today!`;
+   else if (yesterday.count > 0 && today.count === 0) {
+      return `Your total focused time yesterday was ${yesterday.total}. Let's hit it even harder today!`;
    } 
    
    // no sessions from either Y or T
    else {
-      response = `Let's hit it hard today!`;
+      return `Let's hit it hard today!`;
    };
-
-   return response;
-
 };
 
 module.exports = feedbackService;
