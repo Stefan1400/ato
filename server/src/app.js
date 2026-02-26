@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const corsOptions = require('./middleware/corsOptions');
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
+const helmet = require('helmet');
 
 const authRoutes = require('./routes/authRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
@@ -13,6 +14,7 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 
 const app = express();
 app.use(express.json());
+app.use(helmet());
 app.use(cors(corsOptions));
 app.use(apiLimiter);
 
