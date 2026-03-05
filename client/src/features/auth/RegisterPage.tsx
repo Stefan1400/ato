@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import type { Errors } from './auth.types'; 
 
 function RegisterPage() {
   
@@ -6,18 +7,8 @@ function RegisterPage() {
    const [currentEmail, setCurrentEmail] = useState('');
    const [currentPassword, setCurrentPassword] = useState('');
    const [termsChecked, setTermsChecked] = useState(false);
-   
-   type Errors = {
-      email: string,
-      password: string,
-      terms: string
-   };
-   
-   const [errors, setErrors] = useState<Errors>({
-      email: '',
-      password: '',
-      terms: ''
-   });
+
+   const [errors, setErrors] = useState<Errors>({});
 
    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -47,17 +38,6 @@ function RegisterPage() {
       };
 
       setErrors(newErrors);
-   }
-
-
-   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCurrentEmail(value);
-   };
-
-   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setCurrentPassword(value);
    };
   
    return (
@@ -67,7 +47,7 @@ function RegisterPage() {
             <h1 className='text-4xl font-normal text-white text-center mt-27 mb-0'>Sign up</h1>
          </header>
 
-         <form onSubmit={handleRegister} className='flex w-screen flex-col justify-between items-center gap-3 mt-4'>
+         <form onSubmit={handleRegister} noValidate className='flex w-screen flex-col justify-between items-center gap-3 mt-4'>
             <div className="w-screen flex flex-col mt-2 mb-2 items-center">
                <label 
                   className='text-white flex flex-col gap-3 p-3 text-sm' 
@@ -78,7 +58,9 @@ function RegisterPage() {
                      type="email"
                      placeholder='email' 
                      value={currentEmail}
-                     onChange={handleEmailChange}
+                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                        setCurrentEmail(e.target.value)
+                     }
                   />
                   {errors.email && (
                      <span className="text-xs font-extralight text-red-500">{errors.email}</span>
@@ -95,7 +77,9 @@ function RegisterPage() {
                         type={passwordHidden ? 'password' : 'text'}
                         placeholder='password'
                         value={currentPassword}
-                        onChange={handlePasswordChange}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                           setCurrentPassword(e.target.value)
+                        }
                      />
                      {passwordHidden && (
                         <svg 
@@ -131,7 +115,11 @@ function RegisterPage() {
             </div>
             <div className="flex flex-col mb-4">
                <div className="flex items-center gap-2 self-center mb-3">
-                  <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTermsChecked(e.target.checked)} checked={termsChecked} className="accent-red-700" type="checkbox" />
+                  
+                  <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                     setTermsChecked(e.target.checked)
+                  } checked={termsChecked} className="accent-red-700" type="checkbox" />
+                  
                   <span className="font-light text-sm">I agree to the <a className="text-[#D60000]" href="#">Terms</a> and <a className="text-[#D60000]" href="#">Privacy Policy</a></span>
                </div>
                {errors.terms && (
