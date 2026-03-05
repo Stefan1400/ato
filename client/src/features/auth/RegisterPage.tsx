@@ -1,10 +1,54 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 
 function RegisterPage() {
   
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
    const [currentPassword, setCurrentPassword] = useState('');
+   const [termsChecked, setTermsChecked] = useState(false);
+   
+   type Errors = {
+      email: string,
+      password: string,
+      terms: string
+   };
+   
+   const [errors, setErrors] = useState<Errors>({
+      email: '',
+      password: '',
+      terms: ''
+   });
+
+   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const newErrors = {
+         email: '',
+         password: '',
+         terms: ''
+      };
+
+      if (!currentEmail) {
+         newErrors.email = 'Email is required';
+      } else if (!EMAIL_REGEX.test(currentEmail)) {
+         newErrors.email = 'Please enter a valid email address';
+      };
+
+      if (!currentPassword) {
+         newErrors.password = 'Password is required';
+      } else if (currentPassword.length < 8 || currentPassword.length > 64) {
+         newErrors.password = 'Password must be 8-64 characters'
+      }
+
+      if (!termsChecked) {
+         newErrors.terms = 'You must accept the terms and conditions';
+      };
+
+      setErrors(newErrors);
+   }
+
 
    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -20,30 +64,34 @@ function RegisterPage() {
    <div className='w-screen h-screen bg-[#151515]'>
       <main className='text-white w-screen h-screen flex p-4 flex-col items-center gap-10'>
          <header className=''>
-            <h1 className='text-4xl font-normal text-white text-center mt-23 mb-0'>Sign up</h1>
+            <h1 className='text-4xl font-normal text-white text-center mt-27 mb-0'>Sign up</h1>
          </header>
 
-         <form className='flex w-screen flex-col justify-between items-center gap-3 mt-4' action="#">
+         <form onSubmit={handleRegister} className='flex w-screen flex-col justify-between items-center gap-3 mt-4'>
             <div className="w-screen flex flex-col mt-2 mb-2 items-center">
                <label 
-                  className='text-white flex flex-col gap-3 p-3' 
-                  htmlFor="username">Email
+                  className='text-white flex flex-col gap-3 p-3 text-sm' 
+                  htmlFor="email">Email
 
                   <input 
-                     className='border-2 border-[#3C3C3C] rounded-xs px-2 h-[35px] w-[285px]' 
-                     type="text"
+                     className={`${errors.email ? 'border-red-700' : 'border-[#3C3C3C]'} border-2 border-[#3C3C3C] rounded-xs px-2 h-[35px] w-[285px]`} 
+                     type="email"
                      placeholder='email' 
                      value={currentEmail}
                      onChange={handleEmailChange}
                   />
+                  {errors.email && (
+                     <span className="text-xs font-extralight text-red-500">{errors.email}</span>
+                  )}
                </label>
+               
                <label 
-                  className='text-white flex flex-col gap-3 p-3 relative' 
+                  className='text-white flex flex-col gap-3 p-3 relative text-sm' 
                   htmlFor="password">Password
                   
                   <div className="relative w-[285px]">
                      <input 
-                        className="border-2 border-[#3C3C3C] rounded-xs h-[35px] w-[285px] pr-10 pl-2" 
+                        className={`${errors.password ? 'border-red-700' : 'border-[#3C3C3C]'} border-2 border-[#3C3C3C] rounded-xs h-[35px] w-[285px] pr-10 pl-2`} 
                         type={passwordHidden ? 'password' : 'text'}
                         placeholder='password'
                         value={currentPassword}
@@ -76,19 +124,26 @@ function RegisterPage() {
                         </svg>
                      )}
                   </div>
+                  {errors.password && (
+                     <span className="text-xs font-extralight text-red-500">{errors.password}</span>
+                  )}
                </label>
             </div>
-            <div className="flex items-center gap-2 self-center mb-3">
-               <input className="accent-transparent" type="checkbox" />
-               <span className="font-light text-sm">I agree to the <a className="text-[#D60000]" href="#">Terms</a> and <a className="text-[#D60000]" href="#">Privacy Policy</a></span>
+            <div className="flex flex-col mb-4">
+               <div className="flex items-center gap-2 self-center mb-3">
+                  <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTermsChecked(e.target.checked)} checked={termsChecked} className="accent-red-700" type="checkbox" />
+                  <span className="font-light text-sm">I agree to the <a className="text-[#D60000]" href="#">Terms</a> and <a className="text-[#D60000]" href="#">Privacy Policy</a></span>
+               </div>
+               {errors.terms && (
+                  <span className="text-xs font-extralight text-red-500">{errors.terms}</span>
+               )}
             </div>
-
-            <button className="w-[285px] h-[32px] bg-[#D60000]" type='submit'>Sign up</button>
+            <button type="submit" className="w-[285px] h-[32px] bg-[#D60000]">Sign up</button>
          </form>
-         <p className="font-light text-sm">Already have an account? <span className="underline underline-offset-2">Sign in</span></p>
+         <p className="font-light text-sm">Already have an account? <span className="underline underline-offset-2 text-[#D60000]">Sign in</span></p>
       </main>
    </div>
   )
 }
 
-export default RegisterPage
+export default RegisterPage;
