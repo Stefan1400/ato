@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import type { Errors } from './auth.types'; 
+import type { Errors } from './auth.types';
+import { useLogin } from "./useAuth"; 
 
 function LoginPage() {
+
+   const loginMutation = useLogin();
   
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
@@ -11,7 +14,7 @@ function LoginPage() {
 
    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       const newErrors = {
@@ -31,7 +34,20 @@ function LoginPage() {
          newErrors.password = 'Password must be 8-64 characters'
       };
 
-      setErrors(newErrors);
+      const hasErrors = Object.values(newErrors).some(Boolean);
+
+      if (hasErrors) {
+         setErrors(newErrors);
+         return;
+      };
+
+      loginMutation.mutate({
+         email: currentEmail,
+         password: currentPassword
+      });
+
+      setCurrentEmail('');
+      setCurrentPassword('');
    };
   
    return (
@@ -41,7 +57,7 @@ function LoginPage() {
             <h1 className='text-4xl font-normal text-white text-center mt-27 mb-0'>Sign in</h1>
          </header>
 
-         <form onSubmit={handleRegister} noValidate className='flex w-screen flex-col justify-between items-center gap-3 mt-4'>
+         <form onSubmit={handleLogin} noValidate className='flex w-screen flex-col justify-between items-center gap-3 mt-4'>
             <div className="w-screen flex flex-col mt-2 mb-2 items-center">
                <label 
                   className='text-white flex flex-col gap-3 p-3 text-sm' 

@@ -42,8 +42,6 @@ function RegisterPage() {
       
       const hasErrors = Object.values(newErrors).some(Boolean)
       
-      console.log('hasErrors:', hasErrors);
-      
       if (hasErrors) {
          setErrors(newErrors);
          return;
