@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import type { Errors } from './auth.types'; 
+import { useRegister } from "./useAuth";
 
 function RegisterPage() {
+
+   const registerMutation = useRegister();
   
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
@@ -36,8 +39,24 @@ function RegisterPage() {
       if (!termsChecked) {
          newErrors.terms = 'You must accept the terms and conditions';
       };
+      
+      const hasErrors = Object.values(newErrors).some(Boolean)
+      
+      console.log('hasErrors:', hasErrors);
+      
+      if (hasErrors) {
+         setErrors(newErrors);
+         return;
+      };
 
-      setErrors(newErrors);
+      registerMutation.mutate({
+         email: currentEmail,
+         password: currentPassword
+      });
+
+      setCurrentEmail('');
+      setCurrentPassword('');
+      setTermsChecked(false);
    };
   
    return (
