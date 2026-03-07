@@ -6,8 +6,9 @@ export default function App() {
   return (
     <div className="">
       <Navbar />
-      <RegisterPage />
-      {/* <LoginPage /> */}
+      
+      {/* <RegisterPage /> */}
+      <LoginPage />
     </div>
   );
 };
