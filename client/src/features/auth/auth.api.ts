@@ -9,6 +9,6 @@ export function registerUser(data: RegisterRequest): Promise<AuthResponse> {
 
 export function loginUser(data: LoginRequest): Promise<AuthResponse> {
    const response = api<AuthResponse>("/users/login", "POST", data);
-
+   
    return response;
 };

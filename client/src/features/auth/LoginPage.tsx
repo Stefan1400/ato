@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import type { Errors } from './auth.types';
 import { useLogin } from "./useAuth"; 
+import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
 
 function LoginPage() {
 
    const loginMutation = useLogin();
+   const { setUser } = useContext(AuthContext) as AuthContextType;
   
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
@@ -44,10 +46,19 @@ function LoginPage() {
       loginMutation.mutate({
          email: currentEmail,
          password: currentPassword
+      },
+      {
+         onSuccess: (response) => {
+            setUser(response.user);
+            setCurrentEmail('');
+            setCurrentPassword('');
+            setErrors(prev =>
+               Object.fromEntries(
+                  Object.keys(prev).map(key => [key, ""])
+               )
+            );
+         }
       });
-
-      setCurrentEmail('');
-      setCurrentPassword('');
    };
   
    return (

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import type { Errors } from './auth.types'; 
 import { useRegister } from "./useAuth";
+import { AuthContext } from "../../app/AuthProvider";
+import type { AuthContextType } from "../../app/AuthProvider";
 
 function RegisterPage() {
 
    const registerMutation = useRegister();
+   const { setUser } = useContext(AuthContext) as AuthContextType;
   
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
@@ -49,12 +52,22 @@ function RegisterPage() {
 
       registerMutation.mutate({
          email: currentEmail,
-         password: currentPassword
-      });
-
-      setCurrentEmail('');
-      setCurrentPassword('');
-      setTermsChecked(false);
+         password: currentPassword,
+      },
+      {
+         onSuccess: (response) => {
+            setUser(response.user);
+            setCurrentEmail('');
+            setCurrentPassword('');
+            setTermsChecked(false);
+            setErrors(prev =>
+               Object.fromEntries(
+                  Object.keys(prev).map(key => [key, ""])
+               )
+            );
+         }
+      } 
+   );
    };
   
    return (
