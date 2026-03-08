@@ -6,7 +6,7 @@ interface navbarProps {
 function Navbar({ toggleMenu, menuOpen }: navbarProps) {
 
    return (
-   <nav className='fixed left-0 top-0 w-screen h-16 px-6 text-white z-1000'>
+   <nav className='fixed left-0 top-0 w-screen h-16 px-6 text-white z-1000 border-b border-[#2E2E2E]'>
       <ul className='w-full h-full flex justify-between items-center border-none'>
          <li className={`flex gap-6 items-center`}>
             {!menuOpen && (
