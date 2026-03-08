@@ -3,6 +3,7 @@ import type { Errors } from './auth.types';
 import { useRegister } from "./useAuth";
 import { AuthContext } from "../../app/AuthProvider";
 import type { AuthContextType } from "../../app/AuthProvider";
+import { Link } from "react-router-dom";
 
 function RegisterPage() {
 
@@ -158,7 +159,7 @@ function RegisterPage() {
             </div>
             <button type="submit" className="w-[285px] h-[32px] bg-[#D60000]">Sign up</button>
          </form>
-         <p className="font-light text-sm">Already have an account? <span className="underline underline-offset-2 text-[#D60000]">Sign in</span></p>
+         <p className="font-light text-sm">Already have an account? <Link to="/login" className="underline underline-offset-2 text-[#D60000]">Sign in</Link></p>
       </main>
    </div>
   )

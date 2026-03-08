@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import type { Errors } from './auth.types';
 import { useLogin } from "./useAuth"; 
 import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
 
@@ -136,7 +137,7 @@ function LoginPage() {
             </div>
             <button type="submit" className="w-[285px] h-[32px] bg-[#D60000]">Sign in</button>
          </form>
-         <p className="font-light text-sm">Don't have an account? <span className="underline underline-offset-2 text-[#D60000]">Sign up</span></p>
+         <p className="font-light text-sm">Don't have an account? <Link to="/signup" className="underline underline-offset-2 text-[#D60000]">Sign up</Link></p>
       </main>
    </div>
   )
