@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface navbarProps {
    toggleMenu: () => void;
    menuOpen: boolean;
@@ -10,7 +12,9 @@ function Navbar({ toggleMenu, menuOpen }: navbarProps) {
       <ul className='w-full h-full flex justify-between items-center border-none'>
          <li className={`flex gap-6 items-center`}>
             {!menuOpen && (
-               <h1 className='text-[1.1rem] font-medium'>ato</h1>
+               <h1 className='text-[1.1rem] font-medium'>
+                  <Link to='/'>ato</Link>
+               </h1>
             )}
 
             {menuOpen && (
