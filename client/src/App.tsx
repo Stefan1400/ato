@@ -3,6 +3,7 @@ import LoginPage from "./features/auth/LoginPage";
 import Navbar from "./components/Navbar";
 import MenuDropdown from "./components/MenuDropdown";
 import { useState } from "react";
+import { AppRouter } from "./app/router";
 
 export default function App() {
   
@@ -23,7 +24,9 @@ export default function App() {
         <MenuDropdown />
       )}
       {/* <RegisterPage /> */}
-      <LoginPage />
+      {/* <LoginPage /> */}
+
+      <AppRouter />
     </div>
   );
 };
