@@ -9,7 +9,7 @@ function SessionTimer() {
    const intervalRef = useRef<number | null>(null);
 
    function resetTimer() {
-      setInterval(() => {
+      setTimeout(() => {
          setTimerStatus('default');
          setTime(0);
       }, 3000);
@@ -41,6 +41,7 @@ function SessionTimer() {
    };
 
    function handleClick() {
+      
       setTimerStatus(prev => {
          if (prev === 'default') {
             startTimer();
