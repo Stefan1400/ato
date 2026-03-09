@@ -8,6 +8,13 @@ function SessionTimer() {
    const [time, setTime] = useState(0);
    const intervalRef = useRef<number | null>(null);
 
+   function resetTimer() {
+      setInterval(() => {
+         setTimerStatus('default');
+         setTime(0);
+      }, 3000);
+   };
+
    function startTimer() {
       if (intervalRef.current) return;
 
@@ -20,6 +27,7 @@ function SessionTimer() {
       if (intervalRef.current !== null) {
          clearInterval(intervalRef.current);
          intervalRef.current = null;
+         resetTimer();
       };
    };
 
