@@ -1,0 +1,1 @@
+export type timerStatus = 'default' | 'ongoing' | 'finished';
