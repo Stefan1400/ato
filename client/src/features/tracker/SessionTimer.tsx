@@ -1,22 +1,59 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { timerStatus } from "./tracker.types";
 
 function SessionTimer() {
    
    const [timerStatus, setTimerStatus] = useState<timerStatus>('default');
-   
 
+   const [time, setTime] = useState(0);
+   const intervalRef = useRef<number | null>(null);
+
+   function startTimer() {
+      if (intervalRef.current) return;
+
+      intervalRef.current = setInterval(() => {
+         setTime(t => t + 1);
+      }, 1000);
+   };
+
+   function stopTimer() {
+      if (intervalRef.current !== null) {
+         clearInterval(intervalRef.current);
+         intervalRef.current = null;
+      };
+   };
+
+   function formatTime(totalSeconds: number) {
+      const seconds = totalSeconds % 60;
+      const minutes = Math.floor(totalSeconds / 60) % 60;
+      const hours = Math.floor(totalSeconds / 3600);
+      const pad = (num: number) => String(num).padStart(2, '0');
+
+      return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+   };
+
+   function handleClick() {
+      setTimerStatus(prev => {
+         if (prev === 'default') {
+            startTimer();
+            return 'ongoing';
+         } else {
+            stopTimer();
+            return 'finished';
+         }
+      });
+   };
 
    return (
-    <div className={`${timerStatus === 'finished' ? 'bg-[#0AD000] text-black' : timerStatus === 'ongoing' ? 'bg-[#D00000] text-white' : 'bg-[#1F1F1F] text-white'} w-full h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center p-3 rounded-md`}>
+    <div className={`${timerStatus === 'finished' ? 'bg-[#0AD000] text-white' : timerStatus === 'ongoing' ? 'bg-[#D00000] text-white' : 'bg-[#1F1F1F] text-white'} w-full h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center p-3 rounded-md`}>
       <div className='flex flex-col items-start justify-between gap-2'>
          <h2 className="font-normal">Start your session</h2>
-         <span className="text-3xl font-semibold">00:00</span>
-         <h3 className={`font-normal ${timerStatus === 'finished' ? 'text-black' : 'text-[#7E7E7E]'}`}>{timerStatus === 'finished' ? 'session ended' : 'current session'}</h3>
+         <span onClick={startTimer} className="text-3xl font-semibold">{formatTime(time)}</span>
+         <h3 className={`font-normal ${timerStatus === 'default' ? 'text-[#7E7E7E]' : 'text-white'}`}>{timerStatus === 'finished' ? 'session ended' : 'current session'}</h3>
       </div>
 
       {timerStatus !== 'finished' && (
-         <button onClick={timerStatus === 'default' ? () => setTimerStatus('ongoing') : timerStatus === 'ongoing' ? () => setTimerStatus('finished') : undefined} className="p-3.5">
+         <button onClick={handleClick} className="p-3.5">
             <div className='p-6 bg-[#161616] rounded-full border-3 border-[#2A2A2A]'>
                {timerStatus === 'default' && (
                   <svg width="20" height="21" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
