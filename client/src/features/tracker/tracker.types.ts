@@ -1,5 +1,3 @@
-export type timerStatus = 'default' | 'ongoing' | 'finished';
-
 export type addSessionRequest = {
    session_started: Date | null;
    session_ended: Date | null;
