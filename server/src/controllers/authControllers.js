@@ -42,6 +42,13 @@ const registerController = async (req, res, next) => {
          maxAge: 7 * 24 * 60 * 60 * 1000
       });
 
+      res.cookie('accessToken', accessToken, {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+         maxAge: 7 * 24 * 60 * 60 * 1000
+      });
+
       const { password_hash, ...userData } = createdUser;
 
       return res.status(201).json({
@@ -85,6 +92,13 @@ const loginController = async (req, res, next) => {
       await saveRefreshToken(emailExists.id, refreshToken, expiresAt);
 
       res.cookie('refreshToken', refreshToken, {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+         maxAge: 7 * 24 * 60 * 60 * 1000
+      });
+
+      res.cookie('accessToken', accessToken, {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
          sameSite: 'Strict',

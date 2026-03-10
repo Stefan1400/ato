@@ -1,12 +1,20 @@
 import { useState, useRef } from "react";
-import type { timerStatus } from "./tracker.types";
+import type { timerStatus, addSessionTypes } from "./tracker.types";
+import { useAddSession } from "./useSessionTimer";
 
 function SessionTimer() {
-   
+
+
+   const addSessionMutation = useAddSession();
    const [timerStatus, setTimerStatus] = useState<timerStatus>('default');
 
    const [time, setTime] = useState(0);
    const intervalRef = useRef<number | null>(null);
+
+   const sessionRef = useRef<addSessionTypes>({
+      session_started: null,
+      session_ended: null
+   });
 
    function resetTimer() {
       setTimeout(() => {
@@ -16,6 +24,9 @@ function SessionTimer() {
    };
 
    function startTimer() {
+      const started_at = new Date()
+      sessionRef.current.session_started = started_at;
+      
       if (intervalRef.current) return;
 
       intervalRef.current = setInterval(() => {
@@ -28,6 +39,12 @@ function SessionTimer() {
          clearInterval(intervalRef.current);
          intervalRef.current = null;
          resetTimer();
+
+         const ended_at = new Date();
+
+         sessionRef.current.session_ended = ended_at;
+
+         handleAddSession();
       };
    };
 
@@ -41,7 +58,7 @@ function SessionTimer() {
    };
 
    function handleClick() {
-      
+            
       setTimerStatus(prev => {
          if (prev === 'default') {
             startTimer();
@@ -52,6 +69,24 @@ function SessionTimer() {
          }
       });
    };
+
+   function handleAddSession() {
+
+      addSessionMutation.mutate({
+         session_started: sessionRef.current.session_started,
+         session_ended: sessionRef.current.session_ended
+      },
+      {
+         onSuccess: () => {
+            sessionRef.current = {
+               session_started: null,
+               session_ended: null
+            }
+         }
+      }
+   )
+   };
+
 
    return (
     <div className={`${timerStatus === 'finished' ? 'bg-[#04724D] text-white' : timerStatus === 'ongoing' ? 'bg-[#FF9F1C] text-black' : 'bg-[#1F1F1F] text-white'} w-full h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-[96px] pl-3`}>
