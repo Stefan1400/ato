@@ -5,11 +5,13 @@ export const sessionTimerStyles: Record<UIStates, StateStyles> = {
    default: {
       container: 'bg-[#1F1F1F] text-white',
       header: { styles: 'font-semibold text-md', text: 'Ready' },
+      subHeader: { styles: 'font-md text-xs', text: "Start when you're ready" },
       btnVisible: true
    },
    ongoing: {
       container: 'bg-[#FF9F1C] text-black',
       header: { styles: 'font-semibold text-md', text: 'Focus Session' },
+      subHeader: { styles: 'font-md text-xs', text: "Stay Focused" },
       btnVisible: true
    },
    success: {
