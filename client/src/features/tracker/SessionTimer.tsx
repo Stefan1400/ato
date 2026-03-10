@@ -1,9 +1,9 @@
 import { useState, useRef } from "react";
-import type { timerStatus, addSessionTypes } from "./tracker.types";
+import type { timerStatus, addSessionTypes, UIStates } from "./tracker.types";
 import { useAddSession } from "./useSessionTimer";
+import { sessionTimerStyles } from "./SessionTimer.styles";
 
 function SessionTimer() {
-
 
    const addSessionMutation = useAddSession();
    const [timerStatus, setTimerStatus] = useState<timerStatus>('default');
@@ -87,12 +87,24 @@ function SessionTimer() {
    )
    };
 
+   let uiState: UIStates = 'default';
+
+   if (addSessionMutation.isSuccess) {
+      uiState = 'success';
+   } else if (addSessionMutation.isPending) {
+      uiState = 'pending';
+   } else if (addSessionMutation.isError) {
+      uiState = 'error';
+   };
+
+   const style = sessionTimerStyles[uiState];
 
    return (
-    <div className={`${timerStatus === 'finished' ? 'bg-[#04724D] text-white' : timerStatus === 'ongoing' ? 'bg-[#FF9F1C] text-black' : 'bg-[#1F1F1F] text-white'} w-full h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-[96px] pl-3`}>
+    <div className={`${style.container} w-full h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-[96px] pl-3`}>
       <div className='flex flex-col items-start'>
-         <h2 className="font-semibold text-md">{timerStatus === 'ongoing' ? 'Focus Session' : timerStatus === 'finished' ? 'Session Complete' : 'Ready'}</h2>
+         <h2 className="font-semibold text-md">{style.header.text}</h2>
          <span onClick={startTimer} className="text-[2rem] font-bold">{formatTime(time)}</span>
+         <h3 className={style.subHeader?.styles}>{style.subHeader?.text}</h3>
       </div>
 
       {timerStatus !== 'finished' && (

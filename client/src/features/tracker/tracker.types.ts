@@ -22,3 +22,5 @@ export type addedSession = {
 export type sessionResponse = {
    addedSession: addedSession;
 };
+
+export type UIStates = 'default' | 'ongoing' | 'success' | 'pending' | 'error';
