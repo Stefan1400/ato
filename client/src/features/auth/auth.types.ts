@@ -23,3 +23,8 @@ export type AuthResponse = {
    user: User;
    token: string;
 };
+
+export type getUserRequest = {
+   id: number;
+   email: string;
+};

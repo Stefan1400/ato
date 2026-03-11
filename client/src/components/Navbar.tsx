@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { AuthContext } from "../app/AuthProvider";
+import { useContext } from "react";
 
 interface navbarProps {
    toggleMenu: () => void;
@@ -6,6 +8,14 @@ interface navbarProps {
 };
 
 function Navbar({ toggleMenu, menuOpen }: navbarProps) {
+
+   const auth = useContext(AuthContext);
+
+   const email = auth?.user?.email;
+
+   console.log('email:', email);
+   
+   
 
    return (
    <nav className='fixed left-0 top-0 w-screen h-16 px-6 text-white z-1000 border-b border-[#2E2E2E]'>
@@ -19,11 +29,11 @@ function Navbar({ toggleMenu, menuOpen }: navbarProps) {
 
             {menuOpen && (
                <div className="flex items-center gap-4">
-                  <div className='w-[30px] h-[30px] cursor-pointer flex justify-center items-center bg-[#373737] border-none rounded-full'>
-                     <span className='font-medium text-[0.9rem]'>S</span>
+                  <div className='w-7.5 h-7.5 cursor-pointer flex justify-center items-center bg-[#373737] border-none rounded-full'>
+                     <span className='font-medium text-[0.9rem]'>{email ? email[0]?.toUpperCase() : 'G'}</span>
                   </div>
                   
-                  <span className="font-light">stefan@gmail.com</span>
+                  <span className="font-light">{email ? email : 'Logged in as Guest'}</span>
                </div>
             )}
          
