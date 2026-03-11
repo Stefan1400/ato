@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { addSessionTypes, UIStates } from "./tracker.types";
 import { useAddSession } from "./useSessionTimer";
 import { sessionTimerStyles } from "./SessionTimer.styles";
@@ -6,10 +6,13 @@ import { PlayIcon, StopIcon } from "../../assets/svgs";
 
 function SessionTimer() {
 
-   const addSessionMutation = useAddSession();
-   const [timerStatus, setTimerStatus] = useState<UIStates>('default');
+   const saved = localStorage.getItem('sessionTimer');
+   const initialState = saved ? JSON.parse(saved) : { time: 0, timerStatus: 'default', startedAt: null };
 
-   const [time, setTime] = useState(0);
+   const addSessionMutation = useAddSession();
+   const [timerStatus, setTimerStatus] = useState<UIStates>(initialState.timerStatus);
+
+   const [time, setTime] = useState<number>(initialState.time);
    const intervalRef = useRef<number | null>(null);
 
    const sessionRef = useRef<addSessionTypes>({
@@ -17,11 +20,18 @@ function SessionTimer() {
       session_ended: null
    });
 
+   useEffect(() => {
+      if (initialState.startedAt) {
+         sessionRef.current.session_started = new Date(initialState.startedAt);
+      };
+   }, []);
+   
    function resetTimer() {
       setTimeout(() => {
          setTimerStatus('default');
          setTime(0);
          addSessionMutation.reset();
+         localStorage.removeItem('sessionTimer');
       }, 3000);
    };
 
@@ -35,6 +45,30 @@ function SessionTimer() {
          setTime(t => t + 1);
       }, 1000);
    };
+
+   useEffect(() => {
+     localStorage.setItem('sessionTimer', JSON.stringify({
+      time,
+      timerStatus,
+      startedAt: sessionRef.current.session_started
+     }));
+     
+   }, [time, timerStatus]);
+
+   useEffect(() => {
+      if (timerStatus === 'ongoing' && intervalRef.current === null) {
+         intervalRef.current = setInterval(() => {
+            setTime(t => t + 1);
+         }, 1000);
+      }
+
+      return () => {
+         if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+         }
+      }
+   }, [timerStatus]);
 
    function stopTimer() {
       if (intervalRef.current !== null) {
@@ -67,7 +101,7 @@ function SessionTimer() {
             return 'ongoing';
          } else {
             stopTimer();
-            return 'pending';
+            return 'default';
          }
       });
    };
