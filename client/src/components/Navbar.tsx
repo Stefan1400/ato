@@ -12,11 +12,7 @@ function Navbar({ toggleMenu, menuOpen }: navbarProps) {
    const auth = useContext(AuthContext);
 
    const email = auth?.user?.email;
-
-   console.log('email:', email);
    
-   
-
    return (
    <nav className='fixed left-0 top-0 w-screen h-16 px-6 text-white z-1000 border-b border-[#2E2E2E]'>
       <ul className='w-full h-full flex justify-between items-center border-none'>
