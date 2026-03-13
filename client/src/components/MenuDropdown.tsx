@@ -25,10 +25,21 @@ function MenuDropdown() {
             <li>
               <span>Change Password</span>
             </li>
-            <li>
-              <span onClick={handleLogout}>Sign Out</span>
-            </li>
-            {user?.email && (
+            {!user ? (
+              <li className="flex flex-col gap-5 items-center">
+                <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-white text-black font-medium">
+                  <Link to='/signup'>Sign Up</Link>
+                </button>
+                <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">
+                  <Link to='/login'>Sign In</Link>
+                </button>
+              </li>
+            ) : (
+              <li>
+                <button onClick={handleLogout} className="w-full py-3 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">Sign Out</button>
+              </li>
+            )}
+            {user && (
               <li className='text-red-600 mt-65'>
                 <span>Delete Account</span>
               </li>
