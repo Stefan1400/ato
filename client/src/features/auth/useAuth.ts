@@ -1,5 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { registerUser, loginUser, getUser } from "./auth.api";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { registerUser, loginUser, getUser, logoutUser } from "./auth.api";
+import { useContext } from "react";
+import { AuthContext } from "../../app/AuthProvider";
+import type { AuthContextType } from "../../app/AuthProvider";
 
 export const useRegister = () => {   
     return useMutation({
@@ -21,5 +24,18 @@ export const useGetUser = () => {
             return data;
         },
         retry: false
+    });
+};
+
+export const useLogout = () => {
+    const { setUser } = useContext(AuthContext) as AuthContextType;
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: logoutUser,
+        onSuccess: () => {
+            setUser(undefined);
+            queryClient.invalidateQueries({ queryKey: ["user"] });
+      }
     });
 };

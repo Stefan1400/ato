@@ -18,3 +18,9 @@ export async function getUser(): Promise<User> {
    
    return response.fetchedUser;
 };
+
+export async function logoutUser(): Promise<void> {
+   const response = await api<void>("/users/logout", "POST");
+   
+   return response;
+};

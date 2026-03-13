@@ -138,6 +138,16 @@ const logoutController = async (req, res, next) => {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
          sameSite: 'Strict',
+         path: '/',
+         maxAge: 0
+      });
+
+      res.clearCookie('accessToken', {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'Strict',
+         path: '/',
+         maxAge: 0
       });
 
       return res.status(200).json({

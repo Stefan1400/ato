@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom"
+import { useLogout } from "../features/auth/useAuth"
 
 function MenuDropdown() {
+  const logoutMutation = useLogout();
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+  
   return (
     <div className='w-screen h-screen z-1000 bg-[#151515] pt-20 text-white'>
       <nav className='mt-2'>
@@ -15,7 +22,7 @@ function MenuDropdown() {
               <span>Change Password</span>
             </li>
             <li>
-              <span>Sign Out</span>
+              <span onClick={handleLogout}>Sign Out</span>
             </li>
             <li className='text-red-600 mt-65'>
               <span>Delete Account</span>
