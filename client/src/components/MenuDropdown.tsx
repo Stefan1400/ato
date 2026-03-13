@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom"
 import { useLogout } from "../features/auth/useAuth"
+import { AuthContext } from "../app/AuthProvider";
+import type { AuthContextType } from "../app/AuthProvider";
+import { useContext } from "react";
 
 function MenuDropdown() {
   const logoutMutation = useLogout();
+  const { user } = useContext(AuthContext) as AuthContextType;
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -24,9 +28,11 @@ function MenuDropdown() {
             <li>
               <span onClick={handleLogout}>Sign Out</span>
             </li>
-            <li className='text-red-600 mt-65'>
-              <span>Delete Account</span>
-            </li>
+            {user?.email && (
+              <li className='text-red-600 mt-65'>
+                <span>Delete Account</span>
+              </li>
+            )}
          </ul>
       </nav>
     </div>
