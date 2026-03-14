@@ -21,7 +21,7 @@ function MenuDropdown() {
       )}
       
       <nav className='mt-2'>
-         <ul className='flex flex-col items-start gap-4 text-[1.4rem] font-light [&>li]:w-screen [&>li]:p-3 [&>li>span]:ml-4 [&>li>a]:ml-4'>
+         <ul className='flex flex-col gap-1 items-start text-[1.25rem] font-light [&>li]:w-screen [&>li]:p-3 [&>li>span]:ml-4 [&>li>a]:ml-4'>
             <li>
               <Link className="flex flex-row items-center gap-3" to='/'>
                 <HomeIcon />
@@ -41,7 +41,7 @@ function MenuDropdown() {
               </Link>
             </li>
             {!user ? (
-              <li className="flex flex-col gap-5 items-center">
+              <li className="flex flex-col gap-5 items-center mt-3">
                 <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-white text-black font-medium">
                   <Link to='/signup'>Sign Up</Link>
                 </button>
