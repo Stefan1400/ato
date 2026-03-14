@@ -6,12 +6,18 @@ import { useContext } from "react";
 import LoadingScreen from "./LoadingScreen";
 import { HomeIcon, SessionsIcon, LockIcon } from "../assets/svgs";
 
-function MenuDropdown() {
+type MenuDropdownTypes = {
+  toggleMenu: () => void;
+};
+
+function MenuDropdown({ toggleMenu }: MenuDropdownTypes) {
   const logoutMutation = useLogout();
   const { user } = useContext(AuthContext) as AuthContextType;
   
   const handleLogout = () => {
-    logoutMutation.mutate();
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => toggleMenu()
+    });
   };
   
   return (
@@ -22,20 +28,20 @@ function MenuDropdown() {
       
       <nav className='mt-2'>
          <ul className='flex flex-col gap-1 items-start text-[1.25rem] font-light [&>li]:w-screen [&>li]:p-3 [&>li>span]:ml-4 [&>li>a]:ml-4'>
-            <li>
+            <li onClick={toggleMenu}>
               <Link className="flex flex-row items-center gap-3" to='/'>
                 <HomeIcon />
                 <span>Home</span>
               </Link>
             </li>
-            <li>
+            <li onClick={toggleMenu}>
               <Link className="flex flex-row items-center gap-3" to='/my-sessions'>
                 <SessionsIcon />
                 <span>My Sessions</span>
               </Link>
             </li>
             {user && (
-              <li>
+              <li onClick={toggleMenu}>
                 <Link className="flex flex-row items-center gap-3" to='/change-password'>
                   <LockIcon />
                   <span>Change Password</span>
@@ -43,17 +49,19 @@ function MenuDropdown() {
               </li>
             )}
             {!user ? (
-              <li className="flex flex-col gap-5 items-center mt-3">
-                <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-white text-black font-medium">
-                  <Link to='/signup'>Sign Up</Link>
-                </button>
-                
-                <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">
-                  <Link to='/login'>Sign In</Link>
-                </button>
+              <li onClick={toggleMenu} className="flex flex-col gap-5 items-center justify-center mt-3">
+                <Link 
+                  className="w-90 py-2.5 text-[1rem] text-center rounded-xs bg-white text-black font-medium mr-3"
+                  to='/signup'>
+                    Sign Up
+                </Link>
+                <Link 
+                  className="w-90 py-2.5 text-[1rem] text-center rounded-xs bg-[#121212] border-2 border-[#2E2E2E] mr-3"
+                  to='/login'>
+                    Sign In
+                </Link>
               </li>
             ) : (
-              
               <li>
                 <button onClick={handleLogout} className="w-full py-3 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">Sign Out</button>
               </li>
