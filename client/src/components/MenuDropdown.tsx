@@ -51,7 +51,7 @@ function MenuDropdown({ toggleMenu }: MenuDropdownTypes) {
             {!user ? (
               <li onClick={toggleMenu} className="flex flex-col gap-5 items-center justify-center mt-3">
                 <Link 
-                  className="w-90 py-2.5 text-[1rem] text-center rounded-xs bg-white text-black font-medium mr-3"
+                  className="w-90 py-2.5 text-[1rem] text-center rounded-xs bg-[#D60000] text-white font-medium mr-3"
                   to='/signup'>
                     Sign Up
                 </Link>
