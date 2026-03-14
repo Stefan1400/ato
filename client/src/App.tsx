@@ -20,9 +20,13 @@ export default function App() {
         menuOpen={menuOpen} 
       />
       
-      {menuOpen && (
+      {/* {menuOpen && (
         <MenuDropdown toggleMenu={toggleMenu}/>
-      )}
+      )} */}
+
+      <MenuDropdown toggleMenu={toggleMenu} menuOpen={menuOpen}/>
+
+
       {/* <RegisterPage /> */}
       {/* <LoginPage /> */}
 
