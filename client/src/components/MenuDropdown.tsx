@@ -59,8 +59,10 @@ function MenuDropdown() {
               </li>
             )}
             {user && (
-              <li className='text-red-600 mt-65'>
-                <span>Delete Account</span>
+              <li className='text-red-600 mt-70 flex items-center justify-center'>
+                <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-[#1E0A0A] border-2 border-[#790000]">
+                  <Link to='/login'>Delete Account</Link>
+                </button>
               </li>
             )}
          </ul>
