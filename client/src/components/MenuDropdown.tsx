@@ -4,6 +4,7 @@ import { AuthContext } from "../app/AuthProvider";
 import type { AuthContextType } from "../app/AuthProvider";
 import { useContext } from "react";
 import LoadingScreen from "./LoadingScreen";
+import { HomeIcon, SessionsIcon, LockIcon } from "../assets/svgs";
 
 function MenuDropdown() {
   const logoutMutation = useLogout();
@@ -22,19 +23,29 @@ function MenuDropdown() {
       <nav className='mt-2'>
          <ul className='flex flex-col items-start gap-4 text-[1.4rem] font-light [&>li]:w-screen [&>li]:p-3 [&>li>span]:ml-4 [&>li>a]:ml-4'>
             <li>
-              <Link to='/'>Home</Link>
+              <Link className="flex flex-row items-center gap-3" to='/'>
+                <HomeIcon />
+                <span>Home</span>
+              </Link>
             </li>
             <li>
-              <span>My Sessions</span>
+              <Link className="flex flex-row items-center gap-3" to='/my-sessions'>
+                <SessionsIcon />
+                <span>My Sessions</span>
+              </Link>
             </li>
             <li>
-              <span>Change Password</span>
+              <Link className="flex flex-row items-center gap-3" to='/change-password'>
+                <LockIcon />
+                <span>Change Password</span>
+              </Link>
             </li>
             {!user ? (
               <li className="flex flex-col gap-5 items-center">
                 <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-white text-black font-medium">
                   <Link to='/signup'>Sign Up</Link>
                 </button>
+                
                 <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">
                   <Link to='/login'>Sign In</Link>
                 </button>
