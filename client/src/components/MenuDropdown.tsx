@@ -3,17 +3,22 @@ import { useLogout } from "../features/auth/useAuth"
 import { AuthContext } from "../app/AuthProvider";
 import type { AuthContextType } from "../app/AuthProvider";
 import { useContext } from "react";
+import LoadingScreen from "./LoadingScreen";
 
 function MenuDropdown() {
   const logoutMutation = useLogout();
   const { user } = useContext(AuthContext) as AuthContextType;
-
+  
   const handleLogout = () => {
     logoutMutation.mutate();
   };
   
   return (
     <div className='w-screen h-screen z-1000 bg-[#151515] pt-20 text-white'>
+      {logoutMutation.isPending && (
+        <LoadingScreen text="Signing out..."/>
+      )}
+      
       <nav className='mt-2'>
          <ul className='flex flex-col items-start gap-4 text-[1.4rem] font-light [&>li]:w-screen [&>li]:p-3 [&>li>span]:ml-4 [&>li>a]:ml-4'>
             <li>
