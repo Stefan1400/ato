@@ -34,12 +34,14 @@ function MenuDropdown() {
                 <span>My Sessions</span>
               </Link>
             </li>
-            <li>
-              <Link className="flex flex-row items-center gap-3" to='/change-password'>
-                <LockIcon />
-                <span>Change Password</span>
-              </Link>
-            </li>
+            {user && (
+              <li>
+                <Link className="flex flex-row items-center gap-3" to='/change-password'>
+                  <LockIcon />
+                  <span>Change Password</span>
+                </Link>
+              </li>
+            )}
             {!user ? (
               <li className="flex flex-col gap-5 items-center mt-3">
                 <button className="w-90 py-2.5 text-[1rem] rounded-xs bg-white text-black font-medium">
@@ -51,6 +53,7 @@ function MenuDropdown() {
                 </button>
               </li>
             ) : (
+              
               <li>
                 <button onClick={handleLogout} className="w-full py-3 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">Sign Out</button>
               </li>
