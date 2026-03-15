@@ -47,8 +47,10 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
    };
 
    return (
-    <div className="w-screen h-screen fixed left-0 top-0 z-1000 bg-black opacity-100 flex">
-      <div className="w-full h-auto border-2 border-[#3C3C3C] rounded-[5px] fixed left-[50%] bottom-0 translate-x-[-50%] z-1000 text-white bg-[#171717] p-5">
+    <>
+      <div onClick={toggleDeleteAccountPopup} className="w-screen h-screen relative left-0 top-0 z-1000 bg-black opacity-75 flex"></div>
+
+      <div className="w-full h-auto border-2 border-[#3C3C3C] rounded-[5px] absolute left-[50%] bottom-0 translate-x-[-50%] z-1000 text-white bg-[#171717] p-5">
          <main className="flex items-center justify-center flex-col text-center gap-6 p-5">
             <div className="flex justify-center items-center p-2 bg-[#232323] rounded-full">
                <WarningIcon />
@@ -75,13 +77,13 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
                </label>
 
                <div className="flex flex-row items-center justify-between">
-                  <button onClick={toggleDeleteAccountPopup} className="p-3 bg-[#171717] text-white rounded-sm border-[#3C3C3C] border-2">Cancel</button>
+                  <button onClick={toggleDeleteAccountPopup} type="button" className="p-3 bg-[#171717] text-white rounded-sm border-[#3C3C3C] border-2">Cancel</button>
                   <button type="submit" className="p-3 bg-[#D60000] text-white rounded-sm">Delete</button>
                </div>
             </form>
          </main>
       </div>
-    </div>
+    </>   
   )
 }
 
