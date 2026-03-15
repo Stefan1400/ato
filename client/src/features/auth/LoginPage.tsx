@@ -3,12 +3,14 @@ import type { Errors } from './auth.types';
 import { useLogin } from "./useAuth"; 
 import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
 
    const loginMutation = useLogin();
    const { setUser } = useContext(AuthContext) as AuthContextType;
-  
+   const navigate = useNavigate();
+
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
    const [currentPassword, setCurrentPassword] = useState('');
@@ -58,6 +60,7 @@ function LoginPage() {
                   Object.keys(prev).map(key => [key, ""])
                )
             );
+            navigate('/');
          }
       });
    };
