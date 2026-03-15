@@ -31,7 +31,10 @@ export default function App() {
       />
 
       {deleteAccountPopupOpen && (
-        <Popup toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
+        <Popup 
+          toggleDeleteAccountPopup={toggleDeleteAccountPopup} 
+          toggleMenu={toggleMenu}
+        />
       )}
 
       <AppRouter />

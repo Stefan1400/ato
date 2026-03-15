@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { WarningIcon } from "../assets/svgs";
 import { useDeleteUser } from "../features/auth/useAuth";
+import { useNavigate } from "react-router-dom";
 
 type PopupTypes = {
    toggleDeleteAccountPopup: () => void;
+   toggleMenu: () => void;
 };
 
-function Popup({ toggleDeleteAccountPopup }: PopupTypes) {
+function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
 
    const [typedString, settypedString] = useState('');
    const confirmationString = 'delete my account';
    const deleteUserMutation = useDeleteUser();
    const [error, setError] = useState(false);
+
+   const navigate = useNavigate();
 
    const validateString = () => {
       if (!typedString) return false;
@@ -31,10 +35,15 @@ function Popup({ toggleDeleteAccountPopup }: PopupTypes) {
          return;
       };
 
-      deleteUserMutation.mutate();
-
-      settypedString('');
-      setError(false);
+      deleteUserMutation.mutate(undefined, {
+      onSuccess: () => {
+         toggleDeleteAccountPopup();
+         settypedString('');
+         setError(false);
+         navigate('/signup');
+         toggleMenu();
+      }
+    });
    };
 
    return (
