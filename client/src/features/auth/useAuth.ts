@@ -42,7 +42,14 @@ export const useLogout = (options?: UseMutationOptions<void, Error, void>) => {
 };
 
 export const useDeleteUser = () => {
+    const { setUser } = useContext(AuthContext) as AuthContextType;
+    const queryClient = useQueryClient();
+    
     return useMutation({
-        mutationFn: deleteUser
+        mutationFn: deleteUser,
+        onSuccess: () => {
+            setUser(undefined);
+            queryClient.invalidateQueries({ queryKey: ["user"] });
+      }
     });
 };
