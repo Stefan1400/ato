@@ -1,7 +1,38 @@
 import { useState } from "react";
 import { WarningIcon } from "../assets/svgs";
+import { useDeleteUser } from "../features/auth/useAuth";
 
 function Popup() {
+
+   const [typedString, settypedString] = useState('');
+   const confirmationString = 'delete my account';
+   const deleteUserMutation = useDeleteUser();
+   const [error, setError] = useState(false);
+   
+
+   const validateString = () => {
+      if (!typedString) return false;
+
+      if (typedString.toLowerCase() !== confirmationString) return false;
+
+      return true;
+   };
+
+   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const validated = validateString();
+
+      if (!validated) {
+         setError(true);
+         return;
+      };
+
+      deleteUserMutation.mutate();
+
+      settypedString('');
+      setError(false);
+   };
 
    return (
     <div className="w-screen h-screen fixed left-0 top-0 z-1000 bg-black opacity-100 flex">
@@ -14,15 +45,26 @@ function Popup() {
             <h2 className="text-2xl font-semibold">Delete Account?</h2>
             <p className="text-medium">All data will be permanently lost. This action cannot be undone.</p>
 
-            <form className="flex flex-col gap-8 text-start">
-               <label htmlFor="delete-account-input">
-                  Please type <span className="font-bold">delete my account</span> to confirm
-                  <input className="w-full border-2 border-[#3C3C3C] p-3 rounded-sm" type="text" placeholder="Enter the string above" />
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8 text-start">
+               <label className="flex flex-col gap-2" htmlFor="delete-account-input">
+                  <p>Please type <span className="font-bold">delete my account</span> to confirm</p>
+                  <input 
+                     onChange={
+                        (e: React.ChangeEvent<HTMLInputElement>) => settypedString(e.target.value)
+                     } 
+                     value={typedString} 
+                     className={`${error ? 'border-red-500 outline-0' : ''} w-full border-2 border-[#3C3C3C] p-3 rounded-sm`} 
+                     type="text" 
+                     placeholder="Enter the string above" />
+               
+                  {error && (
+                     <span className="text-red-500 font-extralight">Please enter "delete my account"</span>
+                  )}
                </label>
 
                <div className="flex flex-row items-center justify-between">
                   <button className="p-3 bg-[#171717] text-white rounded-sm border-[#3C3C3C] border-2">Cancel</button>
-                  <button className="p-3 bg-[#D60000] text-white rounded-sm">Delete</button>
+                  <button type="submit" className="p-3 bg-[#D60000] text-white rounded-sm">Delete</button>
                </div>
             </form>
          </main>

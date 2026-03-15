@@ -24,3 +24,9 @@ export async function logoutUser(): Promise<void> {
    
    return response;
 };
+
+export async function deleteUser(): Promise<void> {
+   const response = await api<void>("/users", "DELETE");
+   
+   return response;
+};
