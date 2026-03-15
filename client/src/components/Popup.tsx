@@ -2,13 +2,16 @@ import { useState } from "react";
 import { WarningIcon } from "../assets/svgs";
 import { useDeleteUser } from "../features/auth/useAuth";
 
-function Popup() {
+type PopupTypes = {
+   toggleDeleteAccountPopup: () => void;
+};
+
+function Popup({ toggleDeleteAccountPopup }: PopupTypes) {
 
    const [typedString, settypedString] = useState('');
    const confirmationString = 'delete my account';
    const deleteUserMutation = useDeleteUser();
    const [error, setError] = useState(false);
-   
 
    const validateString = () => {
       if (!typedString) return false;
@@ -63,7 +66,7 @@ function Popup() {
                </label>
 
                <div className="flex flex-row items-center justify-between">
-                  <button className="p-3 bg-[#171717] text-white rounded-sm border-[#3C3C3C] border-2">Cancel</button>
+                  <button onClick={toggleDeleteAccountPopup} className="p-3 bg-[#171717] text-white rounded-sm border-[#3C3C3C] border-2">Cancel</button>
                   <button type="submit" className="p-3 bg-[#D60000] text-white rounded-sm">Delete</button>
                </div>
             </form>
