@@ -60,31 +60,63 @@ const feedbackService = async (userId) => {
    // both sessions from Y & T
    if (yesterday.count > 0 && today.count > 0) {
       if (today.totalMs > yesterday.totalMs) {
-         return `You focused for ${today.total} today vs (${yesterday.total}) yesterday. Heck yeah!`
+         return {
+            feedbackType: "TODAY_TOTAL_GREATER",
+            todayTotal: today.total,
+            yesterdayTotal: yesterday.total
+         }
       } else if (today.totalMs === yesterday.totalMs) {
-         return `You matched yesterday at ${yesterday.total}. Wanna beat it?`;
+         return {
+            feedbackType: "TODAY_TOTAL_MATCH",
+            todayTotal: today.total,
+            yesterdayTotal: yesterday.total
+         }
       } else if (today.longestMs > yesterday.longestMs) {
-         return `Your longest session today was ${today.longest} vs yesterday (${yesterday.longest}). Awesome job!`
+         return {
+            feedbackType: "TODAY_LONGEST_GREATER",
+            todayLongest: today.longest,
+            yesterdayLongest: yesterday.longest
+         }
       } else if (today.averageMs > yesterday.averageMs) {
-         return `Your average session today was ${today.average} vs yesterday (${yesterday.average}). Great work!`
+        return {
+            feedbackType: "TODAY_AVERAGE_GREATER",
+            todayAverage: today.average,
+            yesterdayAverage: yesterday.average
+         }
       } else {
-         return `Your focus time today is ${today.total}. Keep it up!`;
+         return {
+            feedbackType: "TODAY_TOTAL_ONLY",
+            todayTotal: today.total,
+            yesterdayTotal: null
+         }
       }
    } 
    
    // sessions from T but none from Y
    else if (yesterday.count === 0 && today.count > 0) {
-      return `Your focus time today is ${today.total}. Let's keep it up!`;
+      return {
+         feedbackType: "TODAY_TOTAL_ONLY",
+         todayTotal: today.total,
+         yesterdayTotal: null
+      }
    }
    
    // sessions from Y but none from T
    else if (yesterday.count > 0 && today.count === 0) {
-      return `Your focus time yesterday was ${yesterday.total}. Let's hit it even harder today!`;
+      return {
+         feedbackType: "YESTERDAY_TOTAL_ONLY",
+         todayTotal: null,
+         yesterdayTotal: yesterday.total
+      }
    } 
    
    // no sessions from either Y or T
    else {
-      return `Let's hit it hard today!`;
+      return {
+         feedbackType: "NO_SESSIONS_YET",
+         todayTotal: null,
+         yesterdayTotal: null
+      }
    };
 };
 
