@@ -3,20 +3,14 @@ import type { Feedback } from "./feedback.types";
 import { useGetFeedback } from "./useFeedback";
 
 function FeedbackMessage({ }) {
-   const getFeedbackMutation = useGetFeedback();
+   const { data, isLoading, isError } = useGetFeedback();
 
-   const handleGetFeedback = () => {      
-      getFeedbackMutation.mutate();
-   };
-
-   const feedbackType = getFeedbackMutation.data?.feedbackType;
-   const today = getFeedbackMutation.data?.todayValue || 0;
-   const yesterday = getFeedbackMutation.data?.yesterdayValue || 0;
+   const feedbackType = data?.feedbackType;
+   const today = data?.todayValue || 0;
+   const yesterday = data?.yesterdayValue || 0;
   
    return (
     <div className="w-screen h-auto flex flex-col items-start justify-start absolute bottom-0 bg-[#2A2A2A] text-white gap-2">
-      <button onClick={handleGetFeedback} className="bg-black">Get Feedback</button>
-      
       <h2>Today's Focus Insight</h2>
       <div>
          <div className="flex flex-row gap-3">

@@ -1,8 +1,10 @@
 import { getFeedback } from "./feedback.api";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetFeedback = () => {
-   return useMutation({
-        mutationFn: getFeedback,
+    return useQuery({
+        queryKey: ["feedback"],
+        queryFn: getFeedback,
+        staleTime: 60 * 1000,
     });
 };

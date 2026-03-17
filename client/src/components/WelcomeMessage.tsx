@@ -8,10 +8,11 @@ type DayTimes = 'Good morning' | 'Good afternoon' | 'Good evening';
 function WelcomeMessage() {
 
    const { user } = useContext(AuthContext) as AuthContextType;
-   const feedbackMutation = useGetFeedback();
    const [greeting, setGreeting] = useState<DayTimes>();
 
-   const today = feedbackMutation.data?.todayValue;
+   const { data, isLoading, isError } = useGetFeedback();
+
+   const today = data?.todayValue;
    
    const username = user?.email.split('@')[0];
    const displayName = username ? username[0].toUpperCase() + username.slice(1) : 'Guest'
@@ -24,10 +25,6 @@ function WelcomeMessage() {
       return 'Good evening';
    };
 
-   function handleGetFeedback() {
-      feedbackMutation.mutate();
-   };
-
    useEffect(() => {
       setGreeting(getTimeOfDay())
       
@@ -37,10 +34,8 @@ function WelcomeMessage() {
 
   return (
     <div className="w-screen h-auto p-3 pl-7 flex flex-col items-start text-white gap-1 mb-11 mt-5">
-      <button onClick={handleGetFeedback}>get feedback</button>
-      
       <h1 className="font-bold text-2xl">{greeting}, {displayName}</h1>
-      <p className="text-[#c3c3c3]">
+      <p className="text-[#a8a8a8]">
          {!today ? (
          'Ready to get started? 😊'
          ) : (
