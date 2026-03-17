@@ -62,32 +62,32 @@ const feedbackService = async (userId) => {
       if (today.totalMs > yesterday.totalMs) {
          return {
             feedbackType: "TODAY_TOTAL_GREATER",
-            todayTotal: today.total,
-            yesterdayTotal: yesterday.total
+            todayValue: today.total,
+            yesterdayValue: yesterday.total
          }
       } else if (today.totalMs === yesterday.totalMs) {
          return {
             feedbackType: "TODAY_TOTAL_MATCH",
-            todayTotal: today.total,
-            yesterdayTotal: yesterday.total
+            todayValue: today.total,
+            yesterdayValue: yesterday.total
          }
       } else if (today.longestMs > yesterday.longestMs) {
          return {
             feedbackType: "TODAY_LONGEST_GREATER",
-            todayLongest: today.longest,
-            yesterdayLongest: yesterday.longest
+            todayValue: today.longest,
+            yesterdayValue: yesterday.longest
          }
       } else if (today.averageMs > yesterday.averageMs) {
         return {
             feedbackType: "TODAY_AVERAGE_GREATER",
-            todayAverage: today.average,
-            yesterdayAverage: yesterday.average
+            todayValue: today.average,
+            yesterdayValue: yesterday.average
          }
       } else {
          return {
             feedbackType: "TODAY_TOTAL_ONLY",
-            todayTotal: today.total,
-            yesterdayTotal: null
+            todayValue: today.total,
+            yesterdayValue: null
          }
       }
    } 
@@ -96,8 +96,8 @@ const feedbackService = async (userId) => {
    else if (yesterday.count === 0 && today.count > 0) {
       return {
          feedbackType: "TODAY_TOTAL_ONLY",
-         todayTotal: today.total,
-         yesterdayTotal: null
+         todayValue: today.total,
+         yesterdayValue: null
       }
    }
    
@@ -105,8 +105,8 @@ const feedbackService = async (userId) => {
    else if (yesterday.count > 0 && today.count === 0) {
       return {
          feedbackType: "YESTERDAY_TOTAL_ONLY",
-         todayTotal: null,
-         yesterdayTotal: yesterday.total
+         todayValue: null,
+         yesterdayValue: yesterday.total
       }
    } 
    
@@ -114,8 +114,8 @@ const feedbackService = async (userId) => {
    else {
       return {
          feedbackType: "NO_SESSIONS_YET",
-         todayTotal: null,
-         yesterdayTotal: null
+         todayValue: null,
+         yesterdayValue: null
       }
    };
 };
