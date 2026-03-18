@@ -36,7 +36,7 @@ export const useLogout = (options?: UseMutationOptions<void, Error, void>) => {
         ...options,
         onSuccess: () => {
             setUser(undefined);
-            queryClient.invalidateQueries({ queryKey: ["user"] });
+            queryClient.clear();
       }
     });
 };
