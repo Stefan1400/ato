@@ -42,7 +42,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
               </Link>
             </li>
             <li onClick={toggleMenu}>
-              <Link className="flex flex-row items-center gap-3" to='/my-sessions'>
+              <Link className="flex flex-row items-center gap-3" to='/analytics'>
                 <SessionsIcon />
                 <span>My Sessions</span>
               </Link>
