@@ -32,18 +32,22 @@ function WelcomeMessage() {
       return () => clearInterval(interval);
    }, []);
 
-  return (
-    <div className="w-screen h-auto p-3 pl-7 flex flex-col items-start text-white gap-1 mb-11 mt-5">
-      <h1 className="font-bold text-2xl">{greeting}, {displayName}</h1>
-      <p className="text-[#a8a8a8]">
-         {!today ? (
-         'Ready to get started? 😊'
-         ) : (
+   let message;
+
+   if (isLoading || isError || !data || today == null) {
+      message = 'Ready to get started? 😊';
+   } else {
+      message = (
          <>
             You've focused <span className="text-white font-medium">{today} 💪</span> today. Ready to continue?
          </>
-         )}
-      </p>
+      )
+   };
+
+  return (
+    <div className="w-screen h-auto p-3 pl-7 flex flex-col items-start text-white gap-1 mb-11 mt-5">
+      <h1 className="font-bold text-2xl">{greeting}, {displayName}</h1>
+      <p className="text-[#a8a8a8]">{message}</p>
     </div>
   )
 };
