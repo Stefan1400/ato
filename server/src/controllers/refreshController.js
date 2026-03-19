@@ -2,6 +2,7 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/tokens')
 const { saveRefreshToken, findRefreshToken, revokeRefreshToken } = require('../models/refreshTokenModel');
 
 const sendNewAccessToken = async (req, res, next) => {
+   
    try {
       const oldRefreshToken = req.cookies?.refreshToken;
 

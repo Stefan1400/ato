@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import type { User } from "../features/auth/auth.types";
 import { useGetUser } from "../features/auth/useAuth";
+import LoadingScreen from "../components/LoadingScreen";
 
 export type AuthContextType = {
    user: User | undefined;

@@ -11,7 +11,7 @@ const saveRefreshToken = async (userId, token, expiresAt) => {
       `,
       [userId, hashedToken, expiresAt]
    );
-
+   
    return result.rows[0];
 };
 
@@ -25,6 +25,7 @@ const findRefreshToken = async (token) => {
 
    for (const row of result.rows) {
       const match = await compareValue(token, row.token);
+      
       if (match) return row;
    };
 

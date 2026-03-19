@@ -3,6 +3,7 @@ import { registerUser, loginUser, getUser, logoutUser, deleteUser } from "./auth
 import { useContext } from "react";
 import { AuthContext } from "../../app/AuthProvider";
 import type { AuthContextType } from "../../app/AuthProvider";
+import { setAccessToken } from "../../lib/api";
 
 export const useRegister = () => {   
     return useMutation({
@@ -36,6 +37,7 @@ export const useLogout = (options?: UseMutationOptions<void, Error, void>) => {
         ...options,
         onSuccess: () => {
             setUser(undefined);
+            setAccessToken(null);
             queryClient.clear();
       }
     });
