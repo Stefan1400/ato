@@ -8,7 +8,6 @@ export function setAccessToken(token: string | null) {
 }
 
 async function refreshAccessToken(): Promise<void> {
-   // Always return the in-flight promise if one exists
    if (refreshingToken) return refreshingToken;
 
    refreshingToken = (async () => {
@@ -47,7 +46,6 @@ export async function api<T>(
    });
 
    if (response.status === 401) {
-      // Refresh once, then retry — no manual second fetch needed
       await refreshAccessToken();
 
       const retryResponse = await fetch(baseUrl + url, {
