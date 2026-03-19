@@ -23,6 +23,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
    }, [data]);
 
+   if (isLoading) return <LoadingScreen text='Loading...' />
+
    return (
       <AuthContext.Provider value={{ user, isLoading, setUser }}>
          { children }
