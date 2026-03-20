@@ -3,6 +3,7 @@ import RegisterPage from "../features/auth/RegisterPage";
 import LoginPage from "../features/auth/LoginPage";
 import HomePage from "../pages/HomePage";
 import AnalyticsPage from "../features/analytics/AnalyticsPage";
+import ChangePasswordPage from "../features/auth/changePassword/ChangePasswordPage";
 
 export function AppRouter() {
    return (
@@ -11,6 +12,7 @@ export function AppRouter() {
          <Route path="/signup" element={<RegisterPage />} />
          <Route path="/login" element={<LoginPage />} />
          <Route path="/analytics" element={<AnalyticsPage />} />
+         <Route path="/change-password" element={<ChangePasswordPage />} />
       </Routes>
    );
 };
