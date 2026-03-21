@@ -28,3 +28,9 @@ export type getUserRequest = {
    id: number;
    email: string;
 };
+
+export type ChangePasswordErrors = {
+   currentPassword: string,
+   newPassword: string,
+   confirmNewPassword: string,
+};

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { EyeSlashedIcon, EyeIcon } from "../../../assets/svgs";
+import type { ChangePasswordErrors } from "../auth.types";
 
 function ChangePasswordPage() {
    
@@ -10,7 +11,42 @@ function ChangePasswordPage() {
    const [currentPasswordHidden, setCurrentPasswordHidden] = useState(true);
    const [newPasswordHidden, setNewPasswordHidden] = useState(true);
    const [confirmNewPasswordHidden, setConfirmNewPasswordHidden] = useState(true);
-  
+   
+   const [errors, setErrors] = useState<ChangePasswordErrors>();
+
+   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const newErrors = {
+         currentPassword: '',
+         newPassword: '',
+         confirmNewPassword: '',
+      };
+
+      type FieldName = 'currentPassword' | 'newPassword' | 'confirmNewPassword';
+
+      function validateInput(name: FieldName, value: string) {
+         if (!value) {
+            newErrors[name] = 'Password is required';
+         } else if (value.length < 8 || value.length > 64) {
+            newErrors[name] = 'Password must be 8-64 characters'
+         };
+      }
+
+      validateInput('currentPassword', currentPassword);
+      validateInput('newPassword', newPassword);
+      validateInput('confirmNewPassword', confirmNewPassword);
+
+      setErrors(newErrors);
+
+      const hasErrors = Object.values(newErrors).some(Boolean);
+
+      if (hasErrors) return;
+
+
+      
+   };
+
    return (
     <div className='w-screen h-screen bg-[#151515] text-white flex flex-col items-center px-6 pt-21'>
       <main className='text-white w-screen h-screen flex p-4 flex-col items-center gap-5'>
@@ -19,7 +55,7 @@ function ChangePasswordPage() {
             <p>Password must be 8-64 characters</p>
          </header>
 
-         <form noValidate className='flex w-screen flex-col justify-between items-center gap-3'>
+         <form onSubmit={handleSubmit} noValidate className='flex w-screen flex-col justify-between items-center gap-3'>
             <div className="w-screen flex flex-col mt-2 mb-2 items-center">
                <label 
                   className='text-white flex flex-col gap-3 p-3 relative text-sm' 
@@ -50,6 +86,9 @@ function ChangePasswordPage() {
                         />
                      )}
                   </div>
+                  {errors?.currentPassword && (
+                     <span className="text-xs font-extralight text-red-500">{errors?.currentPassword}</span>
+                  )}
                </label>
                
                <label 
@@ -81,7 +120,9 @@ function ChangePasswordPage() {
                         />
                      )}
                   </div>
-
+                  {errors?.newPassword && (
+                     <span className="text-xs font-extralight text-red-500">{errors?.newPassword}</span>
+                  )}
                </label>
                <label 
                   className='text-white flex flex-col gap-3 p-3 relative text-sm' 
@@ -112,6 +153,9 @@ function ChangePasswordPage() {
                         />
                      )}
                   </div>
+                  {errors?.confirmNewPassword && (
+                     <span className="text-xs font-extralight text-red-500">{errors?.confirmNewPassword}</span>
+                  )}
                </label>
             </div>
             <button type="submit" className="w-[285px] h-[32px] bg-[#D60000]">Change Password</button>
