@@ -1,5 +1,17 @@
+import { useState } from "react";
+import { EyeSlashedIcon, EyeIcon } from "../../../assets/svgs";
+
 function ChangePasswordPage() {
-  return (
+   
+   const [currentPassword, setCurrentPassword] = useState('');
+   const [newPassword, setNewPassword] = useState('');
+   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+   
+   const [currentPasswordHidden, setCurrentPasswordHidden] = useState(true);
+   const [newPasswordHidden, setNewPasswordHidden] = useState(true);
+   const [confirmNewPasswordHidden, setConfirmNewPasswordHidden] = useState(true);
+  
+   return (
     <div className='w-screen h-screen bg-[#151515] text-white flex flex-col items-center px-6 pt-21'>
       <main className='text-white w-screen h-screen flex p-4 flex-col items-center gap-5'>
          <header>
@@ -10,14 +22,34 @@ function ChangePasswordPage() {
          <form noValidate className='flex w-screen flex-col justify-between items-center gap-3'>
             <div className="w-screen flex flex-col mt-2 mb-2 items-center">
                <label 
-                  className='text-white flex flex-col gap-3 p-3 text-sm' 
+                  className='text-white flex flex-col gap-3 p-3 relative text-sm' 
                   htmlFor="current-password">Current password
 
-                  <input 
-                     className='border-2 border-[#3C3C3C] rounded-xs px-2 h-[35px] w-[285px]' 
-                     type="password"
-                     placeholder='Current password' 
-                  />
+                  <div className="relative w-[285px]">
+                     <input 
+                        className='border-2 border-[#3C3C3C] rounded-xs px-2 h-[35px] w-[285px]' 
+                        type={currentPasswordHidden ? 'password' : 'text'}
+                        placeholder='Current password' 
+                        value={currentPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                           setCurrentPassword(e.target.value)
+                        }
+                     />
+
+                     {currentPasswordHidden && (
+                        <EyeSlashedIcon 
+                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
+                           onClick={() => setCurrentPasswordHidden(false)}
+                        />
+                     )}
+
+                     {!currentPasswordHidden && (
+                        <EyeIcon 
+                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
+                           onClick={() => setCurrentPasswordHidden(true)}
+                        />
+                     )}
+                  </div>
                </label>
                
                <label 
@@ -27,10 +59,29 @@ function ChangePasswordPage() {
                   <div className="relative w-[285px]">
                      <input 
                         className=' border-2 border-[#3C3C3C] rounded-xs h-[35px] w-[285px] pr-10 pl-2' 
-                        type="password"
+                        type={newPasswordHidden ? 'password' : 'text'}
                         placeholder='New password'
+                        value={newPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                           {setNewPassword(e.target.value)}
+                        }
                      />
+
+                     {newPasswordHidden && (
+                        <EyeSlashedIcon 
+                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
+                           onClick={() => setNewPasswordHidden(false)}
+                        />
+                     )}
+
+                     {!newPasswordHidden && (
+                        <EyeIcon 
+                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
+                           onClick={() => setNewPasswordHidden(true)}
+                        />
+                     )}
                   </div>
+
                </label>
                <label 
                   className='text-white flex flex-col gap-3 p-3 relative text-sm' 
@@ -39,9 +90,27 @@ function ChangePasswordPage() {
                   <div className="relative w-[285px]">
                      <input 
                         className=' border-2 border-[#3C3C3C] rounded-xs h-[35px] w-[285px] pr-10 pl-2' 
-                        type="password"
+                        type={confirmNewPasswordHidden ? 'password' : 'text'}
                         placeholder='Confirm new password'
+                        value={confirmNewPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                           {setConfirmNewPassword(e.target.value)}
+                        }
                      />
+
+                     {confirmNewPasswordHidden && (
+                        <EyeSlashedIcon 
+                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
+                           onClick={() => setConfirmNewPasswordHidden(false)}
+                        />
+                     )}
+
+                     {!confirmNewPasswordHidden && (
+                        <EyeIcon 
+                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
+                           onClick={() => setConfirmNewPasswordHidden(true)}
+                        />
+                     )}
                   </div>
                </label>
             </div>
