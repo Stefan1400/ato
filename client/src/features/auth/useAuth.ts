@@ -1,5 +1,5 @@
 import { QueryClient, useMutation, useQuery, useQueryClient, type UseMutationOptions } from "@tanstack/react-query";
-import { registerUser, loginUser, getUser, logoutUser, deleteUser } from "./auth.api";
+import { registerUser, loginUser, getUser, logoutUser, deleteUser, changePassword } from "./auth.api";
 import { useContext } from "react";
 import { AuthContext } from "../../app/AuthProvider";
 import type { AuthContextType } from "../../app/AuthProvider";
@@ -53,5 +53,11 @@ export const useDeleteUser = () => {
             setUser(undefined);
             queryClient.invalidateQueries({ queryKey: ["user"] });
       }
+    });
+};
+
+export const useChangePassword = () => {
+    return useMutation({
+        mutationFn: changePassword,
     });
 };

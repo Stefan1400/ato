@@ -30,7 +30,12 @@ export type getUserRequest = {
 };
 
 export type ChangePasswordErrors = {
-   currentPassword: string,
-   newPassword: string,
-   confirmNewPassword: string,
+   currentPassword?: string,
+   newPassword?: string,
+   confirmNewPassword?: string,
+};
+
+export type ChangePasswordRequest = {
+   current_password: string,
+   new_password: string,
 };

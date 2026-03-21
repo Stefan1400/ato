@@ -1,5 +1,5 @@
 import { api } from '../../lib/api';
-import type { RegisterRequest, LoginRequest, AuthResponse, User, getUserRequest } from "./auth.types";
+import type { RegisterRequest, LoginRequest, AuthResponse, User, getUserRequest, ChangePasswordRequest } from "./auth.types";
 
 export function registerUser(data: RegisterRequest): Promise<AuthResponse> {   
    const response = api<AuthResponse>("/users/register", 'POST', data);
@@ -28,5 +28,11 @@ export async function logoutUser(): Promise<void> {
 export async function deleteUser(): Promise<void> {
    const response = await api<void>("/users", "DELETE");
    
+   return response;
+};
+
+export async function changePassword(data: ChangePasswordRequest): Promise<void> {
+   const response = await api<void>("/users/change-password", "PATCH", data);
+
    return response;
 };

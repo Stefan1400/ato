@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { EyeSlashedIcon, EyeIcon } from "../../../assets/svgs";
 import type { ChangePasswordErrors } from "../auth.types";
+import { useChangePassword } from "../useAuth";
 
 function ChangePasswordPage() {
+
+   const changePasswordMutation = useChangePassword();
    
    const [currentPassword, setCurrentPassword] = useState('');
    const [newPassword, setNewPassword] = useState('');
@@ -12,7 +15,7 @@ function ChangePasswordPage() {
    const [newPasswordHidden, setNewPasswordHidden] = useState(true);
    const [confirmNewPasswordHidden, setConfirmNewPasswordHidden] = useState(true);
    
-   const [errors, setErrors] = useState<ChangePasswordErrors>();
+   const [errors, setErrors] = useState<ChangePasswordErrors>({});
 
    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -31,19 +34,41 @@ function ChangePasswordPage() {
          } else if (value.length < 8 || value.length > 64) {
             newErrors[name] = 'Password must be 8-64 characters'
          };
-      }
+      };
 
       validateInput('currentPassword', currentPassword);
       validateInput('newPassword', newPassword);
       validateInput('confirmNewPassword', confirmNewPassword);
 
-      setErrors(newErrors);
+      if (newPassword !== confirmNewPassword) {
+         newErrors.confirmNewPassword = 'Passwords must match';
+      };
 
       const hasErrors = Object.values(newErrors).some(Boolean);
 
-      if (hasErrors) return;
+      if (hasErrors) {
+         setErrors(newErrors);
+         return;
+      };
 
-
+      changePasswordMutation.mutate(
+         {
+            current_password: currentPassword,
+            new_password: newPassword,
+         },
+         {
+            onSuccess: () => {
+               setCurrentPassword('');
+               setNewPassword('');
+               setConfirmNewPassword('');
+               setErrors({
+                  currentPassword: '',
+                  newPassword: '',
+                  confirmNewPassword: '',
+               });
+            }
+         }
+      )
       
    };
 
