@@ -1,10 +1,7 @@
+import type { SessionWithDates } from "./analytics.types";
 import { calculateSessionPosition } from "./helpers/calculateSessionPosition";
-
-const session_list = [
-   { id: 1, session_started: new Date('2026-03-23T04:00'), session_ended: new Date('2026-03-23T10:00') },
-   { id: 2, session_started: new Date('2026-03-23T13:40'), session_ended: new Date('2026-03-23T14:30') },
-   { id: 3, session_started: new Date('2026-03-23T17:00'), session_ended: new Date('2026-03-23T19:30') }
-];
+import { transformSession } from "./helpers/transformSession";
+import { useGetSessionsByDate } from "./useAnalytics";
 
 function Timeline() {
 
@@ -14,6 +11,15 @@ function Timeline() {
       let convertedTime = `${i.toString().padStart(2,'0')}:00`;
       times.push(convertedTime);
    };
+
+   const today = new Date().toDateString();
+   const { data, isLoading, isError } = useGetSessionsByDate(today);
+
+   const processedSessions = data
+      ?.map(transformSession)
+      .filter((s): s is SessionWithDates => s !== null)
+      .map(calculateSessionPosition)
+   
 
    return (
     <div className="w-screen h-auto text-white flex flex-col items-center mt-30 relative">
@@ -26,11 +32,14 @@ function Timeline() {
          ))}
       </ul>
 
-      {session_list.map(session => {
-         const s = calculateSessionPosition(session);
+      {processedSessions?.map(session => {
          
          return (
-            <div key={s.id} style={{ top: `${s.topPercent}%`, height: `${s.heightPercent}%` }} className="w-3 bg-[#CC0000] absolute left-20 rounded-full z-40"></div>
+            <div 
+               key={session.id} 
+               style={{ top: `${session.topPercent}%`, height: `${session.heightPercent}%` }} 
+               className="w-3 bg-[#CC0000] absolute left-20 rounded-full z-40">
+            </div>
          )
       })}
     </div>
