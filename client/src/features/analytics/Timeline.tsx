@@ -1,4 +1,10 @@
-const session = { session_started: new Date(), session_ended: new Date(Date.now() + 2 * 60 * 60 * 1000) };
+import { calculateSessionPosition } from "./helpers/calculateSessionPosition";
+
+const session_list = [
+   { id: 1, session_started: new Date('2026-03-23T04:00'), session_ended: new Date('2026-03-23T10:00') },
+   { id: 2, session_started: new Date('2026-03-23T13:40'), session_ended: new Date('2026-03-23T14:30') },
+   { id: 3, session_started: new Date('2026-03-23T17:00'), session_ended: new Date('2026-03-23T19:30') }
+];
 
 function Timeline() {
 
@@ -8,24 +14,6 @@ function Timeline() {
       let convertedTime = `${i.toString().padStart(2,'0')}:00`;
       times.push(convertedTime);
    };
-
-   const sessionStart = session.session_started;
-   const sessionEnd = session.session_ended;
-
-   const durationMinutes = (sessionEnd.getTime() - sessionStart.getTime()) / (60 * 1000);
-   
-   const timelinePercentage = (durationMinutes / 1440) * 100;
-   const roundedTimelinePercentage = Math.round(timelinePercentage * 100) / 100;
-
-   const midnight = new Date(
-      sessionStart.getFullYear(), 
-      sessionStart.getMonth(), 
-      sessionStart.getDate()
-   );
-
-   const topPlacement = (sessionStart.getTime() - midnight.getTime()) / (1000 * 60);
-   const topPlacementPercent = (topPlacement / 1440) * 100;
-   const roundedTopPlacement = Math.round(topPlacementPercent * 100) / 100;
 
    return (
     <div className="w-screen h-auto text-white flex flex-col items-center mt-30 relative">
@@ -38,7 +26,13 @@ function Timeline() {
          ))}
       </ul>
 
-      <div style={{ top: `${roundedTopPlacement}%`, height: `${roundedTimelinePercentage}%` }} className="w-3 bg-[#CC0000] absolute left-20 rounded-full z-40"></div>
+      {session_list.map(session => {
+         const s = calculateSessionPosition(session);
+         
+         return (
+            <div key={s.id} style={{ top: `${s.topPercent}%`, height: `${s.heightPercent}%` }} className="w-3 bg-[#CC0000] absolute left-20 rounded-full z-40"></div>
+         )
+      })}
     </div>
   )
 };
