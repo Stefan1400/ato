@@ -14,7 +14,7 @@ function Timeline() {
    };
 
    const today = new Date().toDateString();
-   const { data, isLoading, isError } = useGetSessionsByDate(today);
+   const { data, isLoading, isError } = useGetSessionsByDate(today);   
 
    const processedSessions = data
       ?.map(transformSession)
@@ -52,7 +52,7 @@ function Timeline() {
             <div 
                key={session.id} 
                style={{ top: `${session.topPercent}%`, height: `${session.heightPercent}%` }} 
-               className="w-3 bg-[#CC0000] absolute left-20 rounded-full z-40">
+               className="w-[75vw] bg-[#CC0000] absolute left-20 rounded-full z-40">
             </div>
          )
       })}
