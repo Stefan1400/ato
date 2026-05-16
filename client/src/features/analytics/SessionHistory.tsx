@@ -22,7 +22,7 @@ export default function SessionHistory() {
     : [];
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto pb-7">
       <div className="mb-4 text-[#474747] font-medium mt-10">Session History - 2026-05-14</div>
 
       <div className="space-y-3">
