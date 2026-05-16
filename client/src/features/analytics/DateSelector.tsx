@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { X } from "lucide-react";
+import CalendarHeader from "./calendar/CalendarHeader";
+import Calendar from "./calendar/Calendar";
 
 const monthNames = [
   "January",
@@ -64,22 +66,13 @@ function isSameDay(date1: Date, date2: Date) {
 
 
 
-
-
-
-
-
-type DateSelectorProps = {
+export type DateSelectorProps = {
   selectedDate: Date;
   onSelect: (date: Date) => void;
   onClose: () => void;
 };
 
-export default function DateSelector({
-  selectedDate,
-  onSelect,
-  onClose,
-}: DateSelectorProps) {
+export default function DateSelector({ selectedDate, onSelect, onClose }: DateSelectorProps) {
   // Which month is currently visible in the calendar
   const [currentMonth, setCurrentMonth] = useState(
     new Date(selectedDate)
@@ -98,7 +91,6 @@ export default function DateSelector({
 
 //   console.log('calendarDays:', calendarDays);
   
-
   const monthLabel = `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
 
   function goToPreviousMonth() {
@@ -138,67 +130,20 @@ export default function DateSelector({
       </div>
 
       {/* Month navigation */}
-      <div className="mt-5 flex items-center justify-between rounded-full bg-white/5 px-3 py-2">
-        <button
-          onClick={goToPreviousMonth}
-          className="rounded-full p-2 hover:bg-white/10"
-        >
-          <ChevronLeft size={16} color="white" />
-        </button>
-
-        <span className="font-medium text-white">
-          {monthLabel}
-        </span>
-
-        <button
-          onClick={goToNextMonth}
-          className="rounded-full p-2 hover:bg-white/10"
-        >
-          <ChevronRight size={16} color="white" />
-        </button>
-      </div>
+      <CalendarHeader
+        goToPreviousMonth={goToPreviousMonth}
+        goToNextMonth={goToNextMonth}
+        monthLabel={monthLabel}
+      />
 
       {/* Weekday labels */}
-      <div className="mt-5 grid grid-cols-7 gap-2 text-center text-xs uppercase text-white/40">
-        {weekdayNames.map((weekday) => (
-          <div key={weekday}>{weekday}</div>
-        ))}
-      </div>
-
-      {/* Calendar grid */}
-      <div className="mt-2 grid grid-cols-7 gap-2">
-        {calendarDays.map((date, index) => {
-          const emptyCell = date === null;
-
-          let buttonStyles =
-            "h-11 rounded-2xl border";
-
-          if (emptyCell) {
-            buttonStyles += " cursor-default bg-transparent";
-          } else if (isSameDay(date, selectedDate)) {
-            buttonStyles +=
-              " border-transparent bg-white text-black";
-          } else {
-            buttonStyles +=
-              " border-white/10 bg-white/5 text-white/80 hover:bg-white/10";
-          }
-
-          return (
-            <button
-              key={index}
-              disabled={emptyCell}
-              onClick={() => {
-                if (date) {
-                  onSelect(date);
-                }
-              }}
-              className={buttonStyles}
-            >
-              {date ? date.getDate() : ""}
-            </button>
-          );
-        })}
-      </div>
+      <Calendar
+        calendarDays={calendarDays}
+        weekdayNames={weekdayNames}
+        selectedDate={selectedDate}
+        onSelect={onSelect}
+        isSameDay={isSameDay}
+      />
     </div>
   );
 }
