@@ -2,7 +2,11 @@ import { useState } from "react";
 import type { Feedback } from "./feedback.types";
 import { useGetFeedback } from "./useFeedback";
 
-function FeedbackMessage({ }) {
+type FeedbackMessageProps = {
+   selectedDate: Date;
+};
+
+function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
    const { data, isLoading, isError } = useGetFeedback();
 
    let feedbackType = data?.feedbackType;
@@ -68,7 +72,7 @@ function FeedbackMessage({ }) {
   
    return (
       <div className="w-screen h-auto flex flex-col items-start justify-start text-white gap-2 p-4 pl-5">
-         <p className="text-[#474747] font-medium">Today</p>
+         <p className="text-[#474747] font-medium">{selectedDate.toDateString()}</p>
          <h1 className="text-4xl">{!today ? '0min' : today}</h1>
          <p className="text-[#a8a8a8] w-70">{message}</p>
       </div>

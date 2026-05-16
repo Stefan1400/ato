@@ -3,15 +3,19 @@ import { useGetSessionsByDate } from "./useAnalytics";
 import formatDuration from "./helpers/FormatDuration";
 import formatTime from "./helpers/FormatTime";
 
-export default function SessionHistory() {
-  const { data: sessionsData, isLoading, error } = useGetSessionsByDate("2026-05-14");
+type SessionHistoryProps = {
+  selectedDate: Date;
+};
 
+export default function SessionHistory({ selectedDate }: SessionHistoryProps) {
+  const queryDate = selectedDate.toISOString().slice(0, 10);
+  const { data: sessionsData, isLoading, error } = useGetSessionsByDate(queryDate);
+
+  if (isLoading) return <div className="text-white mt-60">Loading...</div>;
   if (!sessionsData || sessionsData.length === 0) {
-    return <div className="text-white">No sessions found for this date.</div>;
+    return <div className="text-white mt-60">No sessions found for this date.</div>;
   }
-
-  if (isLoading) return <div className="text-white">Loading...</div>;
-  if (error) return <div className="text-white">Error loading sessions</div>;
+  if (error) return <div className="text-white mt-60">Error loading sessions</div>;
 
   const sortedSessions = sessionsData
     ? [...sessionsData].sort(
@@ -23,7 +27,7 @@ export default function SessionHistory() {
 
   return (
     <div className="w-full max-w-3xl mx-auto pb-7">
-      <div className="mb-4 text-[#474747] font-medium mt-10">Session History - 2026-05-14</div>
+      <div className="mb-4 text-[#474747] font-medium mt-10">Session History - {selectedDate.toDateString()}</div>
 
       <div className="space-y-3">
         {sortedSessions.map((session, index) => {
