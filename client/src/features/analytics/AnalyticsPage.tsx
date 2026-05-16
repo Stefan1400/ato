@@ -1,8 +1,8 @@
 import { useState } from "react";
 import FeedbackMessage from "../feedback/feedbackMessage";
-import SessionHistory from "./SessionHistory";
-import ViewByDate from "./ViewByDate";
-import DateSelector from "./DateSelector";
+import SessionHistory from "./sessions/SessionHistory";
+import ViewByDate from "./selectByDate/ViewByDate";
+import DateSelector from "./selectByDate/DateSelector";
 
 function AnalyticsPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());

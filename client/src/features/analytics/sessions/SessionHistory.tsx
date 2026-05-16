@@ -1,5 +1,5 @@
-import { useGetSessionsByDate } from "./useAnalytics";
-import formatTime from "./helpers/FormatTime";
+import { useGetSessionsByDate } from "../useAnalytics";
+import formatTime from "../helpers/FormatTime";
 import SessionCard from "./SessionCard";
 
 type SessionHistoryProps = {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import CalendarHeader from "./calendar/CalendarHeader";
-import Calendar from "./calendar/Calendar";
+import CalendarHeader from "../calendar/CalendarHeader";
+import Calendar from "../calendar/Calendar";
 
 const monthNames = [
   "January",

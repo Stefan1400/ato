@@ -1,5 +1,5 @@
 import { EllipsisIcon } from "lucide-react";
-import formatDuration from "./helpers/FormatDuration";
+import formatDuration from "../helpers/FormatDuration";
 
 export default function SessionCard({ session, index, durationMs, timeframe }: any) {
   return (
