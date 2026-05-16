@@ -1,22 +1,7 @@
 import { EllipsisIcon } from "lucide-react";
 import { useGetSessionsByDate } from "./useAnalytics";
-
-function formatDuration(ms: number) {
-  const totalMinutes = Math.round(ms / 60000);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-
-  if (hours === 0) return `${minutes}min`;
-  if (minutes === 0) return `${hours}hrs`;
-  return `${hours}hrs ${minutes}min`;
-}
-
-function formatTime(date: Date) {
-  return date.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-}
+import formatDuration from "./helpers/FormatDuration";
+import formatTime from "./helpers/FormatTime";
 
 export default function SessionHistory() {
   const { data: sessionsData, isLoading, error } = useGetSessionsByDate("2026-05-14");
