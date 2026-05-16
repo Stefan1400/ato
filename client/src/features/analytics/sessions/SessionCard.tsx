@@ -1,4 +1,3 @@
-import { EllipsisIcon } from "lucide-react";
 import formatDuration from "../helpers/FormatDuration";
 
 export default function SessionCard({ session, index, durationMs, timeframe }: any) {
@@ -9,10 +8,6 @@ export default function SessionCard({ session, index, durationMs, timeframe }: a
    >
       <div className="flex items-center justify-between gap-4">
          <div className="text-sm text-white/80">Session {index + 1}</div>
-
-         <button type="button">
-            <EllipsisIcon color="white" />
-         </button>
       </div>
 
       <div className="flex items-center justify-between gap-4">
