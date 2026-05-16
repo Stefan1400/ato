@@ -21,6 +21,10 @@ function formatTime(date: Date) {
 export default function SessionHistory() {
   const { data: sessionsData, isLoading, error } = useGetSessionsByDate("2026-05-14");
 
+  if (!sessionsData || sessionsData.length === 0) {
+    return <div className="text-white">No sessions found for this date.</div>;
+  }
+
   if (isLoading) return <div className="text-white">Loading...</div>;
   if (error) return <div className="text-white">Error loading sessions</div>;
 
