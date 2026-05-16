@@ -10,7 +10,7 @@ const {
 const authMiddleware = require('../middleware/auth');
 const validateRequest = require('../middleware/validateRequest');
 
-const { addSessionSchema, editSessionSchema }  = require('../schemas/sessionSchemas');
+const { addSessionSchema } = require('../schemas/sessionSchemas');
 
 //add session
 router.post(
@@ -25,21 +25,6 @@ router.get(
    '/',
    authMiddleware,
    getSessionsController
-);
-
-//edit session
-router.patch(
-   '/:sessionId',
-   authMiddleware,
-   validateRequest(editSessionSchema),
-   editSessionController
-);
-
-//delete session
-router.delete(
-   '/:sessionId',
-   authMiddleware,
-   deleteSessionController 
 );
 
 module.exports = router;
