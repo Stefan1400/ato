@@ -1,7 +1,23 @@
 const User = require('../models/authModels');
-const { generateAccessToken, generateRefreshToken } = require('../utils/tokens');
-const { saveRefreshToken, findRefreshToken, revokeRefreshToken, revokeAllRefreshTokens } = require('../models/refreshTokenModel');
 const { hashValue, compareValue } = require('../utils/hash');
+const jwt = require('jsonwebtoken');
+
+const getJwtSecret = () => {
+   const secret = process.env.JWT_SECRET;
+   if (!secret) {
+      throw new Error('JWT secret is not defined');
+   }
+   return secret;
+};
+
+const createToken = (user) => {
+   const secret = getJwtSecret();
+   return jwt.sign(
+      { id: user.id, email: user.email },
+      secret,
+      { expiresIn: '7d' }
+   );
+};
 
 const registerController = async (req, res, next) => {
    
@@ -29,25 +45,21 @@ const registerController = async (req, res, next) => {
          return res.status(409).json({ message: 'There was a problem creating an account' });
       };
 
-      const accessToken = generateAccessToken(createdUser);
-      const refreshToken = generateRefreshToken();
+      const { password_hash, ...userData } = createdUser;
+      const token = createToken(userData);
 
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      await saveRefreshToken(createdUser.id, refreshToken, expiresAt);
-
-      res.cookie('refreshToken', refreshToken, {
+      res.cookie('token', token, {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
-         sameSite: 'Strict',
-         maxAge: 7 * 24 * 60 * 60 * 1000
+         sameSite: 'lax',
+         path: '/',
+         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       });
-
-      const { password_hash, ...userData } = createdUser;
 
       return res.status(201).json({
          message: 'user successfully created',
          user: userData,
-         accessToken
+         token,
       });
 
    } catch (err) {
@@ -78,25 +90,25 @@ const loginController = async (req, res, next) => {
          return res.status(400).json({ message: 'Invalid credentials'});
       };
 
-      const accessToken = generateAccessToken(emailExists);
-      const refreshToken = generateRefreshToken();
-
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-      await saveRefreshToken(emailExists.id, refreshToken, expiresAt);
-
-      res.cookie('refreshToken', refreshToken, {
-         httpOnly: true,
-         secure: process.env.NODE_ENV === 'production',
-         sameSite: 'Strict',
-         maxAge: 7 * 24 * 60 * 60 * 1000
-      });
+      console.log('made it past isMatch');
       
       const { password_hash, ...userData } = emailExists;
+      const token = createToken(userData);
 
+      res.cookie('token', token, {
+         httpOnly: true,
+         secure: process.env.NODE_ENV === 'production',
+         sameSite: 'lax',
+         path: '/',
+         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      });
+
+      console.log('made it past token creation: ');
+      
       return res.status(200).json({
          message: 'user successfully logged in',
          user: userData,
-         accessToken
+         token,
       });
 
    } catch (err) {
@@ -106,34 +118,12 @@ const loginController = async (req, res, next) => {
 
 const logoutController = async (req, res, next) => {
    try {
-      const recievedRefreshToken = req.cookies?.refreshToken;
 
-      if (!recievedRefreshToken) {
-         return res.status(401).json({ message: 'Refresh token is required' });
-      };
-
-      const refreshTokenExists = await findRefreshToken(recievedRefreshToken);
-
-      if (!refreshTokenExists) {
-         return res.status(401).json({ message: 'Refresh token is required' });
-      };
-
-      await revokeRefreshToken(recievedRefreshToken);
-
-      res.clearCookie('refreshToken', {
+      res.clearCookie('token', {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
-         sameSite: 'Strict',
+         sameSite: 'lax',
          path: '/',
-         maxAge: 0
-      });
-
-      res.clearCookie('accessToken', {
-         httpOnly: true,
-         secure: process.env.NODE_ENV === 'production',
-         sameSite: 'Strict',
-         path: '/',
-         maxAge: 0
       });
 
       return res.status(200).json({
@@ -156,10 +146,10 @@ const deleteUserController = async (req, res, next) => {
          return res.status(400).json({ message: 'User deletion unsuccessful' });
       };
 
-      res.clearCookie('refreshToken', {
+      res.clearCookie('token', {
          httpOnly: true,
          secure: process.env.NODE_ENV === 'production',
-         sameSite: 'Strict',
+         sameSite: 'lax',
       });
 
       return res.status(200).json({

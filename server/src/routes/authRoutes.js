@@ -10,7 +10,6 @@ const {
 } = require('../controllers/authControllers');
 const validate = require('../middleware/validateRequest');
 const { registerSchema, loginSchema, changePasswordSchema, forgotPasswordSchema, resetPasswordSchema } = require('../schemas/authSchemas');
-const { sendNewAccessToken } = require('../controllers/refreshController');
 const { forgotPasswordController, resetPasswordController } = require ('../controllers/passwordController');
 const authMiddleware = require('../middleware/auth');
 const validateRequest = require('../middleware/validateRequest');
@@ -27,12 +26,6 @@ router.post(
    '/login',
    validate(loginSchema),
    loginController
-);
-
-//refresh
-router.post(
-   '/refresh',
-   sendNewAccessToken
 );
 
 //logout

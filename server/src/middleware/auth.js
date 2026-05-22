@@ -1,13 +1,18 @@
 const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
-   const token = req.headers.authorization?.split(' ')[1];
+   const token = req.cookies.token;
+
+   console.log('token in auth.js:', token);
    
    if (!token) return res.status(401).json({ message: 'Unauthorized' });
    
    try {
-      
-      const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      const secret = process.env.JWT_SECRET;
+      if (!secret) {
+         return res.status(500).json({ message: 'JWT secret is not configured' });
+      }
+      const payload = jwt.verify(token, secret);
       req.user = payload;
       next();
 

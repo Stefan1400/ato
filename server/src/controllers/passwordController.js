@@ -2,7 +2,6 @@ const User = require('../models/authModels');
 const crypto = require('crypto');
 const { hashToken, hashValue } = require('../utils/hash');
 const { savePasswordResetToken, deletePasswordResetTokens, findPasswordResetTokenByHash } = require('../models/passwordResetTokenModel');
-const { findRefreshToken, revokeAllRefreshTokens } = require('../models/refreshTokenModel');
 
 const forgotPasswordController = async (req, res, next) => {
    const { email } = req.body;
@@ -64,8 +63,6 @@ const resetPasswordController = async (req, res, next) => {
       if (!passwordChanged) {
          return res.status(400).json({ message: 'Invalid request' });
       };
-
-      await revokeAllRefreshTokens(tokenRow.user_id);
 
       await deletePasswordResetTokens(tokenRow.user_id);
 
