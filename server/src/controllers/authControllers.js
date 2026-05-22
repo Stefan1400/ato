@@ -1,23 +1,6 @@
 const User = require('../models/authModels');
 const { hashValue, compareValue } = require('../utils/hash');
-const jwt = require('jsonwebtoken');
-
-const getJwtSecret = () => {
-   const secret = process.env.JWT_SECRET;
-   if (!secret) {
-      throw new Error('JWT secret is not defined');
-   }
-   return secret;
-};
-
-const createToken = (user) => {
-   const secret = getJwtSecret();
-   return jwt.sign(
-      { id: user.id, email: user.email },
-      secret,
-      { expiresIn: '7d' }
-   );
-};
+const { createToken, getJwtSecret } = require('../utils/jwt');
 
 const registerController = async (req, res, next) => {
    
@@ -89,8 +72,6 @@ const loginController = async (req, res, next) => {
       if (!isMatch) {
          return res.status(400).json({ message: 'Invalid credentials'});
       };
-
-      console.log('made it past isMatch');
       
       const { password_hash, ...userData } = emailExists;
       const token = createToken(userData);
@@ -102,8 +83,6 @@ const loginController = async (req, res, next) => {
          path: '/',
          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       });
-
-      console.log('made it past token creation: ');
       
       return res.status(200).json({
          message: 'user successfully logged in',
