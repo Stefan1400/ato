@@ -7,12 +7,15 @@ import { PlayIcon, StopIcon } from "../../assets/svgs";
 function SessionTimer() {
 
    const saved = localStorage.getItem('sessionTimer');
-   const initialState = saved ? JSON.parse(saved) : { time: 0, timerStatus: 'default', startedAt: null };
+   const parsedState = saved ? JSON.parse(saved) : { time: 0, timerStatus: 'default', startedAt: null };
+   const initialTime = parsedState.timerStatus === 'ongoing' && parsedState.startedAt
+      ? Math.max(0, Math.floor((Date.now() - new Date(parsedState.startedAt).getTime()) / 1000))
+      : parsedState.time;
 
    const addSessionMutation = useAddSession();
-   const [timerStatus, setTimerStatus] = useState<UIStates>(initialState.timerStatus);
+   const [timerStatus, setTimerStatus] = useState<UIStates>(parsedState.timerStatus);
 
-   const [time, setTime] = useState<number>(initialState.time);
+   const [time, setTime] = useState<number>(initialTime);
    const intervalRef = useRef<number | null>(null);
 
    const sessionRef = useRef<addSessionTypes>({
@@ -21,8 +24,8 @@ function SessionTimer() {
    });
 
    useEffect(() => {
-      if (initialState.startedAt) {
-         sessionRef.current.session_started = new Date(initialState.startedAt);
+      if (parsedState.startedAt) {
+         sessionRef.current.session_started = new Date(parsedState.startedAt);
       };
    }, []);
    
