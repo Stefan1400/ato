@@ -117,17 +117,21 @@ function SessionTimer() {
          session_started: sessionRef.current.session_started,
          session_ended: sessionRef.current.session_ended
       },
-      {
+      {  
+
          onSuccess: () => {
             sessionRef.current = {
                session_started: null,
                session_ended: null
             }
-            try {
-               showToast({ type: 'success', message: 'Session Successfully Added', duration: 3000 });
-            } catch (err) {
-               showToast({ type: 'error', message: 'Session Could not be added', duration: 3000 });
+            showToast({ type: 'success', message: 'Session Added Successfully', duration: 3000 });
+         },
+         onError: () => {
+            sessionRef.current = {
+               session_started: null,
+               session_ended: null
             }
+            showToast({ type: 'error', message: 'Session Could not be added', duration: 3000 });
          }
       }
    )
