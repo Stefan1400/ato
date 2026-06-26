@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useCallback, useState } from 'react';
-import { CheckmarkIcon } from '../assets/svgs';
-import { X } from 'lucide-react';
+import React, { createContext, useContext, useState } from 'react';
+import { X, SquareCheck } from 'lucide-react';
 
 type ToastType = 'success' | 'error' | 'info';
 type Toast = { id: number; type: ToastType; message: string };
@@ -14,18 +13,18 @@ export const useToast = () => useContext(ToastContext as React.Context<(typeof T
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const removeToast = useCallback((id: number) => {
+  function removeToast(id: number) {
     setToasts((t) => t.filter((x) => x.id !== id));
-  }, []);
+  }
 
-  const showToast = useCallback(({ type, message, duration = 3000 }: ShowToastArgs) => {
+  const showToast = ({ type, message, duration = 3000 }: ShowToastArgs) => {
     const id = Date.now();
     setToasts((t) => [...t, { id, type, message }]);
 
     window.setTimeout(() => {
       removeToast(id);
     }, duration);
-  }, [removeToast]);
+  };
 
   return (
     <ToastContext.Provider value={{ showToast }}>
@@ -38,7 +37,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             className="pointer-events-auto w-full max-w-3xl bg-[#171717] border border-[#2E2E2E] flex items-center justify-between text-white px-4 py-3"
           >
             <div className="flex items-center gap-4">
-              <CheckmarkIcon />
+              <SquareCheck className={`${toast.type === 'success' ? 'text-[#00C851]' : toast.type === 'error' ? 'text-[#FF5252]' : 'text-white'}`} />
+              
               <div className={`${toast.type === 'success' ? 'text-[#00C851]' : toast.type === 'error' ? 'text-[#FF5252]' : 'text-white'}`}>
                 {toast.message}
               </div>
@@ -49,7 +49,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               className="text-xl leading-none"
               aria-label="close-toast"
             >
-              <X className="text-[#00C851]" />
+              <X />
             </button>
           </div>
         ))}
