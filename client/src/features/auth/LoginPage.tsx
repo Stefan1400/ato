@@ -4,12 +4,14 @@ import { useLogin } from "./useAuth";
 import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../components/Toast";
 
 function LoginPage() {
 
    const loginMutation = useLogin();
    const { setUser } = useContext(AuthContext) as AuthContextType;
    const navigate = useNavigate();
+   const { showToast } = useToast();
 
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
@@ -60,6 +62,7 @@ function LoginPage() {
                   Object.keys(prev).map(key => [key, ""])
                )
             );
+            showToast({ type: 'success', message: 'Logged in successfully', duration: 3000 });
             navigate('/');
          }
       });

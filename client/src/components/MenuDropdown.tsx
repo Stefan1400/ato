@@ -6,6 +6,7 @@ import { useContext } from "react";
 import LoadingScreen from "./LoadingScreen";
 import { HomeIcon, SessionsIcon, LockIcon } from "../assets/svgs";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "./Toast";
 
 type MenuDropdownTypes = {
   toggleMenu: () => void;
@@ -17,10 +18,12 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
   const logoutMutation = useLogout();
   const { user } = useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
+        showToast({ type: 'success', message: 'Logged out successfully', duration: 3000 });
         toggleMenu();
         navigate('/login');
       }
