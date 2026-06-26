@@ -3,6 +3,7 @@ import type { addSessionTypes, UIStates } from "./tracker.types";
 import { useAddSession } from "./useSessionTimer";
 import { sessionTimerStyles } from "./SessionTimer.styles";
 import { PlayIcon, StopIcon } from "../../assets/svgs";
+import { useToast } from "../../components/Toast";
 
 function SessionTimer() {
 
@@ -13,6 +14,7 @@ function SessionTimer() {
       : parsedState.time;
 
    const addSessionMutation = useAddSession();
+   const { showToast } = useToast() as any;
    const [timerStatus, setTimerStatus] = useState<UIStates>(parsedState.timerStatus);
 
    const [time, setTime] = useState<number>(initialTime);
@@ -120,6 +122,11 @@ function SessionTimer() {
             sessionRef.current = {
                session_started: null,
                session_ended: null
+            }
+            try {
+               showToast({ type: 'success', message: 'Session Successfully Added', duration: 3000 });
+            } catch (err) {
+               showToast({ type: 'error', message: 'Session Could not be added', duration: 3000 });
             }
          }
       }
