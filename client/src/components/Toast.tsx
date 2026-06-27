@@ -11,7 +11,9 @@ const ToastContext = createContext({ showToast: (opts: ShowToastArgs) => {} });
 export const useToast = () => useContext(ToastContext as React.Context<(typeof ToastContext extends React.Context<infer T> ? T : any)>);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toasts, setToasts] = useState<Toast[]>([]);
+  console.log('ToastProvider rendered');
+  
+   const [toasts, setToasts] = useState<Toast[]>([]);
 
   function removeToast(id: number) {
     setToasts((t) => t.filter((x) => x.id !== id));
@@ -30,7 +32,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={{ showToast }}>
       {children}
 
-      <div className="fixed left-0 right-0 top-16 flex flex-col items-center gap-2 z-1001 pointer-events-none">
+      <div className="fixed left-0 right-0 top-16 flex flex-col items-center gap-2 z-700 pointer-events-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}
