@@ -3,11 +3,15 @@ import { EyeSlashedIcon, EyeIcon } from "../../../assets/svgs";
 import type { ChangePasswordErrors } from "../auth.types";
 import { useChangePassword } from "../useAuth";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../components/Toast";
+import { useLogout } from "../useAuth";
 
 function ChangePasswordPage() {
 
    const changePasswordMutation = useChangePassword();
    const navigate = useNavigate();
+   const { showToast } = useToast();
+   const logoutMutation = useLogout();
    
    const [currentPassword, setCurrentPassword] = useState('');
    const [newPassword, setNewPassword] = useState('');
@@ -50,6 +54,7 @@ function ChangePasswordPage() {
 
       if (hasErrors) {
          setErrors(newErrors);
+         showToast({ type: 'error', message: 'Please fix the errors', duration: 3000 });
          return;
       };
 
@@ -68,7 +73,12 @@ function ChangePasswordPage() {
                   newPassword: '',
                   confirmNewPassword: '',
                });
-               navigate('/');
+               logoutMutation.mutate();
+               navigate('/login');
+               showToast({ type: 'success', message: 'Password changed successfully', duration: 3000 });
+            },
+            onError: () => {
+               showToast({ type: 'error', message: 'Failed to change password', duration: 3000 });
             }
          }
       )

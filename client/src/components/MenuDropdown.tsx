@@ -23,9 +23,18 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        showToast({ type: 'success', message: 'Logged out successfully', duration: 3000 });
+        try {
+          console.log('User logged out successfully');
+          showToast({ type: 'success', message: 'Logged out successfully', duration: 3000 });
+        } catch (error) {
+          console.error('Error during logout:', error);
+        }
         toggleMenu();
         navigate('/login');
+      },
+      onError: (error) => {
+        console.error('Logout failed:', error);
+        showToast({ type: 'error', message: 'Logout failed. Please try again.', duration: 3000 });
       }
     });
   };

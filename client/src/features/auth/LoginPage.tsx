@@ -45,6 +45,7 @@ function LoginPage() {
 
       if (hasErrors) {
          setErrors(newErrors);
+         showToast({ type: 'error', message: 'Please fix the errors', duration: 3000 });
          return;
       };
 
@@ -64,9 +65,16 @@ function LoginPage() {
             );
             showToast({ type: 'success', message: 'Logged in successfully', duration: 3000 });
             navigate('/');
+         },
+         onError: (error: any) => {
+            if (error.response && error.response.status === 401) {
+               showToast({ type: 'error', message: 'Invalid email or password', duration: 3000 });
+            } else {
+               showToast({ type: 'error', message: 'Login failed. Please try again.', duration: 3000 });
+            }
          }
       });
-   };
+   }
   
    return (
    <div className='w-screen h-screen bg-[#151515]'>
