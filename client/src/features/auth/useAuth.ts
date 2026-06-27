@@ -27,16 +27,15 @@ export const useGetUser = () => {
     });
 };
 
-export const useLogout = (options?: UseMutationOptions<void, Error, void>) => {
+export const useLogout = () => {
     const { setUser } = useContext(AuthContext) as AuthContextType;
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: logoutUser,
-        ...options,
         onSuccess: () => {
             setUser(undefined);
-            queryClient.clear();
+            queryClient.removeQueries();
       }
     });
 };

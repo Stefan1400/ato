@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useGetSessionsByDate } from "../useAnalytics";
 import formatTime from "../helpers/FormatTime";
 import SessionCard from "./SessionCard";
+import { useToast } from "../../../components/Toast";
 
 type SessionHistoryProps = {
   selectedDate: Date;
@@ -9,15 +11,28 @@ type SessionHistoryProps = {
 export default function SessionHistory({ selectedDate }: SessionHistoryProps) {
   const queryDate = selectedDate.toISOString().slice(0, 10);
   const { data: sessionsData, isLoading, error } = useGetSessionsByDate(queryDate);
+  const { showToast } = useToast();
+  const [showedEmptyToastDate, setShowedEmptyToastDate] = useState<string | null>(null);
+
+  useEffect(() => {
+    setShowedEmptyToastDate(null);
+  }, [queryDate]);
+
+  useEffect(() => {
+    if (!isLoading && !error && sessionsData && sessionsData.length === 0 && showedEmptyToastDate !== queryDate) {
+      showToast({ type: 'info', message: 'No sessions found for this date.', duration: 3000 });
+      setShowedEmptyToastDate(queryDate);
+    }
+  }, [isLoading, error, sessionsData, showToast, showedEmptyToastDate, queryDate]);
 
   // loading / error / empty states
   if (isLoading) return <div className="text-white mt-60">Loading...</div>;
-  
+
+  if (error) return <div className="text-white mt-60">Error loading sessions</div>;
+
   if (!sessionsData || sessionsData.length === 0) {
     return <div className="text-white mt-60">No sessions found for this date.</div>;
   }
-  
-  if (error) return <div className="text-white mt-60">Error loading sessions</div>;
 
   // Sort sessions by start time (oldest first)
   const sortedSessions = sessionsData

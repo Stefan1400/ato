@@ -59,13 +59,9 @@ const getSessionsController = async (req, res, next) => {
 
     const fetchedSessions = await Session.getSessionsByDate(userId, dayStartUTC, dayEndUTC);
 
-    if (!fetchedSessions || fetchedSessions.length === 0) {
-      return res.status(404).json({ message: `Sessions not found for date: ${date}` });
-    }
-
     return res.status(200).json({
       message: 'sessions successfully fetched',
-      fetchedSessions,
+      fetchedSessions: fetchedSessions || [],
     });
   } catch (err) {
     next(err);
