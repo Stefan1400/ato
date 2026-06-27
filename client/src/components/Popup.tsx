@@ -2,6 +2,7 @@ import { useState } from "react";
 import { WarningIcon } from "../assets/svgs";
 import { useDeleteUser } from "../features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "./Toast";
 
 type PopupTypes = {
    toggleDeleteAccountPopup: () => void;
@@ -16,6 +17,7 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
    const [error, setError] = useState(false);
 
    const navigate = useNavigate();
+   const { showToast } = useToast();
 
    const validateString = () => {
       if (!typedString) return false;
@@ -32,6 +34,7 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
 
       if (!validated) {
          setError(true);
+         showToast({ type: 'error', message: 'Invalid confirmation string', duration: 3000 });
          return;
       };
 
@@ -42,7 +45,11 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
          setError(false);
          navigate('/signup');
          toggleMenu();
-      }
+         showToast({ type: 'success', message: 'Account Deleted Successfully', duration: 3000 });
+      },
+      onError: () => {
+            showToast({ type: 'error', message: 'Account could not be deleted', duration: 3000 });
+         }
     });
    };
 
