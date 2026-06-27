@@ -13,9 +13,11 @@ export default function SessionHistory({ selectedDate }: SessionHistoryProps) {
   const { data: sessionsData, isLoading, error } = useGetSessionsByDate(queryDate);
   const { showToast } = useToast();
   const [showedEmptyToastDate, setShowedEmptyToastDate] = useState<string | null>(null);
+  const [showedErrorToastDate, setShowedErrorToastDate] = useState<string | null>(null);
 
   useEffect(() => {
     setShowedEmptyToastDate(null);
+    setShowedErrorToastDate(null);
   }, [queryDate]);
 
   useEffect(() => {
@@ -23,7 +25,12 @@ export default function SessionHistory({ selectedDate }: SessionHistoryProps) {
       showToast({ type: 'info', message: 'No sessions found for this date.', duration: 3000 });
       setShowedEmptyToastDate(queryDate);
     }
-  }, [isLoading, error, sessionsData, showToast, showedEmptyToastDate, queryDate]);
+
+    if (!isLoading && error && showedErrorToastDate !== queryDate) {
+      showToast({ type: 'error', message: 'Error loading sessions', duration: 3000 });
+      setShowedErrorToastDate(queryDate);
+    }
+  }, [isLoading, error, sessionsData, showToast, showedEmptyToastDate, showedErrorToastDate, queryDate]);
 
   // loading / error / empty states
   if (isLoading) return <div className="text-white mt-60">Loading...</div>;
