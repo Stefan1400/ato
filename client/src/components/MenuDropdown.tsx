@@ -40,62 +40,69 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
   };
   
   return (
-    <div className={`${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} lg:hidden transition-all ease-initial duration-150 opacity-0 w-screen fixed left-0 top-0 h-screen z-800 bg-[#151515] pt-20 text-white`}>
-      {logoutMutation.isPending && (
-        <LoadingScreen text="Signing out..."/>
-      )}
-      
-      <nav className='mt-2'>
-         <ul className='flex flex-col gap-1 items-start text-[1.25rem] font-light [&>li]:w-screen [&>li]:p-3 [&>li>span]:ml-4 [&>li>a]:ml-4'>
-            <li onClick={toggleMenu}>
-              <Link className="flex flex-row items-center gap-3" to='/'>
-                <HomeIcon />
-                <span>Home</span>
-              </Link>
-            </li>
-            <li onClick={toggleMenu}>
-              <Link className="flex flex-row items-center gap-3" to='/analytics'>
-                <SessionsIcon />
-                <span>My Sessions</span>
-              </Link>
-            </li>
-            {user && (
+    <div className={`${menuOpen ? 'pointer-events-auto' : 'pointer-events-none'} lg:hidden fixed inset-0 z-800`}>
+      <div className={`${menuOpen ? 'opacity-100' : 'opacity-0'} absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-200`} />
+
+      <div className={`relative mx-4 mt-20 overflow-hidden rounded-[28px] border border-white/10 bg-[#090909]/95 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)] transition-all duration-200 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-[-10px] opacity-0'}`}>
+        {logoutMutation.isPending && (
+          <LoadingScreen text="Signing out..." />
+        )}
+
+        <div className="px-6 py-5">
+          <nav>
+            <ul className="flex flex-col gap-2 text-sm text-white">
               <li onClick={toggleMenu}>
-                <Link className="flex flex-row items-center gap-3" to='/change-password'>
-                  <LockIcon />
-                  <span>Change Password</span>
+                <Link className="group flex items-center gap-3 rounded-2xl px-4 py-3 transition hover:bg-white/5" to='/'>
+                  <HomeIcon />
+                  <span>Home</span>
                 </Link>
               </li>
-            )}
-            {!user ? (
-              <li onClick={toggleMenu} className="flex flex-col gap-5 items-center justify-center mt-3">
-                <Link 
-                  className="w-90 py-2.5 text-[1rem] text-center rounded-xs bg-[#D60000] text-white font-medium mr-3"
-                  to='/signup'>
+              <li onClick={toggleMenu}>
+                <Link className="group flex items-center gap-3 rounded-2xl px-4 py-3 transition hover:bg-white/5" to='/analytics'>
+                  <SessionsIcon />
+                  <span>My Sessions</span>
+                </Link>
+              </li>
+              {user && (
+                <li onClick={toggleMenu}>
+                  <Link className="group flex items-center gap-3 rounded-2xl px-4 py-3 transition hover:bg-white/5" to='/change-password'>
+                    <LockIcon />
+                    <span>Change Password</span>
+                  </Link>
+                </li>
+              )}
+            </ul>
+
+            <div className="mt-5 border-t border-white/10 pt-5">
+              {!user ? (
+                <div onClick={toggleMenu} className="grid gap-3">
+                  <Link className="inline-flex items-center justify-center rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-[#f3f3f3]" to='/signup'>
                     Sign Up
-                </Link>
-                <Link 
-                  className="w-90 py-2.5 text-[1rem] text-center rounded-xs bg-[#121212] border-2 border-[#2E2E2E] mr-3"
-                  to='/login'>
+                  </Link>
+                  <Link className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-[#111111] px-4 py-3 text-sm text-white transition hover:border-white/20 hover:bg-[#1a1a1a]" to='/login'>
                     Sign In
-                </Link>
-              </li>
-            ) : (
-              <li>
-                <button onClick={handleLogout} className="w-full py-3 text-[1rem] rounded-xs bg-[#121212] border-2 border-[#2E2E2E]">Sign Out</button>
-              </li>
-            )}
-            {user && (
-              <li className='text-red-600 mt-70 flex items-center justify-center'>
-                <button 
-                  onClick={toggleDeleteAccountPopup} 
-                  className="w-90 py-2.5 text-[1rem] rounded-xs bg-[#1E0A0A] border-2 border-[#790000]">
-                    Delete Account
+                  </Link>
+                </div>
+              ) : (
+                <button onClick={handleLogout} className="w-full rounded-2xl bg-[#111111] px-4 py-3 text-sm text-white transition hover:bg-[#1a1a1a] border border-white/10">
+                  Sign Out
                 </button>
-              </li>
-            )}
-         </ul>
-      </nav>
+              )}
+
+              {user && (
+                <div className="mt-3">
+                  <button
+                    onClick={toggleDeleteAccountPopup}
+                    className="w-full rounded-2xl bg-[#170606] px-4 py-3 text-sm font-semibold text-[#ff8f8f] transition hover:bg-[#220b0b] border border-[#650000]"
+                  >
+                    Delete Account
+                  </button>
+                </div>
+              )}
+            </div>
+          </nav>
+        </div>
+      </div>
     </div>
   )
 }
