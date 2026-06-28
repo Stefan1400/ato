@@ -40,7 +40,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
   };
   
   return (
-    <div className={`${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} transition-all ease-initial duration-150 opacity-0 w-screen fixed left-0 top-0 h-screen z-800 bg-[#151515] pt-20 text-white`}>
+    <div className={`${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} lg:hidden transition-all ease-initial duration-150 opacity-0 w-screen fixed left-0 top-0 h-screen z-800 bg-[#151515] pt-20 text-white`}>
       {logoutMutation.isPending && (
         <LoadingScreen text="Signing out..."/>
       )}
