@@ -1,63 +1,51 @@
 import { Link } from "react-router-dom";
 import { AuthContext } from "../app/AuthProvider";
 import { useContext } from "react";
+import { X, LucideMenu } from "lucide-react";
 
-interface navbarProps {
+interface NavbarProps {
    toggleMenu: () => void;
    menuOpen: boolean;
 };
 
-function Navbar({ toggleMenu, menuOpen }: navbarProps) {
-
+function Navbar({ toggleMenu, menuOpen }: NavbarProps) {
    const auth = useContext(AuthContext);
-
    const email = auth?.user?.email;
-   
-   
+   const displayName = email || 'Guest';
+
    return (
-   <nav className='fixed left-0 top-0 w-screen h-16 px-6 text-white z-1000 border-b border-[#2E2E2E]'>
-      <ul className='w-full h-full flex justify-between items-center border-none'>
-         <li className={`flex gap-6 items-center`}>
-            {!menuOpen && (
-               <h1 className='text-[1.1rem] font-medium'>
-                  <Link to='/'>ato</Link>
-               </h1>
+      <nav className='fixed left-0 top-0 w-full h-16 px-4 lg:px-6 text-white z-1000 border-b border-[#2E2E2E] bg-[#090909]/95 backdrop-blur-sm'>
+         <div className='flex h-full w-full items-center justify-between'>
+            {!menuOpen ? (
+               <Link to='/' className='text-[1.1rem] font-semibold tracking-[0.08em] lowercase text-white hover:text-[#f4f4f4]'>
+                  ato
+               </Link>
+            ) : (
+               <span className='font-medium text-white truncate max-w-[180px]'>{displayName}</span>
             )}
+            
 
-            {menuOpen && (
-               <div className="flex items-center gap-4">
-                  <div className='w-7.5 h-7.5 cursor-pointer flex justify-center items-center bg-[#373737] border-none rounded-full'>
-                     <span className='font-medium text-[0.9rem]'>{email ? email[0]?.toUpperCase() : 'G'}</span>
-                  </div>
-                  
-                  <span className="font-light">{email ? email : 'Logged in as Guest'}</span>
+            <div className='flex items-center gap-4'>
+               <div className='hidden lg:flex items-center gap-3 text-sm text-[#d9d9d9]'>
+                  <span className='text-[#8f8f8f]'>Signed in as</span>
+                  <span className='font-medium text-white truncate max-w-[180px]'>{displayName}</span>
                </div>
-            )}
-         
-         </li>
 
-         <li>
-            {!menuOpen && (
-               <button onClick={toggleMenu}>
-                  <svg width="24" height="15" viewBox="0 0 28 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <rect width="24" height="2" rx="0.5" fill="#B6B6B6"/>
-                     <rect y="13" width="24" height="2" rx="0.5" fill="#B6B6B6"/>
-                  </svg>
+               <button
+                  onClick={toggleMenu}
+                  className='flex h-10 w-10 items-center justify-center rounded-full border border-[#2E2E2E] bg-[#111111] text-[#b6b6b6] transition-colors duration-200 hover:border-[#3e3e3e] hover:text-white lg:hidden'
+                  aria-label='Toggle menu'
+               >
+                  {menuOpen ? (
+                     <X size={24} />
+                  ) : (
+                     <LucideMenu size={24} />
+                  )}
                </button>
-            )}
-
-            {menuOpen && (
-               <button onClick={toggleMenu}>
-                  <svg width="24" height="15" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <rect width="19.4691" height="1" rx="0.454925" transform="matrix(0.719087 0.69492 -0.951834 0.306615 0.867188 0.0664062)" fill="#D9D9D9"/>
-                     <rect width="19.4691" height="1" rx="0.454925" transform="matrix(0.719087 -0.69492 0.951834 0.306615 0 13.5273)" fill="#D9D9D9"/>
-                  </svg>
-               </button>
-            )}
-         </li>
-      </ul>
-   </nav>
-  )
+            </div>
+         </div>
+      </nav>
+   )
 }
 
 export default Navbar;
