@@ -55,42 +55,57 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
 
    return (
     <>
-      <div onClick={toggleDeleteAccountPopup} className="w-screen h-screen relative left-0 top-0 z-1000 bg-black opacity-75 flex"></div>
+      <div onClick={toggleDeleteAccountPopup} className="fixed inset-0 z-1000 bg-black/70 backdrop-blur-sm" />
 
-      <div className="w-full h-auto border-2 border-[#3C3C3C] rounded-[5px] absolute left-[50%] bottom-0 translate-x-[-50%] z-1000 text-white bg-[#171717] p-5">
-         <main className="flex items-center justify-center flex-col text-center gap-6 p-5">
-            <div className="flex justify-center items-center p-2 bg-[#232323] rounded-full">
-               <WarningIcon />
+      <div className="fixed inset-x-4 top-12 z-1000 mx-auto flex min-h-[calc(100vh-96px)] items-center justify-center overflow-y-auto pb-8 sm:inset-x-6 sm:top-16">
+         <div className="w-full max-w-lg rounded-[32px] border border-white/10 bg-[#0f0f0f]/95 p-6 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-8">
+            <div className="flex flex-col items-center gap-4 text-center">
+               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#2f1212]/80 text-[#ff8b8b] shadow-[0_0_0_1px_rgba(255,138,138,0.1)]">
+                  <WarningIcon />
+               </div>
+
+               <div>
+                  <h2 className="text-3xl font-semibold tracking-[-0.03em] text-white">Delete Account?</h2>
+                  <p className="mt-3 text-sm leading-6 text-[#c7c7c7]">
+                     Permanently delete your account and all session data. This cannot be undone.
+                  </p>
+               </div>
             </div>
 
-            <h2 className="text-2xl font-semibold">Delete Account?</h2>
-            <p className="text-medium">All data will be permanently lost. This action cannot be undone.</p>
-
-            <form onSubmit={handleSubmit} className="flex flex-col gap-8 text-start">
-               <label className="flex flex-col gap-2" htmlFor="delete-account-input">
-                  <p>Please type <span className="font-bold">delete my account</span> to confirm</p>
-                  <input 
-                     onChange={
-                        (e: React.ChangeEvent<HTMLInputElement>) => settypedString(e.target.value)
-                     } 
-                     value={typedString} 
-                     className={`${error ? 'border-red-500 outline-0' : ''} w-full border-2 border-[#3C3C3C] p-3 rounded-sm`} 
-                     type="text" 
-                     placeholder="Enter the string above" />
-               
-                  {error && (
-                     <span className="text-red-500 font-extralight">Please enter "delete my account"</span>
-                  )}
+            <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-15">
+               <label className="text-sm text-[#e5e5e5]" htmlFor="delete-account-input">
+                  <span className="mb-2 block text-[#b5b5b5]">
+                     Type <span className="font-semibold text-white">delete my account</span> to confirm.
+                  </span>
+                  <input
+                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => settypedString(e.target.value)}
+                     value={typedString}
+                     className={`${error ? 'border-red-500 text-white' : 'border-white/10 text-white'} w-full rounded-3xl border bg-[#111111] px-4 py-3 outline-none transition focus:border-white/30 focus:ring-2 focus:ring-white/10`}
+                     type="text"
+                     placeholder="delete my account"
+                  />
+                  {error && <span className="mt-2 block text-xs text-red-500">Please enter "delete my account"</span>}
                </label>
 
-               <div className="flex flex-row items-center justify-between">
-                  <button onClick={toggleDeleteAccountPopup} type="button" className="p-3 bg-[#171717] text-white rounded-sm border-[#3C3C3C] border-2">Cancel</button>
-                  <button type="submit" className="p-3 bg-[#D60000] text-white rounded-sm">Delete</button>
+               <div className="grid gap-3 sm:grid-cols-[1fr_1fr]">
+                  <button
+                     type="submit"
+                     className="inline-flex h-12 w-full items-center justify-center rounded-3xl bg-[#D60000] text-sm font-semibold text-white transition hover:bg-[#ff1f1f]"
+                  >
+                     Delete account
+                  </button>
+                  <button
+                     onClick={toggleDeleteAccountPopup}
+                     type="button"
+                     className="inline-flex h-12 w-full items-center justify-center rounded-3xl border border-white/10 bg-[#111111] text-sm font-semibold text-white transition hover:border-white/20 hover:bg-[#181818]"
+                  >
+                     Cancel
+                  </button>
                </div>
             </form>
-         </main>
+         </div>
       </div>
-    </>   
+    </>
   )
 }
 
