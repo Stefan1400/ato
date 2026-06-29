@@ -86,121 +86,87 @@ function ChangePasswordPage() {
    };
 
    return (
-    <div className='w-screen h-screen bg-[#151515] text-white flex flex-col items-center px-6 pt-21'>
-      <main className='text-white w-screen h-screen flex p-4 flex-col items-center gap-5'>
-         <header>
-            <h1 className='text-3xl font-normal text-white text-center mt-10'>Change Password</h1>
-            <p>Password must be 8-64 characters</p>
-         </header>
-
-         <form onSubmit={handleSubmit} noValidate className='flex w-screen flex-col justify-between items-center gap-3'>
-            <div className="w-screen flex flex-col mt-2 mb-2 items-center">
-               <label 
-                  className='text-white flex flex-col gap-3 p-3 relative text-sm' 
-                  htmlFor="current-password">Current password
-
-                  <div className="relative w-[285px]">
-                     <input 
-                        className='border-2 border-[#3C3C3C] rounded-xs px-2 h-[35px] w-[285px]' 
-                        type={currentPasswordHidden ? 'password' : 'text'}
-                        placeholder='Current password' 
-                        value={currentPassword}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                           setCurrentPassword(e.target.value)
-                        }
-                     />
-
-                     {currentPasswordHidden && (
-                        <EyeSlashedIcon 
-                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
-                           onClick={() => setCurrentPasswordHidden(false)}
-                        />
-                     )}
-
-                     {!currentPasswordHidden && (
-                        <EyeIcon 
-                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
-                           onClick={() => setCurrentPasswordHidden(true)}
-                        />
-                     )}
-                  </div>
-                  {errors?.currentPassword && (
-                     <span className="text-xs font-extralight text-red-500">{errors?.currentPassword}</span>
-                  )}
-               </label>
-               
-               <label 
-                  className='text-white flex flex-col gap-3 p-3 relative text-sm' 
-                  htmlFor="password">New password
-                  
-                  <div className="relative w-[285px]">
-                     <input 
-                        className=' border-2 border-[#3C3C3C] rounded-xs h-[35px] w-[285px] pr-10 pl-2' 
-                        type={newPasswordHidden ? 'password' : 'text'}
-                        placeholder='New password'
-                        value={newPassword}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                           {setNewPassword(e.target.value)}
-                        }
-                     />
-
-                     {newPasswordHidden && (
-                        <EyeSlashedIcon 
-                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
-                           onClick={() => setNewPasswordHidden(false)}
-                        />
-                     )}
-
-                     {!newPasswordHidden && (
-                        <EyeIcon 
-                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
-                           onClick={() => setNewPasswordHidden(true)}
-                        />
-                     )}
-                  </div>
-                  {errors?.newPassword && (
-                     <span className="text-xs font-extralight text-red-500">{errors?.newPassword}</span>
-                  )}
-               </label>
-               <label 
-                  className='text-white flex flex-col gap-3 p-3 relative text-sm' 
-                  htmlFor="password">Confirm new password
-                  
-                  <div className="relative w-[285px]">
-                     <input 
-                        className=' border-2 border-[#3C3C3C] rounded-xs h-[35px] w-[285px] pr-10 pl-2' 
-                        type={confirmNewPasswordHidden ? 'password' : 'text'}
-                        placeholder='Confirm new password'
-                        value={confirmNewPassword}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                           {setConfirmNewPassword(e.target.value)}
-                        }
-                     />
-
-                     {confirmNewPasswordHidden && (
-                        <EyeSlashedIcon 
-                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
-                           onClick={() => setConfirmNewPasswordHidden(false)}
-                        />
-                     )}
-
-                     {!confirmNewPasswordHidden && (
-                        <EyeIcon 
-                           className="absolute right-3 top-1/4 translate-y-1/4 cursor-pointer" 
-                           onClick={() => setConfirmNewPasswordHidden(true)}
-                        />
-                     )}
-                  </div>
-                  {errors?.confirmNewPassword && (
-                     <span className="text-xs font-extralight text-red-500">{errors?.confirmNewPassword}</span>
-                  )}
-               </label>
+      <div className="min-h-screen bg-[#090909] px-4 py-10 text-white flex items-center justify-center">
+         <main className="mx-auto flex w-full max-w-md flex-col rounded-[32px] border border-white/10 bg-[#111111]/95 p-8 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:px-10">
+            <div className="mb-6 text-center">
+               <h1 className="mt-4 text-3xl font-semibold tracking-[0.02em] text-white">Change Password</h1>
+               <p className="mt-3 text-sm text-[#c5c5c5]">Use a strong password between 8 and 64 characters.</p>
             </div>
-            <button type="submit" className="w-[285px] h-[32px] bg-[#D60000]">Change Password</button>
-         </form>
-      </main>
-   </div>
-  )
+
+            <form onSubmit={handleSubmit} noValidate className="flex w-full flex-col gap-5">
+               <label className="flex flex-col gap-2 text-sm text-[#e5e5e5]" htmlFor="current-password">
+                  Current password
+                  <div className="relative">
+                     <input
+                        className="w-full rounded-2xl border border-[#2f2f2f] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                        type={currentPasswordHidden ? 'password' : 'text'}
+                        placeholder="Current password"
+                        value={currentPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value)}
+                     />
+                     <button
+                        type="button"
+                        onClick={() => setCurrentPasswordHidden(!currentPasswordHidden)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white cursor-pointer"
+                     >
+                        {currentPasswordHidden ? 'Show' : 'Hide'}
+                     </button>
+                  </div>
+                  {errors?.currentPassword && <span className="text-xs text-red-500">{errors?.currentPassword}</span>}
+               </label>
+
+               <label className="flex flex-col gap-2 text-sm text-[#e5e5e5]" htmlFor="new-password">
+                  New password
+                  <div className="relative">
+                     <input
+                        className="w-full rounded-2xl border border-[#2f2f2f] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                        type={newPasswordHidden ? 'password' : 'text'}
+                        placeholder="New password"
+                        value={newPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
+                     />
+                     <button
+                        type="button"
+                        onClick={() => setNewPasswordHidden(!newPasswordHidden)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white cursor-pointer"
+                     >
+                        {newPasswordHidden ? 'Show' : 'Hide'}
+                     </button>
+                  </div>
+                  {errors?.newPassword && <span className="text-xs text-red-500">{errors?.newPassword}</span>}
+               </label>
+
+               <label className="flex flex-col gap-2 text-sm text-[#e5e5e5]" htmlFor="confirm-new-password">
+                  Confirm new password
+                  <div className="relative">
+                     <input
+                        className="w-full rounded-2xl border border-[#2f2f2f] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                        type={confirmNewPasswordHidden ? 'password' : 'text'}
+                        placeholder="Confirm new password"
+                        value={confirmNewPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmNewPassword(e.target.value)}
+                     />
+                     <button
+                        type="button"
+                        onClick={() => setConfirmNewPasswordHidden(!confirmNewPasswordHidden)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white cursor-pointer"
+                     >
+                        {confirmNewPasswordHidden ? 'Show' : 'Hide'}
+                     </button>
+                  </div>
+                  {errors?.confirmNewPassword && <span className="text-xs text-red-500">{errors?.confirmNewPassword}</span>}
+               </label>
+
+               <button
+                  type="submit"
+                  className="inline-flex w-full items-center justify-center rounded-2xl bg-[#D60000] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#ff1717] cursor-pointer"
+               >
+                  Change Password
+               </button>
+            </form>
+         </main>
+      </div>
+   )
 }
 
 export default ChangePasswordPage;
