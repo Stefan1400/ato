@@ -4,22 +4,20 @@ import DayAnalytics from '../components/DayAnalytics';
 
 function HomePage() {
   return (
-    <div className='w-screen min-h-screen bg-[#151515] flex flex-col px-6 pt-24 items-center justify-center'>
-      <div className='flex flex-col lg:flex-row gap-8 justify-start items-center w-full max-w-7xl mx-auto'>
-        {/* Left Column */}
-        <div className='flex flex-col items-start w-full lg:w-auto gap-8'>
+    <div className="w-screen min-h-screen bg-[#090909]/95 backdrop-blur-sm px-6 pt-24 lg:grid place-items-center">
+      <div className="mx-auto grid h-full max-w-7xl grid-cols-1 gap-5 lg:gap-40 lg:grid-cols-2 lg:items-center lg:justify-center">
+
+        <div className="flex flex-col gap-8">
           <WelcomeMessage />
-          <div className='flex justify-start w-full'>
-            <SessionTimer />
-          </div>
+          <SessionTimer />
         </div>
 
-        {/* Right Column */}
-        <div className='flex justify-center lg:justify-center w-full lg:w-auto'>
+        <div>
           <DayAnalytics />
         </div>
-      </div>
+
     </div>
+  </div>
   );
 };
 
