@@ -77,7 +77,10 @@ function LoginPage() {
    }
   
    return (
-      <div className="min-h-screen bg-[#090909] px-4 py-10 text-white flex items-center justify-center">
+      <div className="relative z-10 min-h-screen bg-[#090909] px-4 py-10 pt-25 text-white flex items-center justify-center">
+         
+         <div className="page-background-gradient"></div>
+         
          <main className="mx-auto flex w-full max-w-md flex-col rounded-[32px] border border-white/10 p-8 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:px-10">
             <div className="mb-8 text-center">
                <h1 className="mt-4 text-4xl font-semibold tracking-[0.04em] text-white">Sign in</h1>
