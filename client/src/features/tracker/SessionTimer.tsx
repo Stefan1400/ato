@@ -148,7 +148,7 @@ function SessionTimer() {
    const style = sessionTimerStyles[uiState];
 
    return (
-    <div className={`${style.container} w-full h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-24 pl-3`}>      
+    <div className={`${style.container} w-full max-w-md h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-24 pl-3`}>      
       <div className='flex flex-col items-start'>
          <h2 className="font-semibold text-md flex flex-row items-center gap-2">
             {style.header?.icon && <style.header.icon />}
@@ -162,7 +162,7 @@ function SessionTimer() {
       </div>
 
       {style.btnVisible && (
-         <button onClick={handleClick} className="p-3.5">
+         <button onClick={handleClick} className="p-3.5 cursor-pointer">
             <div className='p-5 bg-[#0C0C0C] rounded-full border-3 border-[#2A2A2A]'>
                {timerStatus === 'default' && (
                   <PlayIcon />

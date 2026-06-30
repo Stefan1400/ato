@@ -45,7 +45,7 @@ function WelcomeMessage() {
    };
 
   return (
-    <div className="w-screen h-auto p-3 pl-7 flex flex-col items-start text-white gap-1 mb-11 mt-5">
+    <div className="w-full h-auto p-3 pl-0 flex flex-col items-start text-white gap-1">
       <h1 className="font-bold text-2xl">{greeting}, {displayName}</h1>
       <p className="text-[#a8a8a8]">{message}</p>
     </div>

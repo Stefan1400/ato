@@ -4,8 +4,8 @@ import type { StateStyles, UIStates } from "./tracker.types";
 export const sessionTimerStyles: Record<UIStates, StateStyles> = {
    default: {
       container: 'bg-[#1F1F1F] text-white',
-      header: { styles: 'font-semibold text-md', text: 'Ready' },
-      subHeader: { styles: 'font-md text-xs', text: "Start when you're ready" },
+      header: { styles: 'font-semibold text-md', text: 'Study Timer' },
+      subHeader: { styles: 'font-md text-xs', text: "Start your session" },
       btnVisible: true
    },
    ongoing: {
