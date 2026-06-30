@@ -17,7 +17,7 @@ function DayAnalytics() {
   const formattedTime = formatDuration(today);
 
   return (
-    <div className="w-full max-w-md h-auto bg-[#1F1F1F] border-2 border-[#2A2A2A] rounded-md p-6 flex flex-col gap-6 text-white">
+    <div className="w-full min-w-[400px] max-w-md h-auto bg-[#1F1F1F] border-2 border-[#2A2A2A] rounded-md p-6 flex flex-col gap-6 text-white">
       <div>
         <h2 className="font-semibold text-md mb-4">Analytics</h2>
         <div>

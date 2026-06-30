@@ -71,7 +71,7 @@ function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
    };
   
    return (
-      <div className="w-screen h-auto flex flex-col items-start justify-start text-white gap-2 p-4 pl-5">
+      <div className="w-full min-w-[400px] h-auto flex flex-col items-start justify-start text-white gap-2 p-4 pl-5">
          <p className="text-[#474747] font-medium">{selectedDate.toDateString()}</p>
          <h1 className="text-4xl">{!today ? '0min' : today}</h1>
          <p className="text-[#a8a8a8] w-70">{message}</p>

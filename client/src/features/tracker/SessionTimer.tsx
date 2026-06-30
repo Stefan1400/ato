@@ -148,7 +148,7 @@ function SessionTimer() {
    const style = sessionTimerStyles[uiState];
 
    return (
-    <div className={`${style.container} w-full max-w-md h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-24 pl-3`}>      
+    <div className={`${style.container} w-full min-w-[400px] max-w-md h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-24 pl-3`}>      
       <div className='flex flex-col items-start'>
          <h2 className="font-semibold text-md flex flex-row items-center gap-2">
             {style.header?.icon && <style.header.icon />}
