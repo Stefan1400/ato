@@ -20,10 +20,10 @@ export default function Calendar({ calendarDays, weekdayNames, selectedDate, onS
           const emptyCell = date === null;
 
           let buttonStyles =
-            "h-11 rounded-2xl border";
+            "h-11 rounded-2xl border cursor-pointer";
 
           if (emptyCell) {
-            buttonStyles += " cursor-default bg-transparent";
+            buttonStyles += " cursor-default bg-transparent pointer-events-none";
           } else if (isSameDay(date, selectedDate)) {
             buttonStyles +=
               " border-transparent bg-white text-black";

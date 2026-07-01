@@ -17,7 +17,7 @@ body {
   .page-background-gradient {
     @apply 
       pointer-events-none
-      absolute inset-0
+      fixed inset-0
       opacity-[0.05]
       z-[-1]
       bg-[radial-gradient(circle,_#ffffff_1px,_transparent_1px)]

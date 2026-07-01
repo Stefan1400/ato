@@ -13,7 +13,7 @@ export const useToast = () => useContext(ToastContext as React.Context<(typeof T
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   console.log('ToastProvider rendered');
   
-   const [toasts, setToasts] = useState<Toast[]>([{ id: 1, type: 'success', message: 'Session added' }]);
+   const [toasts, setToasts] = useState<Toast[]>([]);
 
   function removeToast(id: number) {
     setToasts((t) => t.filter((x) => x.id !== id));

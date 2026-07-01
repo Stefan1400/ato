@@ -123,7 +123,7 @@ export default function DateSelector({ selectedDate, onSelect, onClose }: DateSe
 
         <button
           onClick={onClose}
-          className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80 hover:bg-white/10"
+          className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80 hover:bg-white/10 cursor-pointer"
         >
           <X size={16} />
         </button>

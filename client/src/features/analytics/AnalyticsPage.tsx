@@ -16,7 +16,9 @@ function AnalyticsPage() {
   };
 
   return (
-    <div className="w-screen h-auto bg-[#151515] flex flex-col items-center px-6 pt-21">
+    <div className="fixed z-10 w-screen h-screen bg-[#090909] flex flex-col items-center px-6 pt-21">
+      <div className="page-background-gradient"></div>
+      
       <FeedbackMessage selectedDate={selectedDate} />
       <ViewByDate onOpen={handleOpenDateSelector} />
       {isDateSelectorOpen && (
