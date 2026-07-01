@@ -114,7 +114,7 @@ export default function DateSelector({ selectedDate, onSelect, onClose }: DateSe
   }
 
   return (
-    <div className="fixed top-10 mt-5 h-screen w-full max-w-3xl bg-[#181818] p-5 shadow-[0_32px_80px_rgba(0,0,0,0.35)]">
+    <div className="fixed top-10 z-100 mt-5 h-screen w-full max-w-3xl bg-[#181818] p-5 shadow-[0_32px_80px_rgba(0,0,0,0.35)]">
       {/* Header */}
       <div className="flex items-start justify-between">
         <p className="text-sm text-white/40">
