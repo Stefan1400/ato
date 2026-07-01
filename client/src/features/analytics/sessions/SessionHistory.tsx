@@ -85,7 +85,7 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
     <div className="w-full lg:flex lg:h-full lg:flex-col">
       {header}
 
-      <div className="w-full lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
+      <div className="w-full lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2 custom-scrollbar">
         <div className="space-y-3 pb-7 lg:pb-4">
           {sortedSessions.map((session, index) => {
             const started = new Date(session.session_started);

@@ -24,7 +24,7 @@ function AnalyticsPage() {
           <FeedbackMessage selectedDate={selectedDate} />
         </div>
 
-        <div className="w-full lg:flex lg:min-h-0 lg:flex-col">
+        <div className="w-full lg:flex lg:h-full lg:min-h-0 lg:flex-col">
           <div className="w-full lg:hidden">
             <ViewByDate onOpen={handleOpenDateSelector} />
           </div>
