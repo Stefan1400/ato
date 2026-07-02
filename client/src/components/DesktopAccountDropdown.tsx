@@ -63,12 +63,10 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
       <button
         type="button"
         onClick={toggleDropdown}
-        className="inline-flex items-center gap-10 text-sm font-semibold text-white transition hover:text-[#f4f4f4] cursor-pointer"
+        className="inline-flex items-center gap-3 rounded-full px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/5 hover:text-[#f4f4f4] cursor-pointer"
       >
-         <div className="flex items-center gap-3">
-            <span className="inline-flex h-4.5 w-4.5 rounded-full bg-orange-500" />
-            <span>{displayName}</span>
-         </div>
+        <span className="inline-flex h-3.5 w-3.5 rounded-full bg-orange-500" />
+        <span>{displayName}</span>
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white transition hover:bg-white/10">
           {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </span>
@@ -110,7 +108,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
               )}
             </nav>
 
-            <div className="mt-5 border-t border-white/10 pt-5">
+            <div className="border-t border-white/10 pt-4">
               {user ? (
                 <>
                   <button
