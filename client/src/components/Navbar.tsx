@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../app/AuthProvider";
 import { useContext } from "react";
 import { X, LucideMenu } from "lucide-react";
+import DesktopAccountDropdown from "./DesktopAccountDropdown";
 
 interface NavbarProps {
    toggleMenu: () => void;
    menuOpen: boolean;
+   toggleDeleteAccountPopup: () => void;
 };
 
-function Navbar({ toggleMenu, menuOpen }: NavbarProps) {
+function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps) {
    const auth = useContext(AuthContext);
    const email = auth?.user?.email;
    const displayName = email || 'Guest';
@@ -21,15 +23,12 @@ function Navbar({ toggleMenu, menuOpen }: NavbarProps) {
                   ato
                </Link>
             ) : (
-               <span className='font-medium text-white truncate max-w-[180px]'>{displayName}</span>
+               <span className='font-medium text-white truncate max-w-45'>{displayName}</span>
             )}
             
 
             <div className='flex items-center gap-4'>
-               <div className='hidden lg:flex items-center gap-3 text-sm text-[#d9d9d9]'>
-                  <span className='text-[#8f8f8f]'>Signed in as</span>
-                  <span className='font-medium text-white truncate max-w-[180px]'>{displayName}</span>
-               </div>
+               <DesktopAccountDropdown toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
 
                <button
                   onClick={toggleMenu}

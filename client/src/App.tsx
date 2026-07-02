@@ -22,6 +22,7 @@ export default function App() {
       <Navbar 
         toggleMenu={toggleMenu} 
         menuOpen={menuOpen} 
+        toggleDeleteAccountPopup={toggleDeleteAccountPopup}
       />
 
       <MenuDropdown 
