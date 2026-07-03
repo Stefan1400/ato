@@ -113,7 +113,7 @@ function LoginPage() {
                      <button
                         type="button"
                         onClick={() => setPasswordHidden(!passwordHidden)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white cursor-pointer"
                      >
                         {passwordHidden ? 'Show' : 'Hide'}
                      </button>

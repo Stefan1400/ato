@@ -65,7 +65,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
         onClick={toggleDropdown}
         className="inline-flex items-center gap-3 rounded-full px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/5 hover:text-[#f4f4f4] cursor-pointer"
       >
-        <span className="inline-flex h-3.5 w-3.5 rounded-full bg-orange-500" />
+        <span className="inline-flex h-4.5 w-4.5 rounded-full bg-orange-500" />
         <span>{displayName}</span>
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white transition hover:bg-white/10">
           {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}

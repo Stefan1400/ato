@@ -89,17 +89,17 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
 
                <div className="grid gap-3 sm:grid-cols-[1fr_1fr]">
                   <button
-                     type="submit"
-                     className="inline-flex h-12 w-full items-center justify-center rounded-3xl bg-[#D60000] text-sm font-semibold text-white transition hover:bg-[#ff1f1f]"
-                  >
-                     Delete account
-                  </button>
-                  <button
                      onClick={toggleDeleteAccountPopup}
                      type="button"
-                     className="inline-flex h-12 w-full items-center justify-center rounded-3xl border border-white/10 bg-[#111111] text-sm font-semibold text-white transition hover:border-white/20 hover:bg-[#181818]"
+                     className="inline-flex h-12 w-full items-center justify-center rounded-3xl border border-white/10 bg-[#111111] text-sm font-semibold text-white transition hover:border-white/20 hover:bg-[#181818] cursor-pointer"
                   >
                      Cancel
+                  </button>
+                  <button
+                     type="submit"
+                     className="inline-flex h-12 w-full items-center justify-center rounded-3xl bg-[#D60000] text-sm font-semibold text-white transition hover:bg-[#ff1f1f] cursor-pointer"
+                  >
+                     Delete account
                   </button>
                </div>
             </form>

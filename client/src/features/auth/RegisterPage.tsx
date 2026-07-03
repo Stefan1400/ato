@@ -117,7 +117,7 @@ function RegisterPage() {
                      <button
                         type="button"
                         onClick={() => setPasswordHidden(!passwordHidden)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8f8f8f] transition hover:text-white cursor-pointer"
                      >
                         {passwordHidden ? 'Show' : 'Hide'}
                      </button>
@@ -125,12 +125,12 @@ function RegisterPage() {
                   {errors.password && <span className="text-xs text-red-500">{errors.password}</span>}
                </label>
 
-               <label className="flex cursor-pointer items-start gap-3 text-sm text-[#d1d1d1]">
+               <label className="flex items-start gap-3 text-sm text-[#d1d1d1]">
                   <input
                      type="checkbox"
                      checked={termsChecked}
                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTermsChecked(e.target.checked)}
-                     className="mt-1 h-4 w-4 rounded border-[#2f2f2f] bg-[#0a0a0a] accent-[#D60000]"
+                     className="mt-1 h-4 w-4 rounded border-[#2f2f2f] bg-[#0a0a0a] accent-[#D60000] cursor-pointer"
                   />
                   <span className="leading-5">
                      I agree to the <a className="font-semibold text-[#D60000]" href="#">Terms</a> and <a className="font-semibold text-[#D60000]" href="#">Privacy Policy</a>

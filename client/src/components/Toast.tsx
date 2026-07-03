@@ -11,7 +11,6 @@ const ToastContext = createContext({ showToast: (opts: ShowToastArgs) => {} });
 export const useToast = () => useContext(ToastContext as React.Context<(typeof ToastContext extends React.Context<infer T> ? T : any)>);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  console.log('ToastProvider rendered');
   
    const [toasts, setToasts] = useState<Toast[]>([]);
 
