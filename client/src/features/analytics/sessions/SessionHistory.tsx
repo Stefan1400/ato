@@ -76,8 +76,9 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
   // Sort sessions by start time (oldest first)
   const sortedSessions = sessionsData
     ? [...sessionsData].sort(
-        (a, b) =>
-          new Date(a.session_started).getTime() - new Date(b.session_started).getTime()
+        (b, a) =>
+          new Date(a.session_started).getTime() - 
+          new Date(b.session_started).getTime()
       )
     : [];
 
