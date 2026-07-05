@@ -11,6 +11,7 @@ export const useAddSession = (options?: UseMutationOptions<sessionResponse, Erro
        ...options,
        onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['feedback'] });
+        queryClient.invalidateQueries({ queryKey: ['sessions'] });
       }
    });
 };

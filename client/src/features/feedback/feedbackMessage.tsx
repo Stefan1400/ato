@@ -10,8 +10,8 @@ function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
    const { data, isLoading, isError } = useGetFeedback();
 
    let feedbackType = data?.feedbackType;
-   const today = data?.todayValue || 0;
-   const yesterday = data?.yesterdayValue || 0;
+   const today = data?.todayValue || "0min";
+   const yesterday = data?.yesterdayValue || "0min";
 
    let message;
 
