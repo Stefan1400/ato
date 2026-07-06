@@ -1,23 +1,59 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import type { addSessionTypes, UIStates } from "./tracker.types";
 import { useAddSession } from "./useSessionTimer";
 import { sessionTimerStyles } from "./SessionTimer.styles";
 import { PlayIcon, StopIcon } from "../../assets/svgs";
 import { useToast } from "../../components/Toast";
+import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
+
+type StoredTimerState = {
+   time: number;
+   timerStatus: UIStates;
+   startedAt: string | null;
+};
+
+function loadTimer(userId?: number): StoredTimerState {
+   if (!userId) return { time: 0, timerStatus: 'default', startedAt: null };
+
+   const saved = localStorage.getItem(`sessionTimer:${userId}`);
+   if (!saved) return { time: 0, timerStatus: 'default', startedAt: null };
+
+   try {
+      const parsedState = JSON.parse(saved) as StoredTimerState;
+      return {
+         time: parsedState.time ?? 0,
+         timerStatus: parsedState.timerStatus ?? 'default',
+         startedAt: parsedState.startedAt ?? null
+      };
+   } catch {
+      return { time: 0, timerStatus: 'default', startedAt: null };
+   }
+}
+
+function saveTimer(userId: number | undefined, data: StoredTimerState) {
+   if (!userId) return;
+   localStorage.setItem(`sessionTimer:${userId}`, JSON.stringify(data));
+}
+
+function clearTimer(userId: number | undefined) {
+   if (!userId) return;
+   localStorage.removeItem(`sessionTimer:${userId}`);
+}
 
 function SessionTimer() {
-
-   const saved = localStorage.getItem('sessionTimer');
-   const parsedState = saved ? JSON.parse(saved) : { time: 0, timerStatus: 'default', startedAt: null };
-   const initialTime = parsedState.timerStatus === 'ongoing' && parsedState.startedAt
-      ? Math.max(0, Math.floor((Date.now() - new Date(parsedState.startedAt).getTime()) / 1000))
-      : parsedState.time;
+   const { user } = useContext(AuthContext) as AuthContextType;
+   const userId = user?.id;
+   const initialTimerState = loadTimer(userId);
 
    const addSessionMutation = useAddSession();
    const { showToast } = useToast() as any;
-   const [timerStatus, setTimerStatus] = useState<UIStates>(parsedState.timerStatus);
-
-   const [time, setTime] = useState<number>(initialTime);
+   const [timerStatus, setTimerStatus] = useState<UIStates>(initialTimerState.timerStatus);
+   const [time, setTime] = useState<number>(() => {
+      const parsedState = initialTimerState;
+      return parsedState.timerStatus === 'ongoing' && parsedState.startedAt
+         ? Math.max(0, Math.floor((Date.now() - new Date(parsedState.startedAt).getTime()) / 1000))
+         : parsedState.time;
+   });
    const intervalRef = useRef<number | null>(null);
 
    const sessionRef = useRef<addSessionTypes>({
@@ -26,17 +62,26 @@ function SessionTimer() {
    });
 
    useEffect(() => {
-      if (parsedState.startedAt) {
-         sessionRef.current.session_started = new Date(parsedState.startedAt);
-      };
-   }, []);
+      const restoredState = loadTimer(userId);
+      const restoredTime = restoredState.timerStatus === 'ongoing' && restoredState.startedAt
+         ? Math.max(0, Math.floor((Date.now() - new Date(restoredState.startedAt).getTime()) / 1000))
+         : restoredState.time;
+
+      setTimerStatus(restoredState.timerStatus);
+      setTime(restoredTime);
+
+      if (restoredState.startedAt) {
+         sessionRef.current.session_started = new Date(restoredState.startedAt);
+      } else {
+         sessionRef.current.session_started = null;
+      }
+   }, [userId]);
    
    function resetTimer() {
       setTimeout(() => {
          setTimerStatus('default');
          setTime(0);
          addSessionMutation.reset();
-         localStorage.removeItem('sessionTimer');
       }, 3000);
    };
 
@@ -52,13 +97,12 @@ function SessionTimer() {
    };
 
    useEffect(() => {
-     localStorage.setItem('sessionTimer', JSON.stringify({
-      time,
-      timerStatus,
-      startedAt: sessionRef.current.session_started
-     }));
-     
-   }, [time, timerStatus]);
+      saveTimer(userId, {
+         time,
+         timerStatus,
+         startedAt: sessionRef.current.session_started ? sessionRef.current.session_started.toISOString() : null
+      });
+   }, [time, timerStatus, userId]);
 
    useEffect(() => {
       if (timerStatus === 'ongoing' && intervalRef.current === null) {
@@ -120,6 +164,7 @@ function SessionTimer() {
       {  
 
          onSuccess: () => {
+            clearTimer(userId);
             sessionRef.current = {
                session_started: null,
                session_ended: null
