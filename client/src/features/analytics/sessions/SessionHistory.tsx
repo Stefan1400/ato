@@ -88,7 +88,7 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
 
       <div className="w-full lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2 custom-scrollbar">
         <div className="space-y-3 pb-7 lg:pb-4">
-          {sortedSessions.map((session, index) => {
+          {sortedSessions.map((session) => {
             const started = new Date(session.session_started);
             const ended = new Date(session.session_ended);
             const durationMs = ended.getTime() - started.getTime();
@@ -98,7 +98,6 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
               <SessionCard
                 key={session.id}
                 session={session}
-                index={index}
                 durationMs={durationMs}
                 timeframe={timeframe}
               />
