@@ -9,8 +9,7 @@ const {
    getUserController,
 } = require('../controllers/authControllers');
 const validate = require('../middleware/validateRequest');
-const { registerSchema, loginSchema, changePasswordSchema, forgotPasswordSchema, resetPasswordSchema } = require('../schemas/authSchemas');
-const { forgotPasswordController, resetPasswordController } = require ('../controllers/passwordController');
+const { registerSchema, loginSchema, changePasswordSchema } = require('../schemas/authSchemas');
 const authMiddleware = require('../middleware/auth');
 const validateRequest = require('../middleware/validateRequest');
 
@@ -54,20 +53,6 @@ router.get(
    '/',
    authMiddleware,
    getUserController
-);
-
-//forgot password
-router.post(
-   '/forgot-password',
-   validateRequest(forgotPasswordSchema),
-   forgotPasswordController
-);
-
-//reset password
-router.post(
-   '/reset-password',
-   validateRequest(resetPasswordSchema),
-   resetPasswordController
 );
 
 module.exports = router;
