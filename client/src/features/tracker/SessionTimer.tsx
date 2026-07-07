@@ -91,8 +91,14 @@ function SessionTimer() {
       
       if (intervalRef.current) return;
 
-      intervalRef.current = setInterval(() => {
-         setTime(t => t + 1);
+      intervalRef.current = window.setInterval(() => {
+         if (!sessionRef.current.session_started) return;
+
+         const elapsed = Math.floor(
+            (Date.now() - sessionRef.current.session_started.getTime()) / 1000
+         );
+
+         setTime(elapsed);
       }, 1000);
    };
 
@@ -106,10 +112,16 @@ function SessionTimer() {
 
    useEffect(() => {
       if (timerStatus === 'ongoing' && intervalRef.current === null) {
-         intervalRef.current = setInterval(() => {
-            setTime(t => t + 1);
-         }, 1000);
-      }
+         intervalRef.current = window.setInterval(() => {
+         if (!sessionRef.current.session_started) return;
+
+         const elapsed = Math.floor(
+            (Date.now() - sessionRef.current.session_started.getTime()) / 1000
+         );
+
+         setTime(elapsed);
+      }, 1000);
+}
 
       return () => {
          if (intervalRef.current) {
