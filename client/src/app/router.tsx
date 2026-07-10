@@ -7,6 +7,7 @@ import AnalyticsPage from "../features/analytics/AnalyticsPage";
 import ChangePasswordPage from "../features/auth/changePassword/ChangePasswordPage";
 import { AuthContext } from "./AuthProvider";
 import LoadingScreen from "../components/LoadingScreen";
+import WelcomePage from "../pages/WelcomePage";
 
 function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
    const auth = useContext(AuthContext);
@@ -39,7 +40,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export function AppRouter() {
    return (
       <Routes>
-         <Route path="/" element={<HomePage />} />
+         <Route path="/" element={<WelcomePage />} />
+         <Route path="/dashboard" element={<HomePage />} />
          <Route path="/signup" element={
             <GuestOnlyRoute>
                <RegisterPage />
