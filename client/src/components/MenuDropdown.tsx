@@ -30,7 +30,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
           console.error('Error during logout:', error);
         }
         toggleMenu();
-        navigate('/login');
+        navigate('/');
       },
       onError: (error) => {
         console.error('Logout failed:', error);

@@ -17,7 +17,11 @@ function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
    if (auth.isLoading) return <LoadingScreen text="Loading..." />;
 
    if (auth.user) {
-      return <Navigate to="/" replace state={{ from: location }} />;
+      if (location.pathname === '/signup' && auth.user.account_type === 'guest') {
+         return children;
+      }
+
+      return <Navigate to="/dashboard" replace state={{ from: location }} />;
    }
 
    return children;
@@ -31,7 +35,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
    }
 
    if (!auth.user) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/" replace />;
    }
 
    return children;

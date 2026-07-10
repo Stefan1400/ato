@@ -1,5 +1,5 @@
 import { api } from '../../lib/api';
-import type { RegisterRequest, LoginRequest, AuthResponse, User, getUserRequest, ChangePasswordRequest } from "./auth.types";
+import type { RegisterRequest, LoginRequest, AuthResponse, User, ChangePasswordRequest } from "./auth.types";
 
 export function registerUser(data: RegisterRequest): Promise<AuthResponse> {   
    const response = api<AuthResponse>("/users/register", 'POST', data);
@@ -11,6 +11,14 @@ export function loginUser(data: LoginRequest): Promise<AuthResponse> {
    const response = api<AuthResponse>("/users/login", "POST", data);
    
    return response;
+};
+
+export function createGuestUser(): Promise<AuthResponse> {
+   return api<AuthResponse>("/users/guest", "POST");
+};
+
+export function convertGuestAccount(data: RegisterRequest): Promise<AuthResponse> {
+   return api<AuthResponse>("/users/convert", "POST", data);
 };
 
 export async function getUser(): Promise<User> {

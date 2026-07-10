@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { 
    registerController, 
-   loginController, 
+   loginController,
+   createGuestController,
+   convertGuestToUserController,
    logoutController, 
    deleteUserController, 
    changePasswordController,
@@ -25,6 +27,20 @@ router.post(
    '/login',
    validate(loginSchema),
    loginController
+);
+
+//guest account
+router.post(
+   '/guest',
+   createGuestController
+);
+
+//convert guest to normal account
+router.post(
+   '/convert',
+   authMiddleware,
+   validate(registerSchema),
+   convertGuestToUserController
 );
 
 //logout

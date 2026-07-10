@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import type { Errors } from './auth.types'; 
-import { useRegister } from "./useAuth";
+import { useConvertGuest, useRegister } from "./useAuth";
 import { AuthContext } from "../../app/AuthProvider";
 import type { AuthContextType } from "../../app/AuthProvider";
 import { Link } from "react-router-dom";
@@ -10,7 +10,8 @@ import { useToast } from "../../components/Toast";
 function RegisterPage() {
 
    const registerMutation = useRegister();
-   const { setUser } = useContext(AuthContext) as AuthContextType;
+   const convertGuestMutation = useConvertGuest();
+   const { user, setUser } = useContext(AuthContext) as AuthContextType;
    const navigate = useNavigate();
    const { showToast } = useToast();
 
@@ -56,7 +57,10 @@ function RegisterPage() {
          return;
       };
 
-      registerMutation.mutate({
+      const isGuestConversion = Boolean(user?.account_type === 'guest');
+      const mutation = isGuestConversion ? convertGuestMutation : registerMutation;
+
+      mutation.mutate({
          email: currentEmail,
          password: currentPassword,
       },
@@ -71,11 +75,11 @@ function RegisterPage() {
                   Object.keys(prev).map(key => [key, ""])
                )
             );
-            showToast({ type: 'success', message: 'Account created successfully', duration: 3000 });
-            navigate('/');
+            showToast({ type: 'success', message: isGuestConversion ? 'Account upgraded successfully' : 'Account created successfully', duration: 3000 });
+            navigate('/dashboard');
          },
          onError: () => {
-            showToast({ type: 'error', message: 'Registration failed. Please try again.', duration: 3000 });
+            showToast({ type: 'error', message: isGuestConversion ? 'Could not upgrade account. Please try again.' : 'Registration failed. Please try again.', duration: 3000 });
          }
       });
    };

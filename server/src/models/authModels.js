@@ -1,4 +1,12 @@
 const db = require('../config/db');
+const { hashValue } = require('../utils/hash');
+
+const ensureAccountTypeColumn = async () => {
+   await db.query(`
+      ALTER TABLE users
+      ADD COLUMN IF NOT EXISTS account_type VARCHAR(20) DEFAULT 'user' NOT NULL
+   `);
+};
 
 const checkEmailExists = async (email) => {
    const result = await db.query(
@@ -9,20 +17,66 @@ const checkEmailExists = async (email) => {
    return result.rows[0] || null;
 };
 
-const registerUser = async (email, hashedPassword) => {
+const registerUser = async (email, hashedPassword, accountType = 'user') => {
    try {
+      await ensureAccountTypeColumn();
+
       const result = await db.query(
          `
-         INSERT INTO users (email, password_hash)
-         VALUES ($1, $2)
+         INSERT INTO users (email, password_hash, account_type)
+         VALUES ($1, $2, $3)
          RETURNING *
          `,
-         [email, hashedPassword]
+         [email, hashedPassword, accountType]
       );
 
       return result.rows[0] || 409;
    } catch (err) {
       console.error(err);
+   }
+};
+
+const createGuestUser = async () => {
+   try {
+      await ensureAccountTypeColumn();
+
+      const guestEmail = `guest+${Date.now()}-${Math.random().toString(36).slice(2, 8)}@guest.local`;
+      const guestPasswordHash = await hashValue(`guest-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
+
+      const result = await db.query(
+         `
+         INSERT INTO users (email, password_hash, account_type)
+         VALUES ($1, $2, $3)
+         RETURNING *
+         `,
+         [guestEmail, guestPasswordHash, 'guest']
+      );
+
+      return result.rows[0] || null;
+   } catch (err) {
+      console.error(err);
+      return null;
+   }
+};
+
+const convertGuestToUser = async (userId, email, hashedPassword) => {
+   try {
+      await ensureAccountTypeColumn();
+
+      const result = await db.query(
+         `
+         UPDATE users
+         SET email = $2, password_hash = $3, account_type = 'user'
+         WHERE id = $1
+         RETURNING *
+         `,
+         [userId, email, hashedPassword]
+      );
+
+      return result.rows[0] || null;
+   } catch (err) {
+      console.error(err);
+      return null;
    }
 };
 
@@ -68,6 +122,8 @@ const findUserById = async (userId) => {
 module.exports = {
    checkEmailExists,
    registerUser,
+   createGuestUser,
+   convertGuestToUser,
    deleteUser,
    changePassword,
    findUserById,

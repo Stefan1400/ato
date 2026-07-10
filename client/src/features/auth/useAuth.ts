@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient, type UseMutationOptions } from "@tanstack/react-query";
-import { registerUser, loginUser, getUser, logoutUser, deleteUser, changePassword } from "./auth.api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { registerUser, loginUser, createGuestUser, convertGuestAccount, getUser, logoutUser, deleteUser, changePassword } from "./auth.api";
 import { useContext } from "react";
 import { AuthContext } from "../../app/AuthProvider";
 import type { AuthContextType } from "../../app/AuthProvider";
@@ -13,6 +13,18 @@ export const useRegister = () => {
 export const useLogin = () => {
     return useMutation({
         mutationFn: loginUser
+    });
+};
+
+export const useCreateGuest = () => {
+    return useMutation({
+        mutationFn: createGuestUser
+    });
+};
+
+export const useConvertGuest = () => {
+    return useMutation({
+        mutationFn: convertGuestAccount
     });
 };
 

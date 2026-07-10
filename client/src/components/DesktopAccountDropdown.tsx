@@ -49,7 +49,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
           console.error("Error during logout:", error);
         }
         closeDropdown();
-        navigate("/login");
+        navigate("/");
       },
       onError: (error) => {
         console.error("Logout failed:", error);

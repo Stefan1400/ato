@@ -64,7 +64,7 @@ function LoginPage() {
                )
             );
             showToast({ type: 'success', message: 'Logged in successfully', duration: 3000 });
-            navigate('/');
+            navigate('/dashboard');
          },
          onError: (error: any) => {
             if (error.response && error.response.status === 401) {

@@ -16,7 +16,8 @@ export type LoginRequest = {
 
 export type User = {
    id: number;
-   email: string;
+   email: string | null;
+   account_type?: string;
 };
 
 export type AuthResponse = {
