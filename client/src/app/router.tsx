@@ -9,6 +9,19 @@ import { AuthContext } from "./AuthProvider";
 import LoadingScreen from "../components/LoadingScreen";
 import WelcomePage from "../pages/WelcomePage";
 
+function WelcomeRoute({ children }: { children: React.ReactNode }) {
+   const auth = useContext(AuthContext);
+
+   if (!auth) return null;
+   if (auth.isLoading) return <LoadingScreen text="Loading..." />;
+
+   if (auth.user) {
+      return <Navigate to="/dashboard" replace />;
+   }
+
+   return children;
+}
+
 function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
    const auth = useContext(AuthContext);
    const location = useLocation();
@@ -44,7 +57,11 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export function AppRouter() {
    return (
       <Routes>
-         <Route path="/" element={<WelcomePage />} />
+         <Route path="/" element={
+            <WelcomeRoute>
+               <WelcomePage />
+            </WelcomeRoute>
+         } />
          <Route path="/dashboard" element={<HomePage />} />
          <Route path="/signup" element={
             <GuestOnlyRoute>

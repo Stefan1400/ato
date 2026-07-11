@@ -12,14 +12,16 @@ interface NavbarProps {
 
 function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps) {
    const auth = useContext(AuthContext);
-   const email = auth?.user?.email;
-   const displayName = email || 'Guest';
+   const isAuthenticated = Boolean(auth?.user);
+   const displayName = auth?.user?.account_type === 'guest'
+      ? 'Guest'
+      : (auth?.user?.email || 'Guest');
 
    return (
       <nav className='fixed left-0 top-0 w-full h-16 px-4 lg:px-6 text-white z-1000 border-b border-[#2E2E2E] bg-[#090909]/95 backdrop-blur-sm'>
          <div className='flex h-full w-full items-center justify-between'>
             {!menuOpen ? (
-               <Link to='/' className='text-[1.1rem] font-semibold tracking-[0.08em] lowercase text-white hover:text-[#f4f4f4]'>
+               <Link to={isAuthenticated ? '/dashboard' : '/'} className='text-[1.1rem] font-semibold tracking-[0.08em] lowercase text-white hover:text-[#f4f4f4]'>
                   ato
                </Link>
             ) : (
@@ -28,7 +30,9 @@ function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps)
             
 
             <div className='flex items-center gap-4'>
-               <DesktopAccountDropdown toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
+               {auth?.user?.account_type === 'user' && (
+                  <DesktopAccountDropdown toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
+               )}
 
                <button
                   onClick={toggleMenu}

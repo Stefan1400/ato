@@ -15,13 +15,16 @@ type DesktopAccountDropdownProps = {
 export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: DesktopAccountDropdownProps) {
   const logoutMutation = useLogout();
   const { user } = useContext(AuthContext) as AuthContextType;
+  const isNormalUser = Boolean(user && user.account_type === "user");
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const firstName = user?.email?.split("@")[0]?.split(/[._\- ]/)[0] || "Guest";
-  const displayName = `${firstName.charAt(0).toUpperCase()}${firstName.slice(1)}`;
+  const displayName = user?.account_type === "guest"
+    ? "Guest"
+    : (user?.email ? user.email.split("@")[0]?.split(/[._\- ]/)[0] || "Guest" : "Guest");
+  const formattedDisplayName = displayName ? `${displayName.charAt(0).toUpperCase()}${displayName.slice(1)}` : "Guest";
 
   const closeDropdown = () => setOpen(false);
   const toggleDropdown = () => setOpen((prev) => !prev);
@@ -58,6 +61,10 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
     });
   };
 
+  if (!isNormalUser) {
+    return null;
+  }
+
   return (
     <div ref={wrapperRef} className="hidden lg:block relative">
       <button
@@ -66,7 +73,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
         className="inline-flex items-center gap-3 rounded-full px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/5 hover:text-[#f4f4f4] cursor-pointer"
       >
         <span className="inline-flex h-4.5 w-4.5 rounded-full bg-orange-500" />
-        <span>{displayName}</span>
+        <span>{formattedDisplayName}</span>
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white transition hover:bg-white/10">
           {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </span>
@@ -79,7 +86,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
           <div className="space-y-4 p-4">
             <nav className="space-y-2 text-sm text-white">
               <Link
-                to="/"
+                to="/dashboard"
                 onClick={closeDropdown}
                 className="group flex items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-white/5 cursor-pointer"
               >
@@ -96,7 +103,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
                 <span>Analytics</span>
               </Link>
 
-              {user && (
+              {isNormalUser && (
                 <Link
                   to="/change-password"
                   onClick={closeDropdown}
@@ -109,7 +116,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
             </nav>
 
             <div className="border-t border-white/10 pt-4">
-              {user ? (
+              {isNormalUser ? (
                 <>
                   <button
                     type="button"

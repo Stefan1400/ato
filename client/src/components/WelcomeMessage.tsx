@@ -14,8 +14,9 @@ function WelcomeMessage() {
 
    const today = data?.todayValue;
    
-   const username = user?.email.split('@')[0];
-   const displayName = username ? username[0].toUpperCase() + username.slice(1) : 'Guest'
+   const displayName = user?.account_type === 'guest'
+      ? 'Guest'
+      : (user?.email ? user.email.split('@')[0][0].toUpperCase() + user.email.split('@')[0].slice(1) : 'Guest');
 
    function getTimeOfDay() {
       const hours = new Date().getHours();
