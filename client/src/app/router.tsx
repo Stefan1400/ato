@@ -8,6 +8,7 @@ import ChangePasswordPage from "../features/auth/changePassword/ChangePasswordPa
 import { AuthContext } from "./AuthProvider";
 import LoadingScreen from "../components/LoadingScreen";
 import WelcomePage from "../pages/WelcomePage";
+import NotFoundPage from "../pages/NotFoundPage";
 
 function WelcomeRoute({ children }: { children: React.ReactNode }) {
    const auth = useContext(AuthContext);
@@ -89,6 +90,7 @@ export function AppRouter() {
                <ChangePasswordPage />
             </ProtectedRoute>
          } />
+         <Route path="*" element={<NotFoundPage />} />
       </Routes>
    );
 };
