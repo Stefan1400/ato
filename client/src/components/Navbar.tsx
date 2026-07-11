@@ -30,7 +30,7 @@ function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps)
             
 
             <div className='flex items-center gap-4'>
-               {auth?.user?.account_type === 'user' && (
+               {Boolean(auth?.user) && (
                   <DesktopAccountDropdown toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
                )}
 

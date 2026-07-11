@@ -15,7 +15,8 @@ type DesktopAccountDropdownProps = {
 export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: DesktopAccountDropdownProps) {
   const logoutMutation = useLogout();
   const { user } = useContext(AuthContext) as AuthContextType;
-  const isNormalUser = Boolean(user && user.account_type === "user");
+  const isAuthenticated = Boolean(user);
+  const isNormalUser = isAuthenticated && user?.account_type === "user";
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [open, setOpen] = useState(false);
@@ -61,7 +62,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
     });
   };
 
-  if (!isNormalUser) {
+  if (!isAuthenticated) {
     return null;
   }
 

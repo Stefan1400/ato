@@ -7,7 +7,7 @@ import type { AuthContextType } from "../app/AuthProvider";
 import { useToast } from "../components/Toast";
 
 const actionLinkClassName =
-  "group flex w-full items-center justify-center gap-3 rounded-2xl border border-[#2A2A2A] bg-[#121212] px-5 py-4 text-base font-medium text-[#F5F5F5] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70";
+  "group flex w-full items-center justify-center gap-3 rounded-2xl border border-[#2A2A2A] bg-[#121212] px-5 py-4 text-base font-medium text-[#F5F5F5] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] hover:cursor-pointer hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-70";
 
 export default function WelcomePage() {
   const navigate = useNavigate();

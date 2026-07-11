@@ -30,7 +30,9 @@ function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
    if (auth.isLoading) return <LoadingScreen text="Loading..." />;
 
    if (auth.user) {
-      if (location.pathname === '/signup' && auth.user.account_type === 'guest') {
+      const allowedGuestPaths = ['/signup', '/login'];
+
+      if (auth.user.account_type === 'guest' && allowedGuestPaths.includes(location.pathname)) {
          return children;
       }
 
@@ -62,7 +64,11 @@ export function AppRouter() {
                <WelcomePage />
             </WelcomeRoute>
          } />
-         <Route path="/dashboard" element={<HomePage />} />
+         <Route path="/dashboard" element={
+            <ProtectedRoute>
+               <HomePage />
+            </ProtectedRoute>
+         } />
          <Route path="/signup" element={
             <GuestOnlyRoute>
                <RegisterPage />
@@ -73,7 +79,11 @@ export function AppRouter() {
                <LoginPage />
             </GuestOnlyRoute>
          } />
-         <Route path="/analytics" element={<AnalyticsPage />} />
+         <Route path="/analytics" element={
+            <ProtectedRoute>
+               <AnalyticsPage />
+            </ProtectedRoute>
+         } />
          <Route path="/change-password" element={
             <ProtectedRoute>
                <ChangePasswordPage />

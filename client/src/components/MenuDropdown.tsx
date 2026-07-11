@@ -4,9 +4,10 @@ import { AuthContext } from "../app/AuthProvider";
 import type { AuthContextType } from "../app/AuthProvider";
 import { useContext } from "react";
 import LoadingScreen from "./LoadingScreen";
-import { HomeIcon, SessionsIcon, LockIcon } from "../assets/svgs";
+import { HomeIcon, LockIcon } from "../assets/svgs";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./Toast";
+import { PieChart } from 'lucide-react'
 
 type MenuDropdownTypes = {
   toggleMenu: () => void;
@@ -61,8 +62,8 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
               </li>
               <li onClick={toggleMenu}>
                 <Link className="group flex items-center gap-3 rounded-2xl px-4 py-3 transition hover:bg-white/5" to='/analytics'>
-                  <SessionsIcon />
-                  <span>My Sessions</span>
+                  <PieChart size={21} />
+                  <span>Analytics</span>
                 </Link>
               </li>
               {isNormalUser && (
