@@ -12,21 +12,27 @@ type StoredTimerState = {
    startedAt: string | null;
 };
 
-function loadTimer(userId?: number): StoredTimerState {
-   if (!userId) return { time: 0, timerStatus: 'default', startedAt: null };
+export const DEFAULT_TIMER: StoredTimerState = {
+   time: 0,
+   timerStatus: 'default',
+   startedAt: null,
+};
+
+export function loadTimer(userId?: number): StoredTimerState {
+   if (!userId) return DEFAULT_TIMER;
 
    const saved = localStorage.getItem(`sessionTimer:${userId}`);
-   if (!saved) return { time: 0, timerStatus: 'default', startedAt: null };
+   if (!saved) return DEFAULT_TIMER;
 
    try {
       const parsedState = JSON.parse(saved) as StoredTimerState;
       return {
-         time: parsedState.time ?? 0,
-         timerStatus: parsedState.timerStatus ?? 'default',
-         startedAt: parsedState.startedAt ?? null
+         time: parsedState.time ?? DEFAULT_TIMER.time,
+         timerStatus: parsedState.timerStatus ?? DEFAULT_TIMER.timerStatus,
+         startedAt: parsedState.startedAt ?? DEFAULT_TIMER.startedAt
       };
    } catch {
-      return { time: 0, timerStatus: 'default', startedAt: null };
+      return DEFAULT_TIMER;
    }
 }
 
