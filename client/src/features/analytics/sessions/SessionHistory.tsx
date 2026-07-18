@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGetSessionsByDate } from "../useAnalytics";
-import formatTime from "../helpers/FormatTime";
+import formatTimeOfDay from "../helpers/FormatTimeOfDay";
 import SessionCard from "./SessionCard";
 import { useToast } from "../../../components/Toast";
 import ViewByDate from "../selectByDate/ViewByDate";
@@ -92,7 +92,7 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
             const started = new Date(session.session_started);
             const ended = new Date(session.session_ended);
             const durationMs = ended.getTime() - started.getTime();
-            const timeframe = `${formatTime(started)} - ${formatTime(ended)}`;
+            const timeframe = `${formatTimeOfDay(started)} - ${formatTimeOfDay(ended)}`;
 
             return (
               <SessionCard

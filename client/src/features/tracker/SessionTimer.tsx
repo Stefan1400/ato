@@ -5,6 +5,7 @@ import { sessionTimerStyles } from "./SessionTimer.styles";
 import { PlayIcon, StopIcon } from "../../assets/svgs";
 import { useToast } from "../../components/Toast";
 import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
+import formatElapsedTime from "../analytics/helpers/FormatElapsedTime";
 
 type StoredTimerState = {
    time: number;
@@ -151,15 +152,6 @@ function SessionTimer() {
       };
    };
 
-   function formatTime(totalSeconds: number) {
-      const seconds = totalSeconds % 60;
-      const minutes = Math.floor(totalSeconds / 60) % 60;
-      const hours = Math.floor(totalSeconds / 3600);
-      const pad = (num: number) => String(num).padStart(2, '0');
-
-      return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-   };
-
    function handleClick() {
             
       setTimerStatus(prev => {
@@ -217,7 +209,7 @@ function SessionTimer() {
             {style.header?.icon && <style.header.icon />}
             {style.header.text}
          </h2>
-         <span className="text-[2rem] font-bold">{formatTime(time)}</span>
+         <span className="text-[2rem] font-bold">{formatElapsedTime(time)}</span>
          <h3 className={`${style.subHeader?.styles} flex flex-row items-center gap-2`}>
             {style.subHeader?.icon && <style.subHeader.icon />}
             {style.subHeader?.text}
