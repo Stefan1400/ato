@@ -1,4 +1,4 @@
-import { loadTimer, saveTimer, DEFAULT_TIMER } from './SessionTimer';
+import { loadTimer, saveTimer, clearTimer, DEFAULT_TIMER } from './SessionTimer';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 beforeEach(() => {
@@ -14,7 +14,7 @@ describe('loadTimer()', () => {
       expect(loadTimer(74)).toEqual(DEFAULT_TIMER);
    });
 
-   it('returns saved timer from local storage', () => {
+   it('returns saved timer from localStorage', () => {
       localStorage.setItem('sessionTimer:74', JSON.stringify({ 
          time: 120, 
          timerStatus: 'ongoing', 
@@ -61,7 +61,7 @@ describe('saveTimer()', () => {
       expect(localStorage.length).toBe(0);
    })
 
-   it('saves timer to local storage', () => {
+   it('saves timer to localStorage', () => {
       
       saveTimer(74, { 
          time: 120, 
@@ -76,3 +76,21 @@ describe('saveTimer()', () => {
       }));
    })
 })
+
+describe('clearTimer()', () => {
+   it('does not clear timer when userId is undefined', () => {
+      localStorage.setItem('sessionTimer:74', JSON.stringify(DEFAULT_TIMER));
+
+      clearTimer(undefined);
+
+      expect(localStorage.getItem('sessionTimer:74')).toBe(JSON.stringify(DEFAULT_TIMER));
+   });
+
+   it('clears timer from localStorage', () => {
+      localStorage.setItem('sessionTimer:74', JSON.stringify(DEFAULT_TIMER));
+
+      clearTimer(74);
+
+      expect(localStorage.getItem('sessionTimer:74')).toBeNull();
+   });
+});

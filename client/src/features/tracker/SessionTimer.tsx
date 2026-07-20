@@ -42,7 +42,7 @@ export function saveTimer(userId: number | undefined, data: StoredTimerState) {
    localStorage.setItem(`sessionTimer:${userId}`, JSON.stringify(data));
 }
 
-function clearTimer(userId: number | undefined) {
+export function clearTimer(userId: number | undefined) {
    if (!userId) return;
    localStorage.removeItem(`sessionTimer:${userId}`);
 }
