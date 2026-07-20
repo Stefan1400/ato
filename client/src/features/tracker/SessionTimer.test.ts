@@ -1,4 +1,4 @@
-import { loadTimer, DEFAULT_TIMER } from './SessionTimer';
+import { loadTimer, saveTimer, DEFAULT_TIMER } from './SessionTimer';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 beforeEach(() => {
@@ -52,4 +52,27 @@ describe('loadTimer()', () => {
       
       expect(loadTimer(6)).toEqual(DEFAULT_TIMER);
    });
+})
+
+describe('saveTimer()', () => {
+   it('does not save timer when userId is undefined', () => {
+      saveTimer(undefined, DEFAULT_TIMER);
+      
+      expect(localStorage.length).toBe(0);
+   })
+
+   it('saves timer to local storage', () => {
+      
+      saveTimer(74, { 
+         time: 120, 
+         timerStatus: 'ongoing', 
+         startedAt: '2026-07-16T12:00:00Z'
+      })
+      
+      expect(localStorage.getItem('sessionTimer:74')).toBe(JSON.stringify({
+         time: 120, 
+         timerStatus: 'ongoing', 
+         startedAt: '2026-07-16T12:00:00Z'  
+      }));
+   })
 })

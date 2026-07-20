@@ -37,7 +37,7 @@ export function loadTimer(userId?: number): StoredTimerState {
    }
 }
 
-function saveTimer(userId: number | undefined, data: StoredTimerState) {
+export function saveTimer(userId: number | undefined, data: StoredTimerState) {
    if (!userId) return;
    localStorage.setItem(`sessionTimer:${userId}`, JSON.stringify(data));
 }
