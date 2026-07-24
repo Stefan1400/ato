@@ -15,7 +15,7 @@ function analyzeSessions(sessions) {
       count++;
    };
 
-   const average = count === 0 ? 0 : total / count;
+   const average = Math.round(count === 0 ? 0 : total / count);
 
    return {
       total,
