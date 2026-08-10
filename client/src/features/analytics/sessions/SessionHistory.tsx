@@ -50,7 +50,7 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
     return (
       <div className="w-full lg:flex lg:h-full lg:flex-col">
         {header}
-        <div className="text-white mt-60 lg:mt-0">Loading...</div>
+        <div className="text-white mt-60 lg:mt-0">Loading sessions...</div>
       </div>
     );
   }
