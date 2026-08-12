@@ -6,7 +6,7 @@ import type { AuthContextType } from "../app/AuthProvider";
 import { useLogout } from "../features/auth/useAuth";
 import { useToast } from "./Toast";
 import LoadingScreen from "./LoadingScreen";
-import { HomeIcon, LockIcon } from "../assets/svgs";
+import { Home, Lock } from "lucide-react";
 
 type DesktopAccountDropdownProps = {
   toggleDeleteAccountPopup: () => void;
@@ -91,7 +91,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
                 onClick={closeDropdown}
                 className="group flex items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-white/5 cursor-pointer"
               >
-                <HomeIcon />
+                <Home className="h-5 w-5 text-white" />
                 <span>Home</span>
               </Link>
 
@@ -100,7 +100,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
                 onClick={closeDropdown}
                 className="group flex items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-white/5 cursor-pointer"
               >
-                <PieChart className="h-4 w-4 text-white" />
+                <PieChart className="h-5 w-5 text-white" />
                 <span>Analytics</span>
               </Link>
 
@@ -110,7 +110,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
                   onClick={closeDropdown}
                   className="group flex items-center gap-3 rounded-lg px-4 py-3 transition hover:bg-white/5 cursor-pointer"
                 >
-                  <LockIcon />
+                  <Lock className="h-5 w-5 text-white" />
                   <span>Change Password</span>
                 </Link>
               )}

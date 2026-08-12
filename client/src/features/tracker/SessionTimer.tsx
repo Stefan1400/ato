@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import type { addSessionTypes, UIStates } from "./tracker.types";
 import { useAddSession } from "./useSessionTimer";
 import { sessionTimerStyles } from "./SessionTimer.styles";
-import { PlayIcon, StopIcon } from "../../assets/svgs";
+import { Play, Square } from "lucide-react";
 import { useToast } from "../../components/Toast";
 import { AuthContext, type AuthContextType } from "../../app/AuthProvider";
 import formatElapsedTime from "../analytics/helpers/FormatElapsedTime";
@@ -202,29 +202,32 @@ function SessionTimer() {
 
    const style = sessionTimerStyles[uiState];
 
+   const HeaderIcon = style.header?.icon;
+   const SubHeaderIcon = style.subHeader?.icon;
+
    return (
     <div className={`${style.container} w-full min-w-[400px] max-w-md h-auto border-2 border-[#2A2A2A] flex flex-row justify-between items-center rounded-md min-h-24 pl-3`}>      
       <div className='flex flex-col items-start'>
          <h2 className="font-semibold text-md flex flex-row items-center gap-2">
-            {style.header?.icon && <style.header.icon />}
+            {HeaderIcon && <HeaderIcon className="w-4.5 h-4.5" />}
             {style.header.text}
          </h2>
          <span className="text-[2rem] font-bold">{formatElapsedTime(time)}</span>
          <h3 className={`${style.subHeader?.styles} flex flex-row items-center gap-2`}>
-            {style.subHeader?.icon && <style.subHeader.icon />}
+            {SubHeaderIcon && <SubHeaderIcon className="w-4.5 h-4.5" />}
             {style.subHeader?.text}
          </h3>
       </div>
 
       {style.btnVisible && (
-         <button onClick={handleClick} className="p-3.5 cursor-pointer">
+         <button onClick={handleClick} className="p-3.5 cursor-pointer" aria-label='start/stop timer'>
             <div className='p-5 bg-[#0C0C0C] rounded-full border-3 border-[#2A2A2A]'>
                {timerStatus === 'default' && (
-                  <PlayIcon />
+                  <Play fill="white" className="w-6 h-6" />
                )}
 
                {timerStatus === 'ongoing' && (
-                  <StopIcon />
+                  <Square fill="white" className="w-6 h-6" />
                )}
             </div>
          </button>

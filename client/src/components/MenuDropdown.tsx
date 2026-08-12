@@ -4,7 +4,7 @@ import { AuthContext } from "../app/AuthProvider";
 import type { AuthContextType } from "../app/AuthProvider";
 import { useContext } from "react";
 import LoadingScreen from "./LoadingScreen";
-import { HomeIcon, LockIcon } from "../assets/svgs";
+import { Home, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./Toast";
 import { PieChart } from 'lucide-react'
@@ -56,7 +56,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
             <ul className="flex flex-col gap-2 text-sm text-white">
               <li onClick={toggleMenu}>
                 <Link className="group flex items-center gap-3 rounded-2xl px-4 py-3 transition hover:bg-white/5" to={user ? '/dashboard' : '/'}>
-                  <HomeIcon />
+                  <Home className="h-5 w-5 text-white" />
                   <span>Home</span>
                 </Link>
               </li>
@@ -69,7 +69,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
               {isNormalUser && (
                 <li onClick={toggleMenu}>
                   <Link className="group flex items-center gap-3 rounded-2xl px-4 py-3 transition hover:bg-white/5" to='/change-password'>
-                    <LockIcon />
+                    <Lock className="h-5 w-5 text-white" />
                     <span>Change Password</span>
                   </Link>
                 </li>

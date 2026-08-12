@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { LucideIcon } from "lucide-react";
 
 export type addSessionRequest = {
    session_started: Date | null;
@@ -27,7 +28,7 @@ export type UIStates = 'default' | 'ongoing' | 'success' | 'pending' | 'error';
 
 export type StateStyles = {
    container: string;
-   header: { styles: string; text: string; icon?: ComponentType };
-   subHeader?: { styles: string; text: string; icon?: ComponentType };
+   header: { styles: string; text: string; icon?: LucideIcon };
+   subHeader?: { styles: string; text: string; icon?: LucideIcon };
    btnVisible: boolean;
 };

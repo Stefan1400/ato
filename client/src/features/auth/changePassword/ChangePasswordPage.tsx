@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EyeSlashedIcon, EyeIcon } from "../../../assets/svgs";
+
 import type { ChangePasswordErrors } from "../auth.types";
 import { useChangePassword } from "../useAuth";
 import { useNavigate } from "react-router-dom";

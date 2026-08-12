@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WarningIcon } from "../assets/svgs";
+import { AlertCircle } from "lucide-react";
 import { useDeleteUser } from "../features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./Toast";
@@ -61,7 +61,7 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
          <div className="w-full max-w-lg rounded-[32px] border border-white/10 bg-[#0f0f0f]/95 p-6 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-8">
             <div className="flex flex-col items-center gap-4 text-center">
                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#2f1212]/80 text-[#ff8b8b] shadow-[0_0_0_1px_rgba(255,138,138,0.1)]">
-                  <WarningIcon />
+                  <AlertCircle className="h-6 w-6 text-[#ff8b8b]" />
                </div>
 
                <div>
