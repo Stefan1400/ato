@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../app/AuthProvider";
 import { useContext } from "react";
 import { X, LucideMenu } from "lucide-react";
@@ -13,6 +13,8 @@ interface NavbarProps {
 function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps) {
    const auth = useContext(AuthContext);
    const isAuthenticated = Boolean(auth?.user);
+   const location = useLocation();
+   const hideMenuToggle = !isAuthenticated && ['/', '/signup', '/login'].includes(location.pathname);
    const displayName = auth?.user?.account_type === 'guest'
       ? 'Guest'
       : (auth?.user?.email || 'Guest');
@@ -34,17 +36,19 @@ function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps)
                   <DesktopAccountDropdown toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
                )}
 
-               <button
-                  onClick={toggleMenu}
-                  className='flex h-10 w-10 items-center justify-center rounded-full border border-[#2E2E2E] bg-[#111111] text-[#b6b6b6] transition-colors duration-200 hover:border-[#3e3e3e] hover:text-white lg:hidden'
-                  aria-label='Toggle menu'
-               >
-                  {menuOpen ? (
-                     <X size={24} />
-                  ) : (
-                     <LucideMenu size={24} />
-                  )}
-               </button>
+               {!hideMenuToggle && (
+                  <button
+                     onClick={toggleMenu}
+                     className='flex h-10 w-10 items-center justify-center rounded-full border border-[#2E2E2E] bg-[#111111] text-[#b6b6b6] transition-colors duration-200 hover:border-[#3e3e3e] hover:text-white lg:hidden'
+                     aria-label='Toggle menu'
+                  >
+                     {menuOpen ? (
+                        <X size={24} />
+                     ) : (
+                        <LucideMenu size={24} />
+                     )}
+                  </button>
+               )}
             </div>
          </div>
       </nav>
