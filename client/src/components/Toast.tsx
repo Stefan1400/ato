@@ -91,7 +91,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 hover:bg-white/5
                 hover:shadow-[0_0_10px_rgba(255,255,255,0.15) cursor-pointer
               "
-              aria-label="close-toast"
+              aria-label="close toast"
             >
               <X size={18} />
             </button>
