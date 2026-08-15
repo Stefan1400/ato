@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AlertCircle } from "lucide-react";
 import { useDeleteUser } from "../features/auth/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -53,12 +53,25 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
     });
    };
 
+   const modalRef = useRef<HTMLDivElement | null>(null);
+
+   useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+            toggleDeleteAccountPopup();
+         }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+   }, [toggleDeleteAccountPopup]);
+
    return (
     <>
-      <div onClick={toggleDeleteAccountPopup} className="fixed inset-0 z-1000 bg-black/70 backdrop-blur-sm" />
+      <div className="fixed inset-0 z-1000 bg-black/70 backdrop-blur-sm" />
 
       <div className="fixed inset-x-4 top-12 z-1000 mx-auto flex min-h-[calc(100vh-96px)] items-center justify-center overflow-y-auto pb-8 sm:inset-x-6 sm:top-16">
-         <div className="w-full max-w-lg rounded-[32px] border border-white/10 bg-[#0f0f0f]/95 p-6 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-8">
+         <div ref={modalRef} className="w-full max-w-lg rounded-[32px] border border-white/10 bg-[#0f0f0f]/95 p-6 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-8">
             <div className="flex flex-col items-center gap-4 text-center">
                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#2f1212]/80 text-[#ff8b8b] shadow-[0_0_0_1px_rgba(255,138,138,0.1)]">
                   <AlertCircle className="h-6 w-6 text-[#ff8b8b]" />
