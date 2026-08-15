@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { X, CircleCheck, CircleX, Info } from 'lucide-react';
 
 type ToastType = 'success' | 'error' | 'info';
-type Toast = { id: number; type: ToastType; message: string };
+type Toast = { id: string; type: ToastType; message: string };
 
 type ShowToastArgs = { type: ToastType; message: string; duration?: number };
 
@@ -14,12 +14,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   
    const [toasts, setToasts] = useState<Toast[]>([]);
 
-  function removeToast(id: number) {
+  function removeToast(id: string) {
     setToasts((t) => t.filter((x) => x.id !== id));
   }
 
   const showToast = ({ type, message, duration = 3000 }: ShowToastArgs) => {
-    const id = Date.now();
+    const id = crypto.randomUUID();
     setToasts((t) => [...t, { id, type, message }]);
 
     window.setTimeout(() => {
