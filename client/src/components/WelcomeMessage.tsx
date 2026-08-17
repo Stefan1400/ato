@@ -5,6 +5,14 @@ import { useGetFeedback } from "../features/feedback/useFeedback";
 
 type DayTimes = 'Good morning' | 'Good afternoon' | 'Good evening';
 
+export function getTimeOfDay() {
+   const hours = new Date().getHours();
+
+   if (hours >= 0 && hours < 12) return 'Good morning';
+   if (hours >= 12 && hours < 18) return 'Good afternoon';
+   return 'Good evening';
+};
+
 function WelcomeMessage() {
 
    const { user } = useContext(AuthContext) as AuthContextType;
@@ -17,14 +25,6 @@ function WelcomeMessage() {
    const displayName = user?.account_type === 'guest'
       ? 'Guest'
       : (user?.email ? user.email.split('@')[0][0].toUpperCase() + user.email.split('@')[0].slice(1) : 'Guest');
-
-   function getTimeOfDay() {
-      const hours = new Date().getHours();
-
-      if (hours >= 0 && hours < 12) return 'Good morning';
-      if (hours >= 12 && hours < 18) return 'Good afternoon';
-      return 'Good evening';
-   };
 
    useEffect(() => {
       setGreeting(getTimeOfDay())
