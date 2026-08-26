@@ -1,13 +1,11 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useLogout } from "../features/auth/useAuth"
 import { AuthContext } from "../app/AuthProvider";
 import type { AuthContextType } from "../app/AuthProvider";
 import { useContext } from "react";
 import LoadingScreen from "./LoadingScreen";
-import { Home, Lock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Home, Lock, PieChart } from "lucide-react";
 import { useToast } from "./Toast";
-import { PieChart } from 'lucide-react'
 
 type MenuDropdownTypes = {
   toggleMenu: () => void;
@@ -26,17 +24,12 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        try {
-          console.log('User logged out successfully');
-          showToast({ type: 'success', message: 'Logged out successfully', duration: 3000 });
-        } catch (error) {
-          console.error('Error during logout:', error);
-        }
+        showToast({ type: 'success', message: 'Logged out successfully', duration: 3000 });
+    
         toggleMenu();
         navigate('/');
       },
-      onError: (error) => {
-        console.error('Logout failed:', error);
+      onError: () => {
         showToast({ type: 'error', message: 'Logout failed. Please try again.', duration: 3000 });
       }
     });
@@ -92,11 +85,11 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
                     Sign Up
                   </Link>
                   <Link className="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-[#111111] px-4 py-3 text-sm text-white transition hover:border-white/20 hover:bg-[#1a1a1a]" to='/login'>
-                    Log In
+                    Sign In
                   </Link>
                 </div>
               ) : (
-                <button onClick={handleLogout} className="w-full rounded-2xl bg-[#111111] px-4 py-3 text-sm text-white transition hover:bg-[#1a1a1a] border border-white/10">
+                <button aria-label="sign out" onClick={handleLogout} className="w-full rounded-2xl bg-[#111111] px-4 py-3 text-sm text-white transition hover:bg-[#1a1a1a] border border-white/10">
                   Sign Out
                 </button>
               )}
@@ -104,6 +97,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
               {isNormalUser && (
                 <div className="mt-3">
                   <button
+                    aria-label="delete account"
                     onClick={toggleDeleteAccountPopup}
                     className="w-full rounded-2xl bg-[#170606] px-4 py-3 text-sm font-semibold text-[#ff8f8f] transition hover:bg-[#220b0b] border border-[#650000]"
                   >
