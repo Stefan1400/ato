@@ -6,7 +6,6 @@ function DayAnalytics() {
   const { data, isLoading } = useGetFeedback();
 
   const today = data?.todayValue || "0min";
-  const yesterday = data?.yesterdayValue || "0min";
   const feedbackType = data?.feedbackType;
 
   const formattedTime = isLoading ? "0min" : today;
