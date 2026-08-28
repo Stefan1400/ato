@@ -40,7 +40,7 @@ function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps)
                   <button
                      onClick={toggleMenu}
                      className='flex h-10 w-10 items-center justify-center rounded-full border border-[#2E2E2E] bg-[#111111] text-[#b6b6b6] transition-colors duration-200 hover:border-[#3e3e3e] hover:text-white lg:hidden'
-                     aria-label='Toggle menu'
+                     aria-label='Toggle Menu'
                   >
                      {menuOpen ? (
                         <X size={24} />
