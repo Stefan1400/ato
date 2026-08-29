@@ -1,12 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown, ChevronUp, PieChart } from "lucide-react";
+import { ChevronDown, ChevronUp, PieChart, Home, Lock } from "lucide-react";
 import { AuthContext } from "../app/AuthProvider";
 import type { AuthContextType } from "../app/AuthProvider";
 import { useLogout } from "../features/auth/useAuth";
 import { useToast } from "./Toast";
 import LoadingScreen from "./LoadingScreen";
-import { Home, Lock } from "lucide-react";
 
 type DesktopAccountDropdownProps = {
   toggleDeleteAccountPopup: () => void;
@@ -58,6 +57,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
       onError: (error) => {
         console.error("Logout failed:", error);
         showToast({ type: "error", message: "Logout failed. Please try again.", duration: 3000 });
+        closeDropdown();
       }
     });
   };
@@ -70,6 +70,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
     <div ref={wrapperRef} className="hidden lg:block relative">
       <button
         type="button"
+        aria-label="Toggle Desktop Account Dropdown"
         onClick={toggleDropdown}
         className="inline-flex items-center gap-3 rounded-full px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/5 hover:text-[#f4f4f4] cursor-pointer"
       >
@@ -121,6 +122,7 @@ export default function DesktopAccountDropdown({ toggleDeleteAccountPopup }: Des
                 <>
                   <button
                     type="button"
+                    aria-label="Sign Out"
                     onClick={handleLogout}
                     className="w-full rounded-lg bg-[#111111] px-4 py-3 text-sm text-white transition hover:bg-[#1a1a1a] border border-white/10 cursor-pointer"
                   >
