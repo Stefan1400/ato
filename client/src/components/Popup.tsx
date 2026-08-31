@@ -45,7 +45,7 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
          setError(false);
          navigate('/signup');
          toggleMenu();
-         showToast({ type: 'success', message: 'Account Deleted Successfully', duration: 3000 });
+         showToast({ type: 'success', message: 'Account successfully deleted', duration: 3000 });
       },
       onError: () => {
             showToast({ type: 'error', message: 'Account could not be deleted', duration: 3000 });
@@ -110,9 +110,11 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
                   </button>
                   <button
                      type="submit"
+                     aria-label="Delete Account Submit"
+                     disabled={deleteUserMutation.isPending}
                      className="inline-flex h-12 w-full items-center justify-center rounded-3xl bg-[#D60000] text-sm font-semibold text-white transition hover:bg-[#ff1f1f] cursor-pointer"
                   >
-                     Delete account
+                     {deleteUserMutation.isPending ? 'Deleting account...' : 'Delete account'}
                   </button>
                </div>
             </form>
