@@ -48,6 +48,7 @@ export default function WelcomePage() {
               onClick={handleGuestContinue}
               disabled={createGuestMutation.isPending}
               className={actionLinkClassName}
+              aria-label='Create Guest'
             >
               <UserRound className="h-5 w-5" />
               <span>{createGuestMutation.isPending ? "Creating guest account..." : "Continue as Guest"}</span>
