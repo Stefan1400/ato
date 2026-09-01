@@ -5,6 +5,7 @@ export default function CalendarHeader({ goToPreviousMonth, goToNextMonth, month
     <div className="mt-5 flex items-center justify-between rounded-full bg-white/5 px-3 py-2">
       <button
          onClick={goToPreviousMonth}
+         aria-label='Go To Previous Month'
          className="rounded-full p-2 hover:bg-white/10 cursor-pointer"
       >
          <ChevronLeft size={16} color="white" />
@@ -16,6 +17,7 @@ export default function CalendarHeader({ goToPreviousMonth, goToNextMonth, month
 
       <button
          onClick={goToNextMonth}
+         aria-label='Go To Next Month'
          className="rounded-full p-2 hover:bg-white/10 cursor-pointer"
       >
          <ChevronRight size={16} color="white" />
