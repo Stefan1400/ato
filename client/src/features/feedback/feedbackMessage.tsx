@@ -1,4 +1,3 @@
-import type { Feedback } from "./feedback.types";
 import { useGetFeedback } from "./useFeedback";
 import { useGetSessionsByDate } from "../analytics/useAnalytics";
 import formatDuration from "../analytics/helpers/FormatDuration";
@@ -94,13 +93,13 @@ function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
       }
    }
   
-   return (
-      <div className="w-full min-w-[400px] h-auto flex flex-col items-start justify-start text-white gap-2 p-4 pl-5">
-         <p className="text-[#474747] font-medium">{selectedDate.toDateString()}</p>
-         <h1 className="text-4xl">{isLoading ? '0min' : totalLabel}</h1>
-         <p className="text-[#a8a8a8] w-70">{message}</p>
-      </div>
-  )
+     return (
+        <div className="w-full min-w-0 h-auto flex flex-col items-start justify-start text-white gap-2 p-1 pb-3 lg:pl-5 lg:p-4">
+          <p className="text-[#474747] font-medium">{selectedDate.toDateString()}</p>
+          <h1 className="text-4xl">{isLoading ? '0min' : totalLabel}</h1>
+          <p className="text-[#a8a8a8] w-full wrap-break-word">{message}</p>
+        </div>
+     )
 }
 
 export default FeedbackMessage;
