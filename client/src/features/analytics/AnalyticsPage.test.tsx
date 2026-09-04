@@ -1,6 +1,5 @@
-import { expect, describe, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
+import { expect, describe, it, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import AnalyticsPage from "./AnalyticsPage";
 
 vi.mock('../feedback/feedbackMessage', () => ({
@@ -48,6 +47,15 @@ vi.mock('./selectByDate/DateSelector', () => ({
 }));
 
 describe('AnalyticsPage', () => {
+   beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date(2026, 8, 2));
+   });
+
+   afterEach(() => {
+      vi.useRealTimers();
+   });
+   
    it('renders analytics page', () => {
       render(
          <AnalyticsPage />
@@ -70,52 +78,46 @@ describe('AnalyticsPage', () => {
       ).toBeInTheDocument();
    });
 
-   it('renders date selector when view by date button is clicked', async () => {
+   it('renders date selector when view by date button is clicked', () => {
       render(
          <AnalyticsPage />
       );
-
-      const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: /view by date/i }));
+      
+      fireEvent.click(screen.getByRole('button', { name: /view by date/i }));
 
       expect(screen.getByText('Selected Date - Wed Sep 02 2026')).toBeInTheDocument();
    });
 
-   it('renders date selector when session history button is clicked', async () => {
+   it('renders date selector when session history button is clicked', () => {
       render(
          <AnalyticsPage />
       );
 
-      const user = userEvent.setup();
-      await user.click(screen.getByRole('button', { name: /Open Date Selector/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Open Date Selector/i }));
 
       expect(screen.getByText('Selected Date - Wed Sep 02 2026')).toBeInTheDocument();
    });
 
-   it('closes date selector when close date selector button is clicked', async () => {
+   it('closes date selector when close date selector button is clicked', () => {
       render(
          <AnalyticsPage />
       );
 
-      const user = userEvent.setup();
+      fireEvent.click(screen.getByRole('button', { name: /Open Date Selector/i }));
 
-      await user.click(screen.getByRole('button', { name: /Open Date Selector/i }));
-
-      await user.click(screen.getByRole('button', { name: /Close Date Selector/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Close Date Selector/i }));
 
       expect(screen.queryByText('Selected Date - Wed Sep 02 2026')).not.toBeInTheDocument();
    });
 
-   it('updates selected date and closes date selector after date is selected', async () => {
+   it('updates selected date and closes date selector after date is selected', () => {
       render(
          <AnalyticsPage />
       );
 
-      const user = userEvent.setup();
+      fireEvent.click(screen.getByRole('button', { name: /Open Date Selector/i }));
 
-      await user.click(screen.getByRole('button', { name: /Open Date Selector/i }));
-
-      await user.click(screen.getByRole('button', { name: /Select Date/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Select Date/i }));
 
        expect(
          screen.getByText('Sat Oct 03 2026')
