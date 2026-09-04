@@ -81,7 +81,7 @@ function LoginPage() {
          
          <div className="page-background-gradient"></div>
          
-         <main className="mx-auto flex w-full max-w-md flex-col rounded-[4xl] border border-white/10 p-8 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:px-10">
+         <main className="mx-auto flex w-full max-w-md flex-col rounded-4xl border border-white/10 p-8 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:px-10">
             <div className="mb-8 text-center">
                <h1 className="mt-4 text-4xl font-semibold tracking-[0.04em] text-white">Sign in</h1>
                <p className="mt-3 text-sm text-[#c5c5c5]">Sign in to your account.</p>
