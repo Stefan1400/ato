@@ -22,13 +22,13 @@ export default function Calendar({ calendarDays, weekdayNames, selectedDate, onS
           let buttonStyles = "h-11 rounded-2xl border cursor-pointer";
 
           if (emptyCell) {
-            buttonStyles += "cursor-default bg-transparent pointer-events-none";
+            buttonStyles += " cursor-default bg-transparent pointer-events-none";
           } else if (isSameDay(date, selectedDate)) {
             buttonStyles +=
-              "border-transparent bg-white text-black";
+              " border-transparent bg-white text-black";
           } else {
             buttonStyles +=
-              "border-white/10 bg-white/5 text-white/80 hover:bg-white/10";
+              " border-white/10 bg-white/5 text-white/80 hover:bg-white/10";
           }
 
           return (
