@@ -36,7 +36,7 @@ function ChangePasswordPage() {
 
       function validateInput(name: FieldName, value: string) {
          if (!value) {
-            newErrors[name] = 'Password is required';
+            newErrors[name] = 'Field is required';
          } else if (value.length < 8 || value.length > 64) {
             newErrors[name] = 'Password must be 8-64 characters'
          };
@@ -89,7 +89,7 @@ function ChangePasswordPage() {
       <div className="relative z-10 min-h-screen bg-[#090909] px-4 py-10 pt-25 text-white flex items-center justify-center">
          <div className="page-background-gradient"></div>
          
-         <main className="mx-auto flex w-full max-w-md flex-col rounded-[32px] border border-white/10 bg-[#090909] p-8 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:px-10">
+         <main className="mx-auto flex w-full max-w-md flex-col rounded-4xl border border-white/10 bg-[#090909] p-8 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-xl sm:px-10">
             <div className="mb-6 text-center">
                <h1 className="mt-4 text-3xl font-semibold tracking-[0.02em] text-white">Change Password</h1>
                <p className="mt-3 text-sm text-[#c5c5c5]">Use a strong password between 8 and 64 characters.</p>
