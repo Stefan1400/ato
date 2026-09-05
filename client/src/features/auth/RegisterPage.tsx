@@ -75,11 +75,11 @@ function RegisterPage() {
                   Object.keys(prev).map(key => [key, ""])
                )
             );
-            showToast({ type: 'success', message: isGuestConversion ? 'Account upgraded successfully' : 'Account created successfully', duration: 3000 });
+            showToast({ type: 'success', message: 'Account created successfully', duration: 3000 });
             navigate('/dashboard');
          },
          onError: () => {
-            showToast({ type: 'error', message: isGuestConversion ? 'Could not upgrade account. Please try again.' : 'Registration failed. Please try again.', duration: 3000 });
+            showToast({ type: 'error', message: 'Registration failed. Please try again.', duration: 3000 });
          }
       });
    };
