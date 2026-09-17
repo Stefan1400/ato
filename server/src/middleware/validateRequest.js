@@ -2,7 +2,6 @@ const { ZodError } = require("zod");
 
 const validateRequest = (schema) => (req, res, next) => {
   try {
-
     const result = schema.parse(req.body);
     req.body = result;
 
@@ -14,10 +13,10 @@ const validateRequest = (schema) => (req, res, next) => {
         error: "Validation failed",
         details: err.errors,
       });
-    }
+    };
 
     next(err);
-  }
+  };
 };
 
 module.exports = validateRequest;
