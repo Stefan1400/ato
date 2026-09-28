@@ -20,7 +20,6 @@ const monthNames = [
 
 const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-// Create all calendar cells for a month
 function getCalendarDays(year: number, month: number) {
   const days: Array<Date | null> = [];
 
@@ -52,19 +51,15 @@ function getCalendarDays(year: number, month: number) {
   }
 
   return days;
-}
+};
 
-// Compare two dates
-function isSameDay(date1: Date, date2: Date) {
+export function isSameDay(date1: Date, date2: Date) {
   return (
     date1.getDate() === date2.getDate() &&
     date1.getMonth() === date2.getMonth() &&
     date1.getFullYear() === date2.getFullYear()
   );
-}
-
-
-
+};
 
 export type DateSelectorProps = {
   selectedDate: Date;
@@ -73,23 +68,18 @@ export type DateSelectorProps = {
 };
 
 export default function DateSelector({ selectedDate, onSelect, onClose }: DateSelectorProps) {
-  // Which month is currently visible in the calendar
   const [currentMonth, setCurrentMonth] = useState(
     new Date(selectedDate)
   );
 
-  // If selected date changes externally, sync calendar view
   useEffect(() => {
     setCurrentMonth(new Date(selectedDate));
   }, [selectedDate]);
 
-  // Generate all visible calendar cells
   const calendarDays = getCalendarDays(
     currentMonth.getFullYear(),
     currentMonth.getMonth()
   );
-
-//   console.log('calendarDays:', calendarDays);
   
   const monthLabel = `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
 
@@ -101,7 +91,7 @@ export default function DateSelector({ selectedDate, onSelect, onClose }: DateSe
         1
       );
     });
-  }
+  };
 
   function goToNextMonth() {
     setCurrentMonth((prev) => {
@@ -111,25 +101,24 @@ export default function DateSelector({ selectedDate, onSelect, onClose }: DateSe
         1
       );
     });
-  }
+  };
 
   return (
   <div className="fixed inset-0 z-1000 flex items-center justify-center px-4">
-    {/* Backdrop - blurs the page behind the modal */}
     <div
+      data-testid="backdrop"
       className="absolute inset-0 bg-black/30 backdrop-blur-sm"
       onClick={onClose}
     />
 
-    {/* Modal card */}
     <div className="relative z-10 w-full max-w-3xl rounded-[28px] border border-white/10 bg-[#090909]/95 p-10 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)]">
-      {/* Header */}
       <div className="flex items-start justify-between">
         <p className="text-sm text-white/40">
           View Sessions by Date
         </p>
 
         <button
+          aria-label="Close"
           onClick={onClose}
           className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80 hover:bg-white/10 cursor-pointer"
         >
@@ -137,14 +126,12 @@ export default function DateSelector({ selectedDate, onSelect, onClose }: DateSe
         </button>
       </div>
 
-      {/* Month navigation */}
       <CalendarHeader
         goToPreviousMonth={goToPreviousMonth}
         goToNextMonth={goToNextMonth}
         monthLabel={monthLabel}
       />
 
-      {/* Weekday labels */}
       <Calendar
         calendarDays={calendarDays}
         weekdayNames={weekdayNames}
