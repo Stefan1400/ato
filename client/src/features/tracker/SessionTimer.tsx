@@ -35,17 +35,17 @@ export function loadTimer(userId?: number): StoredTimerState {
    } catch {
       return DEFAULT_TIMER;
    }
-}
+};
 
 export function saveTimer(userId: number | undefined, data: StoredTimerState) {
    if (!userId) return;
    localStorage.setItem(`sessionTimer:${userId}`, JSON.stringify(data));
-}
+};
 
 export function clearTimer(userId: number | undefined) {
    if (!userId) return;
    localStorage.removeItem(`sessionTimer:${userId}`);
-}
+};
 
 function SessionTimer() {
    const { user } = useContext(AuthContext) as AuthContextType;
@@ -220,7 +220,11 @@ function SessionTimer() {
       </div>
 
       {style.btnVisible && (
-         <button onClick={handleClick} className="p-3.5 cursor-pointer" aria-label='start/stop timer'>
+         <button 
+            onClick={handleClick} 
+            className="p-3.5 cursor-pointer" 
+            aria-label='start/stop timer'
+            >
             <div className='p-5 bg-[#0C0C0C] rounded-full border-3 border-[#2A2A2A]'>
                {timerStatus === 'default' && (
                   <Play fill="white" className="w-6 h-6" />
