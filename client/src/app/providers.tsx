@@ -9,11 +9,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
    return (
       <BrowserRouter>
          <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-               <ToastProvider>
+            <ToastProvider>
+               <AuthProvider>
                   {children}
-               </ToastProvider>
-            </AuthProvider>
+               </AuthProvider>
+            </ToastProvider>
          </QueryClientProvider>
       </BrowserRouter>
    );
