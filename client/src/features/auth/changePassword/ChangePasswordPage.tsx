@@ -100,7 +100,7 @@ function ChangePasswordPage() {
                   Current password
                   <div className="relative">
                      <input
-                        className="w-full rounded-2xl border border-[#2f2f2f] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                        className={`${errors.currentPassword ? 'border-red-500 text-white' : 'border-[#2f2f2f] text-white'} w-full rounded-2xl border bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10`}
                         type={currentPasswordHidden ? 'password' : 'text'}
                         placeholder="Current password"
                         value={currentPassword}
@@ -121,7 +121,7 @@ function ChangePasswordPage() {
                   New password
                   <div className="relative">
                      <input
-                        className="w-full rounded-2xl border border-[#2f2f2f] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                        className={`${errors.newPassword ? 'border-red-500 text-white' : 'border-[#2f2f2f] text-white'} w-full rounded-2xl border bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10`}
                         type={newPasswordHidden ? 'password' : 'text'}
                         placeholder="New password"
                         value={newPassword}
@@ -142,7 +142,7 @@ function ChangePasswordPage() {
                   Confirm new password
                   <div className="relative">
                      <input
-                        className="w-full rounded-2xl border border-[#2f2f2f] bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10"
+                        className={`${errors.confirmNewPassword ? 'border-red-500 text-white' : 'border-[#2f2f2f] text-white'} w-full rounded-2xl border bg-[#0a0a0a] px-4 py-3 text-white outline-none transition focus:border-white/40 focus:ring-2 focus:ring-white/10`}
                         type={confirmNewPasswordHidden ? 'password' : 'text'}
                         placeholder="Confirm new password"
                         value={confirmNewPassword}

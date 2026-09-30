@@ -133,6 +133,10 @@ describe('ChangePasswordPage', () => {
    
          expect(screen.getByText('Password must be 8-64 characters')).toBeInTheDocument();
          expect(screen.getByText('Passwords must match')).toBeInTheDocument();
+
+         expect(current_password).not.toHaveClass('border-red-500');
+         expect(new_password).toHaveClass('border-red-500');
+         expect(confirm_new_password).toHaveClass('border-red-500');
          
          expect(mockChangePasswordMutation).not.toHaveBeenCalled();
    });
