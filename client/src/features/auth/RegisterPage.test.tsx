@@ -62,7 +62,6 @@ async function submitValidRegistration() {
 
 	await user.type(email, 'user@example.com');
 	await user.type(password, 'password123');
-	await user.click(screen.getByRole('checkbox'));
 	await user.click(screen.getByRole('button', { name: 'Sign up' }));
 };
 
@@ -85,11 +84,12 @@ describe('RegisterPage', () => {
 		expect(screen.getByText('Create your free account.')).toBeInTheDocument();
 		expect(screen.getByPlaceholderText('name@example.com')).toBeInTheDocument();
 		expect(screen.getByPlaceholderText('Create a password')).toHaveAttribute('type', 'password');
-		expect(screen.getByRole('checkbox')).not.toBeChecked();
+		expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+		expect(screen.queryByText(/Terms|Privacy Policy/)).not.toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/login');
 	});
 
-	it('validates required fields and terms acceptance without submitting', async () => {
+	it('validates required fields without submitting', async () => {
 		renderRegisterPage();
 
 		const user = userEvent.setup();
@@ -97,7 +97,6 @@ describe('RegisterPage', () => {
 
 		expect(screen.getByText('Email is required')).toBeInTheDocument();
 		expect(screen.getByText('Password is required')).toBeInTheDocument();
-		expect(screen.getByText('You must accept the terms and conditions')).toBeInTheDocument();
 
 		expect(mockShowToast).toHaveBeenCalledWith({
 			type: 'error',
@@ -117,7 +116,6 @@ describe('RegisterPage', () => {
 
 		await user.type(email, 'invalid-email');
 		await user.type(password, 'short');
-		await user.click(screen.getByRole('checkbox'));
 		await user.click(screen.getByRole('button', { name: 'Sign up' }));
 
 		expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
@@ -178,7 +176,6 @@ describe('RegisterPage', () => {
 		expect(screen.getByTestId('location')).toHaveTextContent('/dashboard');
 		expect(screen.getByPlaceholderText('name@example.com')).toHaveValue('');
 		expect(screen.getByPlaceholderText('Create a password')).toHaveValue('');
-		expect(screen.getByRole('checkbox')).not.toBeChecked();
 	});
 
 	it('converts a guest account instead of registering a new account', async () => {

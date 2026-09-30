@@ -18,7 +18,6 @@ function RegisterPage() {
    const [passwordHidden, setPasswordHidden] = useState(true);
    const [currentEmail, setCurrentEmail] = useState('');
    const [currentPassword, setCurrentPassword] = useState('');
-   const [termsChecked, setTermsChecked] = useState(false);
 
    const [errors, setErrors] = useState<Errors>({});
 
@@ -29,8 +28,7 @@ function RegisterPage() {
 
       const newErrors = {
          email: '',
-         password: '',
-         terms: ''
+         password: ''
       };
 
       if (!currentEmail) {
@@ -45,10 +43,6 @@ function RegisterPage() {
          newErrors.password = 'Password must be 8-64 characters'
       }
 
-      if (!termsChecked) {
-         newErrors.terms = 'You must accept the terms and conditions';
-      };
-      
       const hasErrors = Object.values(newErrors).some(Boolean)
       
       if (hasErrors) {
@@ -69,7 +63,6 @@ function RegisterPage() {
             setUser(response.user);
             setCurrentEmail('');
             setCurrentPassword('');
-            setTermsChecked(false);
             setErrors(prev =>
                Object.fromEntries(
                   Object.keys(prev).map(key => [key, ""])
@@ -128,19 +121,6 @@ function RegisterPage() {
                   </div>
                   {errors.password && <span className="text-xs text-red-500">{errors.password}</span>}
                </label>
-
-               <label className="flex items-start gap-3 text-sm text-[#d1d1d1]">
-                  <input
-                     type="checkbox"
-                     checked={termsChecked}
-                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTermsChecked(e.target.checked)}
-                     className="mt-1 h-4 w-4 rounded border-[#2f2f2f] bg-[#0a0a0a] accent-[#D60000] cursor-pointer"
-                  />
-                  <span className="leading-5">
-                     I agree to the <a className="font-semibold text-[#D60000]" href="#">Terms</a> and <a className="font-semibold text-[#D60000]" href="#">Privacy Policy</a>
-                  </span>
-               </label>
-               {errors.terms && <span className="text-xs text-red-500">{errors.terms}</span>}
 
                <button
                   type="submit"

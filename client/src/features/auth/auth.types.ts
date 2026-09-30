@@ -1,7 +1,6 @@
 export interface Errors {
    email?: string,
-   password?: string,
-   terms?: string
+   password?: string
 };
 
 export type RegisterRequest = {
