@@ -38,6 +38,30 @@ describe('Navbar', () => {
       expect(screen.getByText('stefan123@gmail.com')).toBeInTheDocument();
    });
 
+   it("truncates a long email visually without changing its text", () => {
+      const email = 'averylongusername@example.com';
+
+      render(
+         <MemoryRouter>
+            <AuthContext.Provider value={{
+               user: { id: 1, email, account_type: 'user' },
+               isLoading: false,
+               setUser: vi.fn()
+            }}>
+               <Navbar
+                  toggleMenu={vi.fn()}
+                  menuOpen={true}
+                  toggleDeleteAccountPopup={vi.fn()}
+               />
+            </AuthContext.Provider>
+         </MemoryRouter>
+      );
+
+      const emailDisplay = screen.getByText(email);
+      expect(emailDisplay).toHaveClass('truncate', 'min-w-0', 'max-w-[8ch]', 'sm:max-w-[12ch]');
+      expect(emailDisplay.textContent).toBe(email);
+   });
+
    it("renders Guest for authorized guest in the navbar", () => {
       render(
          <MemoryRouter>

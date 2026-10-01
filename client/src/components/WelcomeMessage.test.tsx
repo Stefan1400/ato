@@ -56,7 +56,7 @@ describe('WelcomeMessage', () => {
       
       render(<WelcomeMessage />);
       
-      expect(screen.getByText('Good morning, Guest')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good morning, Guest');
    });
 
    it('renders afternoon greeting', () => {
@@ -67,7 +67,7 @@ describe('WelcomeMessage', () => {
       
       render(<WelcomeMessage />);
       
-      expect(screen.getByText('Good afternoon, Guest')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good afternoon, Guest');
    });
 
    it('renders evening greeting', () => {
@@ -78,7 +78,7 @@ describe('WelcomeMessage', () => {
       
       render(<WelcomeMessage />);
       
-      expect(screen.getByText('Good evening, Guest')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good evening, Guest');
    });
 
    it('renders focus time when today exists', () => {
@@ -127,7 +127,7 @@ describe('WelcomeMessage', () => {
       
       render(<WelcomeMessage />);
       
-      expect(screen.getByText('Good morning, Guest')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good morning, Guest');
    });
 
    it('renders username when user', () => {
@@ -146,7 +146,23 @@ describe('WelcomeMessage', () => {
       
       render(<WelcomeMessage />);
       
-      expect(screen.getByText('Good morning, Stefan')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good morning, Stefan');
+   });
+
+   it('truncates a long username visually without changing its text', () => {
+      const displayName = 'Averyverylongusername';
+      mockUseContext.mockReturnValue({
+         user: {
+            account_type: 'user',
+            email: 'averyverylongusername@example.com'
+         },
+      });
+
+      render(<WelcomeMessage />);
+
+      const username = screen.getByText(displayName);
+      expect(username).toHaveClass('truncate', 'max-w-[7ch]', 'sm:max-w-[10ch]');
+      expect(username.textContent).toBe(displayName);
    });
 
    it('returns correct time of day', () => {
@@ -192,12 +208,12 @@ describe('WelcomeMessage', () => {
 
       render(<WelcomeMessage />);
 
-      expect(screen.getByText('Good morning, Guest')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good morning, Guest');
       
       act(() => {
          vi.advanceTimersByTime(60000);
       });
 
-      expect(screen.getByText('Good afternoon, Guest')).toBeInTheDocument();
+      expect(screen.getByRole('heading')).toHaveTextContent('Good afternoon, Guest');
    });
 });

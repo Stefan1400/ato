@@ -53,6 +53,26 @@ describe('DesktopAccountDropdown', () => {
       expect(screen.getByText('Stefan123')).toBeInTheDocument();
    });
 
+   it('truncates a long username visually without changing its text', () => {
+      const displayName = 'Averyverylongusername';
+
+      render(
+         <MemoryRouter>
+            <AuthContext.Provider value={{
+               user: { id: 1, email: 'averyverylongusername@example.com', account_type: 'user' },
+               isLoading: false,
+               setUser: vi.fn()
+            }}>
+               <DesktopAccountDropdown toggleDeleteAccountPopup={vi.fn()} />
+            </AuthContext.Provider>
+         </MemoryRouter>
+      );
+
+      const username = screen.getByText(displayName);
+      expect(username).toHaveClass('truncate', 'min-w-0', 'max-w-[12ch]');
+      expect(username.textContent).toBe(displayName);
+   });
+
    it('renders username for authorized guests', () => {
       render(
          <MemoryRouter>

@@ -46,8 +46,8 @@ function WelcomeMessage() {
    };
 
   return (
-    <div className="w-full h-auto p-3 pl-0 flex flex-col items-start text-white gap-1">
-      <h1 className="font-bold text-2xl">{greeting}, {displayName}</h1>
+      <div className="w-full h-auto p-3 pl-0 flex flex-col items-start text-white gap-1">
+         <h1 className="w-full min-w-0 font-bold text-2xl">{greeting}, <span className="inline-block max-w-[7ch] truncate align-bottom sm:max-w-[10ch]">{displayName}</span></h1>
       <p className="text-[#a8a8a8]">{message}</p>
     </div>
   )

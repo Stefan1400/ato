@@ -27,7 +27,7 @@ function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps)
                   ato
                </Link>
             ) : (
-               <span className='font-medium text-white truncate max-w-45'>{displayName}</span>
+               <span className='min-w-0 max-w-[8ch] truncate font-medium text-white sm:max-w-[15ch]'>{displayName}</span>
             )}
             
 
