@@ -16,35 +16,11 @@ function LocationDisplay() {
 };
 
 describe('Navbar', () => {
-   it("renders authorized user's email in the navbar", () => {
+   it("keeps the open-menu close button and account dropdown on the right", () => {
       render(
-         <MemoryRouter>
-            <AuthContext.Provider 
-               value={{ 
-                  user: { id: 1, email: 'stefan123@gmail.com', account_type: 'user' }, 
-                  isLoading: false, 
-                  setUser: vi.fn() 
-               }}
-            >
-               <Navbar 
-                  toggleMenu={vi.fn()} 
-                  menuOpen={true} 
-                  toggleDeleteAccountPopup={vi.fn()} 
-               />
-            </AuthContext.Provider>
-         </MemoryRouter>
-      );
-
-      expect(screen.getByText('stefan123@gmail.com')).toBeInTheDocument();
-   });
-
-   it("truncates a long email visually without changing its text", () => {
-      const email = 'averylongusername@example.com';
-
-      render(
-         <MemoryRouter>
+         <MemoryRouter initialEntries={['/dashboard']}>
             <AuthContext.Provider value={{
-               user: { id: 1, email, account_type: 'user' },
+               user: { id: 1, email: 'stefan123@gmail.com', account_type: 'user' },
                isLoading: false,
                setUser: vi.fn()
             }}>
@@ -57,53 +33,12 @@ describe('Navbar', () => {
          </MemoryRouter>
       );
 
-      const emailDisplay = screen.getByText(email);
-      expect(emailDisplay).toHaveClass('truncate', 'min-w-0', 'max-w-[8ch]', 'sm:max-w-[12ch]');
-      expect(emailDisplay.textContent).toBe(email);
-   });
+      const accountDropdown = screen.getByTestId('desktop-account-dropdown');
+      const closeButton = screen.getByRole('button', { name: /toggle menu/i });
 
-   it("renders Guest for authorized guest in the navbar", () => {
-      render(
-         <MemoryRouter>
-            <AuthContext.Provider 
-               value={{ 
-                  user: { id: 1, email: 'guest123532342@gmail.com', account_type: 'guest' }, 
-                  isLoading: false, 
-                  setUser: vi.fn() 
-               }}
-            >
-               <Navbar 
-                  toggleMenu={vi.fn()} 
-                  menuOpen={true} 
-                  toggleDeleteAccountPopup={vi.fn()} 
-               />
-            </AuthContext.Provider>
-         </MemoryRouter>
-      );
-
-      expect(screen.getByText('Guest')).toBeInTheDocument();
-   });
-
-   it("doesn't render email address in the navbar for unauthorized users", () => {
-      render(
-         <MemoryRouter>
-            <AuthContext.Provider 
-               value={{ 
-                  user: undefined, 
-                  isLoading: false, 
-                  setUser: vi.fn() 
-               }}
-            >
-               <Navbar 
-                  toggleMenu={vi.fn()} 
-                  menuOpen={false} 
-                  toggleDeleteAccountPopup={vi.fn()} 
-               />
-            </AuthContext.Provider>
-         </MemoryRouter>
-      );
-
-      expect(screen.queryByText('Guest')).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: /ato/i })).not.toBeInTheDocument();
+      expect(accountDropdown.parentElement).toBe(closeButton.parentElement);
+      expect(closeButton.parentElement).toHaveClass('ml-auto');
    });
 
    it("navigates to /dashboard when authorized user clicks ato", async () => {

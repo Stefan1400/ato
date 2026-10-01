@@ -15,23 +15,18 @@ function Navbar({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: NavbarProps)
    const isAuthenticated = Boolean(auth?.user);
    const location = useLocation();
    const hideMenuToggle = !isAuthenticated && ['/', '/signup', '/login'].includes(location.pathname);
-   const displayName = auth?.user?.account_type === 'guest'
-      ? 'Guest'
-      : (auth?.user?.email || 'Guest');
 
    return (
       <nav className='fixed left-0 top-0 w-full h-16 px-4 lg:px-6 text-white z-1000 border-b border-[#2E2E2E] bg-[#090909]/95 backdrop-blur-sm'>
          <div className='flex h-full w-full items-center justify-between'>
-            {!menuOpen ? (
+            {!menuOpen && (
                <Link to={isAuthenticated ? '/dashboard' : '/'} className='text-[1.1rem] font-semibold tracking-[0.08em] lowercase text-white hover:text-[#f4f4f4]'>
                   ato
                </Link>
-            ) : (
-               <span className='min-w-0 max-w-[8ch] truncate font-medium text-white sm:max-w-[15ch]'>{displayName}</span>
             )}
             
 
-            <div className='flex items-center gap-4'>
+            <div className='ml-auto flex items-center gap-4'>
                {Boolean(auth?.user) && (
                   <DesktopAccountDropdown toggleDeleteAccountPopup={toggleDeleteAccountPopup} />
                )}
