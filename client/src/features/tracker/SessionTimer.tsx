@@ -220,22 +220,53 @@ function SessionTimer() {
       </div>
 
       {style.btnVisible && (
-         <button 
-            onClick={handleClick} 
-            className="p-3.5 cursor-pointer" 
-            aria-label='start/stop timer'
-            >
-            <div className='p-5 bg-[#0C0C0C] rounded-full border-3 border-[#2A2A2A]'>
-               {timerStatus === 'default' && (
-                  <Play fill="white" className="w-6 h-6" />
-               )}
+   <button
+      onClick={handleClick}
+      className="
+         p-3.5
+         cursor-pointer
+         rounded-full
+         transition-transform duration-150 ease-out
+         hover:scale-[1.03]
+         active:scale-[0.96]
+         focus-visible:outline-none
+         focus-visible:ring-2
+         focus-visible:ring-white/20
+      "
+      aria-label="start/stop timer"
+   >
+      <div
+         className="
+            flex items-center justify-center
+            w-17 h-17
+            rounded-full
+            border-2 border-[#2A2A2A]
+            bg-[#0C0C0C]
+            shadow-[0_2px_8px_rgba(0,0,0,0.25)]
+            transition-[background-color,border-color,box-shadow]
+            duration-200 ease-out
+            hover:bg-[#111111]
+            hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)]
+            active:bg-[#0A0A0A]
+            active:shadow-[0_1px_4px_rgba(0,0,0,0.25)]
+         "
+      >
+         {timerStatus === 'default' && (
+            <Play
+               fill="white"
+               className="w-6 h-6"
+            />
+         )}
 
-               {timerStatus === 'ongoing' && (
-                  <Square fill="white" className="w-6 h-6" />
-               )}
-            </div>
-         </button>
-      )}
+         {timerStatus === 'ongoing' && (
+            <Square
+               fill="white"
+               className="w-6 h-6"
+            />
+         )}
+      </div>
+   </button>
+)}
     </div>
   )
 }
