@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGetSessionsByDate } from "../useAnalytics";
 import formatTimeOfDay from "../helpers/FormatTimeOfDay";
 import SessionCard from "./SessionCard";
@@ -14,25 +14,20 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
   const queryDate = selectedDate.toISOString().slice(0, 10);
   const { data: sessionsData, isLoading, error } = useGetSessionsByDate(queryDate);
   const { showToast } = useToast();
-  const [showedEmptyToastDate, setShowedEmptyToastDate] = useState<string | null>(null);
-  const [showedErrorToastDate, setShowedErrorToastDate] = useState<string | null>(null);
+  const showedEmptyToastDate = useRef<string | null>(null);
+  const showedErrorToastDate = useRef<string | null>(null);
 
   useEffect(() => {
-    setShowedEmptyToastDate(null);
-    setShowedErrorToastDate(null);
-  }, [queryDate]);
-
-  useEffect(() => {
-    if (!isLoading && !error && sessionsData && sessionsData.length === 0 && showedEmptyToastDate !== queryDate) {
+    if (!isLoading && !error && sessionsData && sessionsData.length === 0 && showedEmptyToastDate.current !== queryDate) {
+      showedEmptyToastDate.current = queryDate;
       showToast({ type: 'info', message: 'No sessions found for this date.', duration: 3000 });
-      setShowedEmptyToastDate(queryDate);
     }
 
-    if (!isLoading && error && showedErrorToastDate !== queryDate) {
+    if (!isLoading && error && showedErrorToastDate.current !== queryDate) {
+      showedErrorToastDate.current = queryDate;
       showToast({ type: 'error', message: 'Error loading sessions', duration: 3000 });
-      setShowedErrorToastDate(queryDate);
     }
-  }, [isLoading, error, sessionsData, showToast, showedEmptyToastDate, showedErrorToastDate, queryDate]);
+  }, [isLoading, error, sessionsData, showToast, queryDate]);
 
   const header = (
     <div className="mb-4 mt-10 flex items-center justify-between gap-4 text-[#474747] font-medium lg:mt-0">
