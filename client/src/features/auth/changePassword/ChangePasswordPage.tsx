@@ -161,9 +161,10 @@ function ChangePasswordPage() {
 
                <button
                   type="submit"
+                  disabled={changePasswordMutation.isPending}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-[#D60000] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#ff1717] cursor-pointer"
                >
-                  Change Password
+                  {changePasswordMutation.isPending ? 'Changing password...' : 'Change Password'}
                </button>
             </form>
          </main>

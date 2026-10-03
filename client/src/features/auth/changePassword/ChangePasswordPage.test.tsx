@@ -11,13 +11,15 @@ const {
    mockUseChangePassword, 
    mockUseLogout, 
    mockChangePasswordMutation, 
-   mockLogoutMutation 
+   mockLogoutMutation,
+   mockChangePasswordIsPending
 } = vi.hoisted(() => ({
 	mockShowToast: vi.fn(),
 	mockUseChangePassword: vi.fn(),
 	mockUseLogout: vi.fn(),
 	mockChangePasswordMutation: vi.fn(),
 	mockLogoutMutation: vi.fn(),
+   mockChangePasswordIsPending: { current: false },
 }));
 
 vi.mock('../../../components/Toast', () => ({
@@ -40,7 +42,7 @@ function LocationDisplay() {
 function renderChangePasswordPage(user?: { id: number; email: string | null; account_type?: string }) {
 	const setUser = vi.fn();
 
-	render(
+   const view = render(
 		<MemoryRouter initialEntries={['/change-password']}>
 			<AuthContext.Provider value={{
 				user,
@@ -53,7 +55,7 @@ function renderChangePasswordPage(user?: { id: number; email: string | null; acc
 		</MemoryRouter>
 	);
 
-	return { setUser };
+   return { setUser, rerender: view.rerender };
 };
 
 function getChangePasswordFields() {
@@ -82,9 +84,11 @@ async function submitValidPasswordChange() {
 describe('ChangePasswordPage', () => {
    beforeEach(() => {
       vi.clearAllMocks();
+      mockChangePasswordIsPending.current = false;
 
       mockUseChangePassword.mockReturnValue({
-         mutate: mockChangePasswordMutation
+         mutate: mockChangePasswordMutation,
+         isPending: mockChangePasswordIsPending.current,
       });
       mockUseLogout.mockReturnValue({
          mutate: mockLogoutMutation
@@ -100,6 +104,34 @@ describe('ChangePasswordPage', () => {
       expect(screen.getByPlaceholderText('New password')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Confirm new password')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Change Password' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Change Password' })).toBeEnabled();
+   });
+
+   it('disables the submit button while password change is pending and enables it afterward', () => {
+      const { rerender } = renderChangePasswordPage();
+      const renderPage = () => (
+         <MemoryRouter initialEntries={['/change-password']}>
+            <AuthContext.Provider value={{
+               user: undefined,
+               isLoading: false,
+               setUser: vi.fn()
+            }}>
+               <ChangePasswordPage />
+            </AuthContext.Provider>
+         </MemoryRouter>
+      );
+
+      mockChangePasswordIsPending.current = true;
+      mockUseChangePassword.mockReturnValue({ mutate: mockChangePasswordMutation, isPending: mockChangePasswordIsPending.current });
+      rerender(renderPage());
+
+      expect(screen.getByRole('button', { name: 'Changing password...' })).toBeDisabled();
+
+      mockChangePasswordIsPending.current = false;
+      mockUseChangePassword.mockReturnValue({ mutate: mockChangePasswordMutation, isPending: mockChangePasswordIsPending.current });
+      rerender(renderPage());
+
+      expect(screen.getByRole('button', { name: 'Change Password' })).toBeEnabled();
    });
 
    it('validates required fields without submitting', async () => {
@@ -117,6 +149,7 @@ describe('ChangePasswordPage', () => {
          });
          
          expect(mockChangePasswordMutation).not.toHaveBeenCalled();
+         expect(screen.getByRole('button', { name: 'Change Password' })).toBeEnabled();
    });
 
    it('validates password format and length', async () => {

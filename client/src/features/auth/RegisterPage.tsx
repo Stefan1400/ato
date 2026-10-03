@@ -12,6 +12,7 @@ function RegisterPage() {
    const registerMutation = useRegister();
    const convertGuestMutation = useConvertGuest();
    const { user, setUser } = useContext(AuthContext) as AuthContextType;
+   const mutation = user?.account_type === 'guest' ? convertGuestMutation : registerMutation;
    const navigate = useNavigate();
    const { showToast } = useToast();
 
@@ -50,9 +51,6 @@ function RegisterPage() {
          showToast({ type: 'error', message: 'Please fix the errors', duration: 3000 });
          return;
       };
-
-      const isGuestConversion = Boolean(user?.account_type === 'guest');
-      const mutation = isGuestConversion ? convertGuestMutation : registerMutation;
 
       mutation.mutate({
          email: currentEmail,
@@ -124,9 +122,10 @@ function RegisterPage() {
 
                <button
                   type="submit"
+                  disabled={mutation.isPending}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-[#D60000] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#ff1717] cursor-pointer"
                >
-                  Sign up
+                  {mutation.isPending ? 'Creating account...' : 'Sign up'}
                </button>
             </form>
 

@@ -5,10 +5,11 @@ import { AuthContext } from "../../app/AuthProvider";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
-const { mockShowToast, mockUseLogin, mockLoginMutation } = vi.hoisted(() => ({
+const { mockShowToast, mockUseLogin, mockLoginMutation, mockLoginIsPending } = vi.hoisted(() => ({
    mockShowToast: vi.fn(),
    mockUseLogin: vi.fn(),
    mockLoginMutation: vi.fn(),
+   mockLoginIsPending: { current: false },
 }));
 
 vi.mock('../../components/Toast', () => ({
@@ -30,7 +31,7 @@ function LocationDisplay() {
 function renderLoginPage() {
    const setUser = vi.fn();
 
-   render(
+   const view = render(
       <MemoryRouter initialEntries={['/login']}>
          <AuthContext.Provider value={{
             user: undefined,
@@ -43,7 +44,7 @@ function renderLoginPage() {
       </MemoryRouter>
    );
 
-   return { setUser };
+   return { setUser, rerender: view.rerender };
 };
 
 function getLoginFields() {
@@ -56,9 +57,11 @@ function getLoginFields() {
 describe('LoginPage', () => {
    beforeEach(() => {
       vi.clearAllMocks();
+      mockLoginIsPending.current = false;
 
       mockUseLogin.mockReturnValue({
-         mutate: mockLoginMutation
+         mutate: mockLoginMutation,
+         isPending: mockLoginIsPending.current,
       });
    });
    
@@ -71,6 +74,34 @@ describe('LoginPage', () => {
       expect(screen.getByPlaceholderText('Enter password')).toHaveAttribute('type', 'password');
       expect(screen.getByText(/Don't have an account?/)).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Sign up' })).toHaveAttribute('href', '/signup');
+      expect(screen.getByRole('button', { name: 'Sign in' })).toBeEnabled();
+   });
+
+   it('disables the submit button while login is pending and enables it afterward', () => {
+      const { rerender } = renderLoginPage();
+      const renderPage = () => (
+         <MemoryRouter initialEntries={['/login']}>
+            <AuthContext.Provider value={{
+               user: undefined,
+               isLoading: false,
+               setUser: vi.fn()
+            }}>
+               <LoginPage />
+            </AuthContext.Provider>
+         </MemoryRouter>
+      );
+
+      mockLoginIsPending.current = true;
+      mockUseLogin.mockReturnValue({ mutate: mockLoginMutation, isPending: mockLoginIsPending.current });
+      rerender(renderPage());
+
+      expect(screen.getByRole('button', { name: 'Signing in...' })).toBeDisabled();
+
+      mockLoginIsPending.current = false;
+      mockUseLogin.mockReturnValue({ mutate: mockLoginMutation, isPending: mockLoginIsPending.current });
+      rerender(renderPage());
+
+      expect(screen.getByRole('button', { name: 'Sign in' })).toBeEnabled();
    });
 
    it('validates required fields and does not submit invalid input', async () => {
@@ -89,6 +120,7 @@ describe('LoginPage', () => {
       });
 
       expect(mockLoginMutation).not.toHaveBeenCalled();
+      expect(screen.getByRole('button', { name: 'Sign in' })).toBeEnabled();
    });
 
    it('validates email format and password length', async () => {

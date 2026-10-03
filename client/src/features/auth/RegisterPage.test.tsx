@@ -5,12 +5,13 @@ import { AuthContext } from "../../app/AuthProvider";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
-const { mockShowToast, mockUseRegister, mockUseConvertGuest, mockRegisterMutation, mockConvertGuestMutation } = vi.hoisted(() => ({
+const { mockShowToast, mockUseRegister, mockUseConvertGuest, mockRegisterMutation, mockConvertGuestMutation, mockRegisterIsPending } = vi.hoisted(() => ({
 	mockShowToast: vi.fn(),
 	mockUseRegister: vi.fn(),
 	mockUseConvertGuest: vi.fn(),
 	mockRegisterMutation: vi.fn(),
 	mockConvertGuestMutation: vi.fn(),
+	mockRegisterIsPending: { current: false },
 }));
 
 vi.mock('../../components/Toast', () => ({
@@ -33,7 +34,7 @@ function LocationDisplay() {
 function renderRegisterPage(user?: { id: number; email: string | null; account_type?: string }) {
 	const setUser = vi.fn();
 
-	render(
+	const view = render(
 		<MemoryRouter initialEntries={['/signup']}>
 			<AuthContext.Provider value={{
 				user,
@@ -46,7 +47,7 @@ function renderRegisterPage(user?: { id: number; email: string | null; account_t
 		</MemoryRouter>
 	);
 
-	return { setUser };
+	return { setUser, rerender: view.rerender };
 };
 
 function getRegisterFields() {
@@ -68,12 +69,15 @@ async function submitValidRegistration() {
 describe('RegisterPage', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		mockRegisterIsPending.current = false;
 
 		mockUseRegister.mockReturnValue({
-			mutate: mockRegisterMutation
+			mutate: mockRegisterMutation,
+			isPending: mockRegisterIsPending.current,
 		});
 		mockUseConvertGuest.mockReturnValue({
-			mutate: mockConvertGuestMutation
+			mutate: mockConvertGuestMutation,
+			isPending: false,
 		});
 	});
 
@@ -87,6 +91,34 @@ describe('RegisterPage', () => {
 		expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
 		expect(screen.queryByText(/Terms|Privacy Policy/)).not.toBeInTheDocument();
 		expect(screen.getByRole('link', { name: 'Sign in' })).toHaveAttribute('href', '/login');
+		expect(screen.getByRole('button', { name: 'Sign up' })).toBeEnabled();
+	});
+
+	it('disables the submit button while registration is pending and enables it afterward', () => {
+		const { rerender } = renderRegisterPage();
+		const renderPage = () => (
+			<MemoryRouter initialEntries={['/signup']}>
+				<AuthContext.Provider value={{
+					user: undefined,
+					isLoading: false,
+					setUser: vi.fn()
+				}}>
+					<RegisterPage />
+				</AuthContext.Provider>
+			</MemoryRouter>
+		);
+
+		mockRegisterIsPending.current = true;
+		mockUseRegister.mockReturnValue({ mutate: mockRegisterMutation, isPending: mockRegisterIsPending.current });
+		rerender(renderPage());
+
+		expect(screen.getByRole('button', { name: 'Creating account...' })).toBeDisabled();
+
+		mockRegisterIsPending.current = false;
+		mockUseRegister.mockReturnValue({ mutate: mockRegisterMutation, isPending: mockRegisterIsPending.current });
+		rerender(renderPage());
+
+		expect(screen.getByRole('button', { name: 'Sign up' })).toBeEnabled();
 	});
 
 	it('validates required fields without submitting', async () => {
@@ -106,6 +138,7 @@ describe('RegisterPage', () => {
       
 		expect(mockRegisterMutation).not.toHaveBeenCalled();
 		expect(mockConvertGuestMutation).not.toHaveBeenCalled();
+		expect(screen.getByRole('button', { name: 'Sign up' })).toBeEnabled();
 	});
 
 	it('validates email format and password length', async () => {

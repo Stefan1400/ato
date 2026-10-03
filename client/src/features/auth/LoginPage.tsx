@@ -123,9 +123,10 @@ function LoginPage() {
 
                <button
                   type="submit"
+                  disabled={loginMutation.isPending}
                   className="inline-flex w-full items-center justify-center rounded-2xl bg-[#D60000] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#ff1717] cursor-pointer"
                >
-                  Sign in
+                  {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
                </button>
             </form>
 
