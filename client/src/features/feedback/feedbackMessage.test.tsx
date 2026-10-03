@@ -27,12 +27,14 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "20min",
             feedbackType: "TODAY_TOTAL_ONLY"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       mockUseGetSessionsByDate.mockReturnValue({
          data: [],
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
    });
@@ -78,7 +80,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: null,
             feedbackType: "TODAY_TOTAL_ONLY"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -105,7 +108,8 @@ describe("FeedbackMessage", () => {
                session_ended: "2026-08-31T11:45:00.000Z"
             }
          ],
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -117,7 +121,7 @@ describe("FeedbackMessage", () => {
       expect(screen.getByText("1hrs 15min")).toBeInTheDocument();
    });
 
-   it("displays 0min while today's feedback is loading", () => {
+   it("shows a loading state while today's feedback is loading", () => {
 
       mockUseGetFeedback.mockReturnValue({
          data: {
@@ -125,7 +129,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: null,
             feedbackType: "TODAY_TOTAL_ONLY"
          },
-         isLoading: true
+         isLoading: true,
+         error: null
       });
 
       render(
@@ -134,17 +139,54 @@ describe("FeedbackMessage", () => {
          </MemoryRouter>
       );
 
-      expect(screen.getByText("0min")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toHaveTextContent("Loading focus data...");
+      expect(screen.queryByText("No sessions yet — start today to track your focus")).not.toBeInTheDocument();
 
    });
 
-   it("displays 0min while selected date sessions are loading", () => {
+   it("shows an error when today's feedback request fails", () => {
+      mockUseGetFeedback.mockReturnValue({
+         data: undefined,
+         isLoading: false,
+         error: new Error("Feedback request failed")
+      });
+
+      render(
+         <MemoryRouter>
+            <FeedbackMessage selectedDate={new Date()} />
+         </MemoryRouter>
+      );
+
+      expect(screen.getByRole("alert")).toHaveTextContent("Unable to load focus data. Please try again.");
+      expect(screen.queryByText("0min")).not.toBeInTheDocument();
+      expect(screen.queryByText("No sessions yet — start today to track your focus")).not.toBeInTheDocument();
+   });
+
+   it("ignores a sessions error when today is selected", () => {
+      mockUseGetSessionsByDate.mockReturnValue({
+         data: undefined,
+         isLoading: false,
+         error: new Error("Sessions request failed")
+      });
+
+      render(
+         <MemoryRouter>
+            <FeedbackMessage selectedDate={new Date()} />
+         </MemoryRouter>
+      );
+
+      expect(screen.getByRole("heading", { name: "30min" })).toBeInTheDocument();
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+   });
+
+   it("shows a loading state while selected date sessions are loading", () => {
 
       const selectedDate = new Date(2026, 7, 31);
 
       mockUseGetSessionsByDate.mockReturnValue({
          data: [],
-         isLoading: true
+         isLoading: true,
+         error: null
       });
 
       render(
@@ -153,7 +195,55 @@ describe("FeedbackMessage", () => {
          </MemoryRouter>
       );
 
-      expect(screen.getByText("0min")).toBeInTheDocument();
+      expect(screen.getByRole("status")).toHaveTextContent("Loading focus data...");
+      expect(screen.queryByText("Total focus time")).not.toBeInTheDocument();
+   });
+
+   it("shows an error when selected date sessions fail to load", () => {
+      const selectedDate = new Date(2026, 7, 31);
+      mockUseGetSessionsByDate.mockReturnValue({
+         data: undefined,
+         isLoading: false,
+         error: new Error("Sessions request failed")
+      });
+
+      render(
+         <MemoryRouter>
+            <FeedbackMessage selectedDate={selectedDate} />
+         </MemoryRouter>
+      );
+
+      expect(screen.getByRole("alert")).toHaveTextContent("Unable to load focus data. Please try again.");
+      expect(screen.queryByText("0min")).not.toBeInTheDocument();
+      expect(screen.queryByText("Total focus time")).not.toBeInTheDocument();
+   });
+
+   it("ignores a feedback error when a non-today date is selected", () => {
+      const selectedDate = new Date(2026, 7, 31);
+      mockUseGetFeedback.mockReturnValue({
+         data: undefined,
+         isLoading: false,
+         error: new Error("Feedback request failed")
+      });
+      mockUseGetSessionsByDate.mockReturnValue({
+         data: [
+            {
+               session_started: "2026-08-31T10:00:00.000Z",
+               session_ended: "2026-08-31T10:30:00.000Z"
+            }
+         ],
+         isLoading: false,
+         error: null
+      });
+
+      render(
+         <MemoryRouter>
+            <FeedbackMessage selectedDate={selectedDate} />
+         </MemoryRouter>
+      );
+
+      expect(screen.getByText("30min")).toBeInTheDocument();
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
    });
 
    it("displays TODAY_TOTAL_ONLY feedback", () => {
@@ -164,7 +254,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: null,
             feedbackType: "TODAY_TOTAL_ONLY"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -188,7 +279,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "30min",
             feedbackType: "TODAY_TOTAL_GREATER"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -211,7 +303,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "30min",
             feedbackType: "NO_SESSIONS_YET"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -233,7 +326,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "35min",
             feedbackType: "YESTERDAY_TOTAL_ONLY"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -255,7 +349,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "30min",
             feedbackType: "TODAY_TOTAL_MATCH"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -285,7 +380,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "30min",
             feedbackType: "TODAY_LONGEST_GREATER"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -311,7 +407,8 @@ describe("FeedbackMessage", () => {
             yesterdayValue: "30min",
             feedbackType: "TODAY_AVERAGE_GREATER"
          },
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -333,7 +430,8 @@ describe("FeedbackMessage", () => {
 
       mockUseGetFeedback.mockReturnValue({
          data: undefined,
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(
@@ -362,7 +460,8 @@ describe("FeedbackMessage", () => {
                session_ended: "2026-08-31T12:30:00.000Z"
             }
          ],
-         isLoading: false
+         isLoading: false,
+         error: null
       });
 
       render(

@@ -20,8 +20,8 @@ function getTotalDurationMs(sessions: Array<{ session_started: string | Date; se
 
 function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
    const queryDate = getIsoDate(selectedDate);
-   const { data: sessions = [], isLoading: sessionsLoading } = useGetSessionsByDate(queryDate);
-   const { data, isLoading: feedbackLoading } = useGetFeedback();
+   const { data: sessions = [], isLoading: sessionsLoading, error: sessionsError } = useGetSessionsByDate(queryDate);
+   const { data, isLoading: feedbackLoading, error: feedbackError } = useGetFeedback();
 
    const isSelectedDateToday = queryDate === getIsoDate(new Date());
    const totalMs = getTotalDurationMs(sessions);
@@ -30,6 +30,7 @@ function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
    const yesterday = data?.yesterdayValue || "0min";
    const feedbackType = data?.feedbackType;
    const isLoading = isSelectedDateToday ? feedbackLoading : sessionsLoading;
+   const error = isSelectedDateToday ? feedbackError : sessionsError;
    const totalLabel = isSelectedDateToday ? today : selectedDateTotal;
 
    let message;
@@ -96,8 +97,16 @@ function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
      return (
         <div className="w-full min-w-0 h-auto flex flex-col items-start justify-start text-white gap-2 p-1 pb-3 lg:pl-5 lg:p-4">
           <p className="text-[#474747] font-medium">{selectedDate.toDateString()}</p>
-          <h1 className="text-4xl">{isLoading ? '0min' : totalLabel}</h1>
-          <p className="text-[#a8a8a8] w-full wrap-break-word">{message}</p>
+               {isLoading ? (
+                  <p className="text-white" role="status">Loading focus data...</p>
+               ) : error ? (
+                  <p className="text-[#ff8f8f]" role="alert">Unable to load focus data. Please try again.</p>
+               ) : (
+                  <>
+                     <h1 className="text-4xl">{totalLabel}</h1>
+                     <p className="text-[#a8a8a8] w-full wrap-break-word">{message}</p>
+                  </>
+               )}
         </div>
      )
 }
