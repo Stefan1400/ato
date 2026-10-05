@@ -57,6 +57,24 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
    return children;
 }
 
+function RegularUserRoute({ children }: { children: React.ReactNode }) {
+   const auth = useContext(AuthContext);
+
+   if (!auth || auth.isLoading) {
+      return <LoadingScreen text="Loading..." />;
+   }
+
+   if (!auth.user) {
+      return <Navigate to="/" replace />;
+   }
+
+   if (auth.user.account_type !== 'user') {
+      return <Navigate to="/dashboard" replace />;
+   }
+
+   return children;
+}
+
 export function AppRouter() {
    return (
       <Routes>
@@ -86,9 +104,9 @@ export function AppRouter() {
             </ProtectedRoute>
          } />
          <Route path="/change-password" element={
-            <ProtectedRoute>
+            <RegularUserRoute>
                <ChangePasswordPage />
-            </ProtectedRoute>
+            </RegularUserRoute>
          } />
          <Route path="*" element={<NotFoundPage />} />
       </Routes>

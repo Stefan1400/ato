@@ -201,6 +201,16 @@ describe('AppRouter', () => {
          expect(screen.getByText('Analytics Page')).toBeInTheDocument();
       });
 
+      it('allows authenticated guests to access the analytics page', () => {
+         renderRouter('/analytics', {
+            user: { id: 74, email: null, account_type: 'guest' },
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Analytics Page')).toBeInTheDocument();
+      });
+
       it('renders the change password page', () => {
          renderRouter('/change-password', {
             user: { id: 74, email: 'user@gmail.com', account_type: 'user' },
@@ -209,6 +219,28 @@ describe('AppRouter', () => {
          });
 
          expect(screen.getByText('Change Password Page')).toBeInTheDocument();
+      });
+
+      it('redirects authenticated guests from change password to the dashboard', () => {
+         renderRouter('/change-password', {
+            user: { id: 74, email: null, account_type: 'guest' },
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Home Page')).toBeInTheDocument();
+         expect(screen.queryByText('Change Password Page')).not.toBeInTheDocument();
+      });
+
+      it('redirects unauthenticated users from change password to the welcome page', () => {
+         renderRouter('/change-password', {
+            user: undefined,
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Welcome Page')).toBeInTheDocument();
+         expect(screen.queryByText('Change Password Page')).not.toBeInTheDocument();
       });
 
       it('renders the not found page for an unknown route', () => {
