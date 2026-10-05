@@ -40,15 +40,15 @@ function WelcomeMessage() {
    } else {
       message = (
          <>
-            You've focused <span className="text-white font-medium">{today} 💪</span> today. Ready to continue?
+            You've focused <span className="text-white font-medium">{today} 💪</span> today.
          </>
       )
    };
 
   return (
-      <div className="w-full h-auto p-3 pl-0 flex flex-col items-start text-white gap-1">
-         <h1 className="w-full min-w-0 font-bold text-2xl">{greeting}, <span className="inline-block max-w-[7ch] truncate align-bottom sm:max-w-[10ch]">{displayName}</span></h1>
-      <p className="text-[#a8a8a8]">{message}</p>
+      <div className="w-full min-w-0 max-w-md h-auto p-3 pl-0 flex flex-col items-start text-white gap-1 lg:w-96">
+         <h1 className="w-full min-w-0 font-bold text-[1.25rem] lg:text-2xl ">{greeting}, <span className="inline-block max-w-[7ch] truncate align-bottom sm:max-w-[10ch]">{displayName}</span></h1>
+      <p className="w-full max-w-full wrap-break-word text-[#a8a8a8]">{message}</p>
     </div>
   )
 };
