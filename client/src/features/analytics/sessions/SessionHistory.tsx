@@ -12,7 +12,7 @@ type SessionHistoryProps = {
 
 export default function SessionHistory({ selectedDate, onOpenDateSelector }: SessionHistoryProps) {
   const queryDate = selectedDate.toISOString().slice(0, 10);
-  const { data: sessionsData, isLoading, error } = useGetSessionsByDate(queryDate);
+  const { data: sessionsData, isLoading, error, refetch } = useGetSessionsByDate(queryDate);
   const { showToast } = useToast();
   const showedEmptyToastDate = useRef<string | null>(null);
   const showedErrorToastDate = useRef<string | null>(null);
@@ -55,6 +55,13 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
       <div className="w-full lg:flex lg:h-full lg:flex-col">
         {header}
         <div className="text-white mt-60 lg:mt-0">Error loading sessions</div>
+        <button
+          type="button"
+          onClick={() => refetch()}
+          className="mt-3 w-fit rounded-md bg-[#2A2A2A] px-4 py-2 text-white transition-colors hover:bg-[#333333] cursor-pointer"
+        >
+          Retry
+        </button>
       </div>
     );
   }

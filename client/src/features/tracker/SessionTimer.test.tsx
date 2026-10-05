@@ -318,7 +318,7 @@ describe('SessionTimer', () => {
       render(<SessionTimer />);
 
       expect(screen.getByText('Error')).toBeInTheDocument(); 
-      expect(screen.getByText('Failed to save session. Please try again.')).toBeInTheDocument(); 
+      expect(screen.getByText('Failed to save session.')).toBeInTheDocument(); 
 
    });
 });

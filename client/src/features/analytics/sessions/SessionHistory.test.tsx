@@ -77,6 +77,7 @@ describe("SessionHistory", () => {
       data: [],
       isLoading: false,
       error: new Error("Failed to load sessions"),
+      refetch: vi.fn(),
     } as any);
 
     const queryClient = new QueryClient();
@@ -88,6 +89,30 @@ describe("SessionHistory", () => {
     );
 
     expect(screen.getByText("Error loading sessions")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
+  });
+
+  it("retries the existing sessions query when Retry is clicked", async () => {
+    const refetch = vi.fn();
+    vi.mocked(useGetSessionsByDate).mockReturnValue({
+      data: [],
+      isLoading: false,
+      error: new Error("Failed to load sessions"),
+      refetch,
+    } as any);
+
+    const queryClient = new QueryClient();
+    const user = userEvent.setup();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <SessionHistory selectedDate={selectedDate} />
+      </QueryClientProvider>
+    );
+
+    await user.click(screen.getByRole("button", { name: "Retry" }));
+
+    expect(refetch).toHaveBeenCalledOnce();
   });
 
   it("renders no sessions message when no sessions are found", () => {
