@@ -29,7 +29,7 @@ export const sessionTimerStyles: Record<UIStates, StateStyles> = {
    error: {
       container: 'bg-[#6A041D] text-white',
       header: { styles: 'font-semibold text-md', text: 'Error', icon: CircleX },
-      subHeader: { styles: 'font-md text-xs', text: 'Failed to save session. Please try again.' },
+      subHeader: { styles: 'font-md text-xs', text: 'Failed to save session.' },
       btnVisible: false
    },
 };
