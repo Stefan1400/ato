@@ -14,19 +14,25 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
    
    const [user, setUser] = useState<User>();
+   const [isInitialized, setIsInitialized] = useState(false);
 
    const { data, isLoading } = useGetUser();
 
    useEffect(() => {
+      if (isLoading) return;
+
       if (data) {
          setUser(data);
       }
-   }, [data]);
+      setIsInitialized(true);
+   }, [data, isLoading]);
 
-   if (isLoading) return <LoadingScreen text='Loading...' />
+   const isAuthLoading = isLoading || !isInitialized;
+
+   if (isAuthLoading) return <LoadingScreen text='Loading...' />
 
    return (
-      <AuthContext.Provider value={{ user, isLoading, setUser }}>
+      <AuthContext.Provider value={{ user, isLoading: isAuthLoading, setUser }}>
          { children }
       </AuthContext.Provider>
    );
