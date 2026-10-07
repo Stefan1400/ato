@@ -19,7 +19,10 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 let queryClient: QueryClient;
 
-const date = '2026-09-07';
+const range = {
+   start: '2026-09-07T07:00:00.000Z',
+   end: '2026-09-08T07:00:00.000Z',
+};
 
 describe("useGetSessionsByDate", () => {
    beforeEach(() => {
@@ -32,13 +35,13 @@ describe("useGetSessionsByDate", () => {
    
    it('fetches sessions for the provided date', async () => {
       renderHook(() => 
-         useGetSessionsByDate(date), { 
+         useGetSessionsByDate(range), { 
             wrapper 
          }
       ); 
       
       await waitFor(() => {
-         expect(mockGetSessionsByDate).toHaveBeenCalledWith(date);
+         expect(mockGetSessionsByDate).toHaveBeenCalledWith(range);
       });
    });
 
@@ -47,14 +50,14 @@ describe("useGetSessionsByDate", () => {
       const sessions = [
          {
             id: 1,
-            date,
+            date: range.start.slice(0, 10),
          },
       ];
 
       mockGetSessionsByDate.mockResolvedValue(sessions);
 
       const { result } = renderHook(() => 
-         useGetSessionsByDate(date), { 
+         useGetSessionsByDate(range), { 
             wrapper 
          }
       ); 
@@ -62,5 +65,19 @@ describe("useGetSessionsByDate", () => {
       await waitFor(() => {
          expect(result.current.data).toEqual(sessions);
       });
+   });
+
+   it('uses both ISO boundaries in the query cache key', () => {
+      const nextRange = {
+         start: '2026-09-08T07:00:00.000Z',
+         end: '2026-09-09T07:00:00.000Z',
+      };
+
+      renderHook(() => useGetSessionsByDate(range), { wrapper });
+      renderHook(() => useGetSessionsByDate(nextRange), { wrapper });
+
+      const queryKeys = queryClient.getQueryCache().getAll().map(query => query.queryKey);
+      expect(queryKeys).toContainEqual(['sessions', range.start, range.end]);
+      expect(queryKeys).toContainEqual(['sessions', nextRange.start, nextRange.end]);
    });
 });

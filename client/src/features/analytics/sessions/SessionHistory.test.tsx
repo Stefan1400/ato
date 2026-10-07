@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SessionHistory from "./SessionHistory";
 import userEvent from "@testing-library/user-event";
+import getLocalDayRange from "../helpers/LocalDayRange";
 
 vi.mock("../useAnalytics", () => ({
   useGetSessionsByDate: vi.fn(),
@@ -37,6 +38,18 @@ describe("SessionHistory", () => {
       isLoading: false,
       error: null,
     } as any);
+  });
+
+  it("queries with the selected local day's start and next-day start", () => {
+    const queryRange = getLocalDayRange(selectedDate);
+
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <SessionHistory selectedDate={selectedDate} />
+      </QueryClientProvider>
+    );
+
+    expect(useGetSessionsByDate).toHaveBeenCalledWith(queryRange);
   });
 
 

@@ -4,6 +4,7 @@ import formatTimeOfDay from "../helpers/FormatTimeOfDay";
 import SessionCard from "./SessionCard";
 import { useToast } from "../../../components/Toast";
 import ViewByDate from "../selectByDate/ViewByDate";
+import getLocalDayRange, { getLocalDateKey } from "../helpers/LocalDayRange";
 
 type SessionHistoryProps = {
   selectedDate: Date;
@@ -11,8 +12,9 @@ type SessionHistoryProps = {
 };
 
 export default function SessionHistory({ selectedDate, onOpenDateSelector }: SessionHistoryProps) {
-  const queryDate = selectedDate.toISOString().slice(0, 10);
-  const { data: sessionsData, isLoading, error, refetch } = useGetSessionsByDate(queryDate);
+  const queryDate = getLocalDateKey(selectedDate);
+  const dayRange = getLocalDayRange(selectedDate);
+  const { data: sessionsData, isLoading, error, refetch } = useGetSessionsByDate(dayRange);
   const { showToast } = useToast();
   const showedEmptyToastDate = useRef<string | null>(null);
   const showedErrorToastDate = useRef<string | null>(null);

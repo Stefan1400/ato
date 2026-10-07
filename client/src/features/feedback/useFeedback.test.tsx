@@ -2,6 +2,7 @@ import { expect, describe, it, vi, beforeEach } from "vitest";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useGetFeedback } from "./useFeedback";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import getLocalDayRange from "../analytics/helpers/LocalDayRange";
 
 const { mockGetFeedback } = vi.hoisted(() => ({
     mockGetFeedback: vi.fn(),
@@ -36,8 +37,29 @@ describe("useGetFeedback", () => {
       ); 
       
       await waitFor(() => {
-         expect(mockGetFeedback).toHaveBeenCalled();
+         expect(mockGetFeedback).toHaveBeenCalledWith(expect.objectContaining({
+            today: expect.objectContaining({ start: expect.any(String), end: expect.any(String) }),
+            yesterday: expect.objectContaining({ start: expect.any(String), end: expect.any(String) }),
+         }));
       });
+   });
+
+   it('keys feedback cache by local today and yesterday boundaries', () => {
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const todayRange = getLocalDayRange(today);
+      const yesterdayRange = getLocalDayRange(yesterday);
+
+      renderHook(() => useGetFeedback(), { wrapper });
+
+      expect(queryClient.getQueryCache().getAll()[0]?.queryKey).toEqual([
+         "feedback",
+         todayRange.start,
+         todayRange.end,
+         yesterdayRange.start,
+         yesterdayRange.end,
+      ]);
    });
 
    it('returns the feedback from the API', async () => {

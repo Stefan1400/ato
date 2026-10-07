@@ -1,4 +1,5 @@
 const Session = require('../models/sessionModels');
+const parseIsoTimestamp = require('../utils/parseIsoTimestamp');
 
 const addSessionController = async (req, res, next) => {
    
@@ -43,21 +44,18 @@ const addSessionController = async (req, res, next) => {
 };
 
 const getSessionsController = async (req, res, next) => {
-  const { date } = req.query;
+   const { start, end } = req.query;
   const userId = req.user.id;
 
   try {
-    if (!date) return res.status(400).json({ message: 'Date is required.' });
+      const dayStart = parseIsoTimestamp(start);
+      const dayEnd = parseIsoTimestamp(end);
 
-    const userDate = new Date(date);
+      if (!dayStart || !dayEnd || dayStart >= dayEnd) {
+         return res.status(400).json({ message: 'Valid start and end timestamps are required.' });
+      }
 
-    const dayStartUTC = new Date(userDate);
-    dayStartUTC.setUTCHours(0, 0, 0, 0);
-
-    const dayEndUTC = new Date(userDate);
-    dayEndUTC.setUTCHours(23, 59, 59, 999);
-
-    const fetchedSessions = await Session.getSessionsByDate(userId, dayStartUTC, dayEndUTC);
+      const fetchedSessions = await Session.getSessionsByDate(userId, dayStart, dayEnd);
 
     return res.status(200).json({
       message: 'sessions successfully fetched',

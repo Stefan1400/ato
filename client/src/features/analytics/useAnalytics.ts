@@ -1,9 +1,10 @@
 import { getSessionsByDate } from "./analytics.api";
 import { useQuery } from "@tanstack/react-query";
+import type { LocalDayRange } from "./helpers/LocalDayRange";
 
-export function useGetSessionsByDate(date: string) {
+export function useGetSessionsByDate(range: LocalDayRange) {
    return useQuery({
-      queryKey: ["sessions", date],
-      queryFn: () => getSessionsByDate(date),
+      queryKey: ["sessions", range.start, range.end],
+      queryFn: () => getSessionsByDate(range),
    })
 };

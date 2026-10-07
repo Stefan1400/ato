@@ -15,6 +15,17 @@ const feedback = {
    yesterdayValue: null,
 };
 
+const ranges = {
+   today: {
+      start: "2026-10-06T07:00:00.000Z",
+      end: "2026-10-07T07:00:00.000Z",
+   },
+   yesterday: {
+      start: "2026-10-05T07:00:00.000Z",
+      end: "2026-10-06T07:00:00.000Z",
+   },
+};
+
 describe('getFeedback', () => {
    beforeEach(() => {
       vi.clearAllMocks();
@@ -25,9 +36,15 @@ describe('getFeedback', () => {
    });
    
    it("calls the feedback API and returns the feedback", async () => {
-      const result = await getFeedback();
+      const result = await getFeedback(ranges);
 
-      expect(mockApi).toHaveBeenCalledWith("/feedback", "GET");
+      const params = new URLSearchParams({
+         todayStart: ranges.today.start,
+         todayEnd: ranges.today.end,
+         yesterdayStart: ranges.yesterday.start,
+         yesterdayEnd: ranges.yesterday.end,
+      });
+      expect(mockApi).toHaveBeenCalledWith(`/feedback?${params}`, "GET");
       expect(result).toEqual(feedback);
    });
 });

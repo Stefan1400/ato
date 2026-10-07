@@ -20,7 +20,10 @@ const fetchedSessions = [
    }
 ];
 
-const selectedDate = new Date(2026, 9, 10).toDateString();
+const range = {
+   start: "2026-10-06T07:00:00.000Z",
+   end: "2026-10-07T07:00:00.000Z",
+};
 
 describe('getSessionsByDate', () => {
    beforeEach(() => {
@@ -32,16 +35,17 @@ describe('getSessionsByDate', () => {
    });
    
    it("calls the analytics API and returns the fetched sessions for the selected date", async () => {
-      const result = await getSessionsByDate(selectedDate);
+      const result = await getSessionsByDate(range);
 
-      expect(mockApi).toHaveBeenCalledWith(`/sessions?date=${selectedDate}`, "GET");
+      const params = new URLSearchParams(range);
+      expect(mockApi).toHaveBeenCalledWith(`/sessions?${params}`, "GET");
       expect(result).toEqual(fetchedSessions);
    });
 
    it("returns an empty array if no sessions exist for the selected date", async () => {
       mockApi.mockRejectedValue(new Error('404'));
       
-      const result = await getSessionsByDate(selectedDate);
+      const result = await getSessionsByDate(range);
 
       expect(result).toEqual([]);
    });
@@ -51,7 +55,7 @@ describe('getSessionsByDate', () => {
 
       mockApi.mockRejectedValue(error);
 
-      await expect(getSessionsByDate(selectedDate)).rejects.toThrow(
+      await expect(getSessionsByDate(range)).rejects.toThrow(
          error
       )
    });

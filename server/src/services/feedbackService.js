@@ -2,48 +2,18 @@ const Session = require('../models/sessionModels');
 const analyzeSessions = require('../utils/analyzeSessions');
 const buildDay = require("../utils/buildDay");
 
-const feedbackService = async (userId) => {
-
-   const now = new Date();
-
-   const startOfYesterdayUTC = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() - 1,
-      0, 0, 0, 0
-   ));
-
-   const endOfYesterdayUTC = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() - 1,
-      23, 59, 59, 999
-   ));
-
-   const startOfTodayUTC = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      0, 0, 0, 0
-   ));
-
-   const endOfTodayUTC = new Date(Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      23, 59, 59, 999
-   ));
+const feedbackService = async (userId, ranges) => {
 
    const yesterdaySessions = await Session.getSessionsFromYesterday(
       userId, 
-      startOfYesterdayUTC, 
-      endOfYesterdayUTC
+      ranges.yesterday.start,
+      ranges.yesterday.end
    );
 
    const todaySessions = await Session.getSessionsFromToday(
       userId,
-      startOfTodayUTC,
-      endOfTodayUTC
+      ranges.today.start,
+      ranges.today.end
    );
 
    // calculating analytics

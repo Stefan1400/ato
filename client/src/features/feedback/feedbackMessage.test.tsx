@@ -2,6 +2,7 @@ import { expect, describe, it, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import FeedbackMessage from "./feedbackMessage";
 import { MemoryRouter } from "react-router-dom";
+import getLocalDayRange from "../analytics/helpers/LocalDayRange";
 
 const { mockUseGetFeedback, mockUseGetSessionsByDate } = vi.hoisted(() => ({
    mockUseGetFeedback: vi.fn(),
@@ -66,7 +67,7 @@ describe("FeedbackMessage", () => {
       );
 
       expect(mockUseGetSessionsByDate).toHaveBeenCalledWith(
-         selectedDate.toISOString().slice(0, 10)
+         getLocalDayRange(selectedDate)
       );
    });
 

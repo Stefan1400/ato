@@ -1,14 +1,11 @@
 import { useGetFeedback } from "./useFeedback";
 import { useGetSessionsByDate } from "../analytics/useAnalytics";
 import formatDuration from "../analytics/helpers/FormatDuration";
+import getLocalDayRange, { getLocalDateKey, getLocalTodayAndYesterdayRanges } from "../analytics/helpers/LocalDayRange";
 
 type FeedbackMessageProps = {
    selectedDate: Date;
 };
-
-function getIsoDate(date: Date) {
-   return date.toISOString().slice(0, 10);
-}
 
 function getTotalDurationMs(sessions: Array<{ session_started: string | Date; session_ended: string | Date }>) {
    return sessions.reduce((total, session) => {
@@ -19,11 +16,15 @@ function getTotalDurationMs(sessions: Array<{ session_started: string | Date; se
 }
 
 function FeedbackMessage({ selectedDate }: FeedbackMessageProps) {
-   const queryDate = getIsoDate(selectedDate);
-   const { data: sessions = [], isLoading: sessionsLoading, error: sessionsError } = useGetSessionsByDate(queryDate);
-   const { data, isLoading: feedbackLoading, error: feedbackError } = useGetFeedback();
+   const queryDate = getLocalDateKey(selectedDate);
+   const selectedDayRange = getLocalDayRange(selectedDate);
+   const { data: sessions = [], isLoading: sessionsLoading, error: sessionsError } = useGetSessionsByDate(selectedDayRange);
 
-   const isSelectedDateToday = queryDate === getIsoDate(new Date());
+   const todayDate = new Date();
+   const feedbackRanges = getLocalTodayAndYesterdayRanges(todayDate);
+   const { data, isLoading: feedbackLoading, error: feedbackError } = useGetFeedback(feedbackRanges);
+
+   const isSelectedDateToday = queryDate === getLocalDateKey(todayDate);
    const totalMs = getTotalDurationMs(sessions);
    const selectedDateTotal = formatDuration(totalMs);
    const today = data?.todayValue || "0min";
