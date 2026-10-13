@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Calendar, CircleCheck, Play, Square } from "lucide-react";
 
 const sectionClassName =
-  "flex w-full flex-col justify-center border-b border-[#1A1A1A] bg-[#090909] px-6 py-20 sm:px-8 sm:py-24 lg:px-10";
+  "flex w-full flex-col justify-start border-b border-[#1A1A1A] bg-[#090909] px-6 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
 
 const containerClassName = "mx-auto w-full max-w-6xl";
 
@@ -111,7 +111,7 @@ export default function LandingPage() {
               {greetings.map((greeting) => (
                 <div
                   key={greeting.title}
-                  className="rounded-lg p-2 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#121212]"
+                  className="rounded-lg p-2"
                 >
                   <h2 className="text-2xl font-semibold tracking-tight">{greeting.title}</h2>
                   <p className="mt-2 text-xs text-[#F5F5F5]">
@@ -126,7 +126,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} min-h-[125vh]`}>
+      <section className={`${sectionClassName} lg:min-h-[125vh]`}>
         <div className={containerClassName}>
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
             <h2 className={sectionHeadingClassName}>
@@ -149,7 +149,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} min-h-[125vh]`}>
+      <section className={`${sectionClassName} lg:min-h-[125vh]`}>
         <div className={containerClassName}>
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-start">
             <div>
@@ -184,7 +184,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} min-h-[125vh]`}>
+      <section className={`${sectionClassName} lg:min-h-[125vh]`}>
         <div className={containerClassName}>
           <h2 className={sectionHeadingClassName}>
             <span className="text-white">Review</span> your progress
@@ -222,7 +222,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="flex min-h-[125vh] w-full flex-col bg-[#090909]">
+      <section className="flex min-h-[95vh] w-full flex-col bg-[#090909]">
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center sm:px-8 lg:px-10">
           <h2 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Start tracking your progress now
@@ -233,7 +233,7 @@ export default function LandingPage() {
         </div>
 
         <footer className="flex items-center justify-between gap-4 border-t border-[#1A1A1A] px-6 py-6 sm:px-8 lg:px-10">
-          <p className="text-xs text-[#F5F5F5]">ato copyright 2026</p>
+          <p className="text-xs text-[#F5F5F5]">© {new Date().getFullYear()} Ato. All rights reserved.</p>
           <button type="button" onClick={handleBackToTop} className={secondaryButtonClassName}>
             Back to top
           </button>
