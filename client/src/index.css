@@ -11,6 +11,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #151515;
+  overflow-x: clip;
 }
 
 @layer components {
@@ -25,7 +26,6 @@ body {
   }
 }
 
-/* Custom themed scrollbar */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #2a2a2a #090909;

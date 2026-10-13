@@ -84,7 +84,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#090909] text-white">
       <section className="flex w-full flex-col border-b border-[#1A1A1A] bg-[#090909]">
-        <div className="flex min-h-[70vh] items-center px-6 py-20 sm:px-8 lg:px-10">
+        <div className="flex min-h-[110vh] items-start px-6 pb-20 pt-[60vh] sm:px-8 lg:px-10">
           <div className={`${containerClassName} flex flex-col items-start justify-between gap-12 md:flex-row md:items-center`}>
             <h1 className="text-5xl font-semibold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
               Track your study.
@@ -126,17 +126,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} min-h-[70vh]`}>
+      <section className={`${sectionClassName} min-h-[125vh]`}>
         <div className={containerClassName}>
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-start">
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
             <h2 className={sectionHeadingClassName}>
               <span className="text-white">Start</span> your session
             </h2>
-            <p className={`${sectionTextClassName} max-w-xs md:text-right`}>
-              When you're ready to study, start the timer.
-              <br />
-              <span className="font-semibold text-white">Ato does the rest</span>
-            </p>
+            <p className={`${sectionTextClassName} lg:text-right`}>
+             <span className="block whitespace-nowrap text-[clamp(0.75rem,3.6vw,1.125rem)]">
+               When you're ready to study, start the timer.
+             </span>
+             <span className="block font-semibold text-white">Ato does the rest</span>
+           </p>
           </div>
 
           <div className="mt-16 flex justify-center md:justify-end md:pr-16 lg:pr-24">
@@ -148,7 +149,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} min-h-[70vh]`}>
+      <section className={`${sectionClassName} min-h-[125vh]`}>
         <div className={containerClassName}>
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-start">
             <div>
@@ -183,7 +184,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} min-h-[70vh]`}>
+      <section className={`${sectionClassName} min-h-[125vh]`}>
         <div className={containerClassName}>
           <h2 className={sectionHeadingClassName}>
             <span className="text-white">Review</span> your progress
@@ -221,8 +222,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="flex w-full flex-col bg-[#090909]">
-        <div className="flex min-h-[60vh] flex-col items-center justify-center px-6 py-20 text-center sm:px-8 lg:px-10">
+      <section className="flex min-h-[125vh] w-full flex-col bg-[#090909]">
+        <div className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center sm:px-8 lg:px-10">
           <h2 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Start tracking your progress now
           </h2>
