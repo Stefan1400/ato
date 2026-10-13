@@ -9,6 +9,7 @@ import { AuthContext } from "./AuthProvider";
 import LoadingScreen from "../components/LoadingScreen";
 import WelcomePage from "../pages/WelcomePage";
 import NotFoundPage from "../pages/NotFoundPage";
+import LandingPage from "../pages/LandingPage";
 
 function WelcomeRoute({ children }: { children: React.ReactNode }) {
    const auth = useContext(AuthContext);
@@ -78,6 +79,12 @@ function RegularUserRoute({ children }: { children: React.ReactNode }) {
 export function AppRouter() {
    return (
       <Routes>
+         <Route path="/get-started" element={
+            <WelcomeRoute>
+               <LandingPage />
+            </WelcomeRoute>
+         } />
+         
          <Route path="/" element={
             <WelcomeRoute>
                <WelcomePage />
