@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { Calendar, CircleCheck, Play, Square } from "lucide-react";
+import { Calendar, Play, Square } from "lucide-react";
 
 const sectionClassName =
-  "flex w-full flex-col justify-start border-b border-[#1A1A1A] bg-[#090909] px-6 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
+  "flex w-full flex-col justify-start bg-[#090909] px-6 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
 
 const containerClassName = "mx-auto w-full max-w-6xl";
 
@@ -14,13 +14,13 @@ const cardClassName =
   "rounded-lg border border-[#1F1F1F] bg-[#1A1A1A] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#2A2A2A] hover:bg-[#202020] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)]";
 
 const timerButtonClassName =
-  "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#090909] text-white transition-all duration-200 hover:scale-105 hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]";
+  "flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#090909] text-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]";
 
 const primaryButtonClassName =
   "inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-base font-medium text-[#090909] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#E5E5E5] hover:cursor-pointer hover:shadow-[0_10px_30px_rgba(255,255,255,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] active:translate-y-0";
 
 const secondaryButtonClassName =
-  "inline-flex items-center justify-center gap-2 rounded-md border border-[#2A2A2A] bg-[#121212] px-4 py-2 text-sm font-medium text-[#F5F5F5] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] hover:cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909] active:translate-y-0";
+  "inline-flex items-center justify-center gap-2 rounded-md border border-[#2A2A2A] bg-[#121212] px-4 py-2 text-sm font-medium text-[#F5F5F5] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]";
 
 const greetings = [
   { title: "Good morning, John", subtitle: "Ready to get started? 😊" },
@@ -41,6 +41,33 @@ type TimerCardProps = {
   caption: string;
   showButton?: boolean;
 };
+
+const steps: { title: string; description: string; highlight: string; timer: TimerCardProps }[] = [
+  {
+    title: "Start your session",
+    description: "When you're ready to study, start the timer.",
+    highlight: "Ato does the rest",
+    timer: { variant: "ready", label: "Ready", time: "00:00:00", caption: "Session Timer" },
+  },
+  {
+    title: "Focus on your work",
+    description: "Let the timer run while you study.",
+    highlight: "Ato tracks your time automatically.",
+    timer: { variant: "focus", label: "Focus Session", time: "00:51:44", caption: "Stay Focused" },
+  },
+  {
+    title: "Save your session",
+    description: "Done studying? Stop the timer.",
+    highlight: "Ato will save it for you.",
+    timer: {
+      variant: "saved",
+      label: "Session Added",
+      time: "00:51:44",
+      caption: "Session Saved to Analytics",
+      showButton: false,
+    },
+  },
+];
 
 const timerVariantClassNames = {
   ready: "bg-[#222222] text-white hover:bg-[#2A2A2A]",
@@ -83,10 +110,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#090909] text-white">
-      <section className="flex w-full flex-col border-b border-[#1A1A1A] bg-[#090909]">
+      <section className="flex w-full flex-col bg-[#090909]">
         <div className="flex min-h-[110vh] items-start px-6 pb-20 pt-[60vh] sm:px-8 lg:px-10">
           <div className={`${containerClassName} flex flex-col items-start justify-between gap-12 md:flex-row md:items-center`}>
-            <h1 className="text-5xl font-semibold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
               Track your study.
               <br />
               See your progress.
@@ -101,9 +128,9 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="border-t border-[#1A1A1A] bg-[#0D0D0D] px-6 py-8 sm:px-8 lg:px-10">
+        <div className="px-6 py-8 sm:px-8 lg:px-10 lg:pb-32">
           <div className={containerClassName}>
-            <p className="text-sm text-[#A8A8A8] sm:text-base">
+            <p className="text-center text-sm text-[#A8A8A8] sm:text-left sm:text-base">
               Ato gives real-time feedback to help motivate you in your studies.
             </p>
 
@@ -111,7 +138,7 @@ export default function LandingPage() {
               {greetings.map((greeting) => (
                 <div
                   key={greeting.title}
-                  className="rounded-lg p-2"
+                  className="rounded-lg p-2 text-center sm:text-left"
                 >
                   <h2 className="text-2xl font-semibold tracking-tight">{greeting.title}</h2>
                   <p className="mt-2 text-xs text-[#F5F5F5]">
@@ -126,60 +153,26 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} lg:min-h-[125vh]`}>
+      <section className={`${sectionClassName} lg:min-h-screen`}>
         <div className={containerClassName}>
-          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
-            <h2 className={sectionHeadingClassName}>
-              <span className="text-white">Start</span> your session
-            </h2>
-            <p className={`${sectionTextClassName} lg:text-right`}>
-             <span className="block whitespace-nowrap text-[clamp(0.75rem,3.6vw,1.125rem)]">
-               When you're ready to study, start the timer.
-             </span>
-             <span className="block font-semibold text-white">Ato does the rest</span>
-           </p>
-          </div>
+          <div className="grid grid-cols-1 divide-y divide-[#1F1F1F] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+            {steps.map((step) => (
+              <div
+                key={step.title}
+                className="flex flex-col gap-10 py-10 first:pt-0 last:pb-0 lg:px-8 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+              >
+                <div className="w-full max-w-100 lg:max-w-none">
+                  <TimerCard {...step.timer} />
+                </div>
 
-          <div className="mt-16 flex justify-center md:justify-end md:pr-16 lg:pr-24">
-            <div className="flex w-full max-w-sm flex-col gap-10 rounded-xl bg-[#0D0D0D] p-6 sm:p-10">
-              <TimerCard variant="ready" label="Ready" time="00:00:00" caption="Session Timer" />
-              <TimerCard variant="focus" label="Focus Session" time="00:00:01" caption="Stay Focused" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={`${sectionClassName} lg:min-h-[125vh]`}>
-        <div className={containerClassName}>
-          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-start">
-            <div>
-              <h2 className={sectionHeadingClassName}>
-                <span className="text-white">Save</span> your session
-              </h2>
-              <p className={`${sectionTextClassName} mt-6 max-w-xs`}>
-                Done studying? Stop the timer.
-                <br />
-                <span className="font-semibold text-white">Ato will save it for you.</span>
-              </p>
-            </div>
-
-            <div className="flex w-full items-center gap-3 rounded-lg border border-[#1F1F1F] bg-[#121212] px-5 py-4 text-sm font-semibold text-[#22C55E] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] md:w-auto">
-              <CircleCheck className="h-5 w-5 shrink-0" />
-              <span>Session Added Successfully</span>
-            </div>
-          </div>
-
-          <div className="mt-16 flex justify-center">
-            <div className="flex w-full max-w-sm flex-col gap-1.5">
-              <TimerCard variant="focus" label="Focus Session" time="00:51:44" caption="Stay Focused" />
-              <TimerCard
-                variant="saved"
-                label="Session Added"
-                time="00:51:44"
-                caption="Session Saved to Analytics"
-                showButton={false}
-              />
-            </div>
+                <div>
+                  <h2 className="text-xl font-medium tracking-tight text-white">{step.title}</h2>
+                  <p className="mt-3 text-xs leading-6 text-[#A8A8A8] sm:text-base">
+                    {step.description} <span className="font-semibold text-white">{step.highlight}</span>
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
