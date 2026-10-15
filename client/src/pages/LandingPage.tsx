@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { Calendar, Play, Square } from "lucide-react";
 
 const sectionClassName =
-  "flex w-full flex-col justify-start bg-[#090909] px-6 pb-20 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
+  "flex w-full flex-col justify-start bg-[#090909] px-6 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
 
 const containerClassName = "mx-auto w-full max-w-6xl";
 
-const sectionHeadingClassName = "text-4xl font-semibold tracking-tight text-[#A8A8A8] sm:text-5xl";
+const sectionHeadingClassName = "text-3xl font-semibold leading-tight tracking-tight text-[#A8A8A8] sm:text-4xl lg:text-5xl";
 
 const sectionTextClassName = "text-base leading-7 text-[#A8A8A8] sm:text-lg";
 
@@ -111,7 +111,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#090909] text-white">
       <section className="flex w-full flex-col bg-[#090909]">
-        <div className="flex min-h-[110vh] items-start px-6 pb-20 pt-[60vh] sm:px-8 lg:px-10">
+        <div className="flex min-h-[110vh] items-start px-6 pb-0 pt-[70vh] sm:px-8 lg:px-10">
           <div className={`${containerClassName} flex flex-col items-start justify-between gap-12 md:flex-row md:items-center`}>
             <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
               Track your study.
@@ -130,18 +130,18 @@ export default function LandingPage() {
 
         <div className="px-6 py-8 sm:px-8 lg:px-10 lg:pb-32">
           <div className={containerClassName}>
-            <p className="text-center text-sm text-[#A8A8A8] sm:text-left sm:text-base">
+            <p className="text-sm text-[#A8A8A8] sm:text-left sm:text-base">
               Ato gives real-time feedback to help motivate you in your studies.
             </p>
 
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:[&>*:nth-child(2)]:justify-self-center lg:[&>*:nth-child(3)]:justify-self-end">
               {greetings.map((greeting) => (
                 <div
                   key={greeting.title}
-                  className="rounded-lg p-2 text-center sm:text-left"
+                  className="rounded-lg p-2 sm:text-left lg:px-0"
                 >
                   <h2 className="text-2xl font-semibold tracking-tight">{greeting.title}</h2>
-                  <p className="mt-2 text-xs text-[#F5F5F5]">
+                  <p className="mt-2 text-sm text-[#F5F5F5]">
                     {greeting.subtitle}{" "}
                     {greeting.highlight && <span className="font-bold">{greeting.highlight}</span>}{" "}
                     {greeting.suffix}
@@ -153,21 +153,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} lg:min-h-screen`}>
+      <section className={`flex w-full flex-col justify-center bg-[#090909] px-6 py-20 sm:px-8 sm:py-24 lg:min-h-screen lg:px-10`}>
         <div className={containerClassName}>
-          <div className="grid grid-cols-1 divide-y divide-[#1F1F1F] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+          <h2 className={`${sectionHeadingClassName} text-white`}>Tracking made simple</h2>
+          <div className="grid grid-cols-1 divide-y divide-[#1F1F1F] lg:-mx-8 lg:grid-cols-3 lg:divide-x lg:divide-y-0 mt-16">
             {steps.map((step) => (
               <div
                 key={step.title}
-                className="flex flex-col gap-10 py-10 first:pt-0 last:pb-0 lg:px-8 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+                className="flex flex-col-reverse gap-10 py-10 first:pt-0 last:pb-0 lg:flex-col lg:px-8 lg:py-0"
               >
-                <div className="w-full max-w-100 lg:max-w-none">
+                <div className="w-full max-w-100 lg:max-w-none cursor-default select-none">
                   <TimerCard {...step.timer} />
                 </div>
 
                 <div>
                   <h2 className="text-xl font-medium tracking-tight text-white">{step.title}</h2>
-                  <p className="mt-3 text-xs leading-6 text-[#A8A8A8] sm:text-base">
+                  <p className="mt-3 text-sm leading-6 text-[#A8A8A8] sm:text-base">
                     {step.description} <span className="font-semibold text-white">{step.highlight}</span>
                   </p>
                 </div>
@@ -177,36 +178,35 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`${sectionClassName} lg:min-h-[125vh]`}>
+      <section className={`${sectionClassName} lg:min-h-screen`}>
         <div className={containerClassName}>
-          <h2 className={sectionHeadingClassName}>
-            <span className="text-white">Review</span> your progress
-          </h2>
-          <p className={`${sectionTextClassName} mt-6 max-w-xs`}>Track your progress, no matter the day, month, or year.</p>
+          <h2 className={`${sectionHeadingClassName} text-white`}>Review your progress</h2>
+          
+          <p className={`${sectionTextClassName} mt-6 max-w-sm`}>Track your progress, no matter the day, month, or year.</p>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
             <div className="flex flex-col justify-center">
-              <p className="text-xs font-medium text-[#5A5A5A]">Tue Oct 06 2026</p>
+              <p className="text-sm font-medium text-[#5A5A5A]">Tue Oct 06 2026</p>
               <p className="mt-2 text-4xl font-medium tracking-tight">15min</p>
-              <p className="mt-2 text-xs text-[#8A8A8A]">
+              <p className="mt-2 text-sm text-[#8A8A8A]">
                 Nice work - <span className="font-semibold text-white">15min</span> today
               </p>
             </div>
 
             <div>
               <div className="flex items-center justify-between gap-4">
-                <p className="text-xs font-medium text-[#5A5A5A]">Session History - Tue Oct 06 2026</p>
-                <button type="button" className={secondaryButtonClassName}>
+                <p className="text-sm font-medium text-[#5A5A5A]">Session History - Tue Oct 06 2026</p>
+                <button type="button" className={`shrink-0 whitespace-nowrap ${secondaryButtonClassName}`}>
                   <Calendar className="h-3.5 w-3.5" />
                   <span>View by Date</span>
                 </button>
               </div>
 
-              <div className="mt-4 flex flex-col gap-3">
+              <div className="mt-4 flex flex-col gap-3 cursor-default select-none">
                 {sessionHistory.map((session) => (
                   <div key={session.time} className={`${cardClassName} flex items-center justify-between`}>
                     <span className="text-sm font-semibold">{session.duration}</span>
-                    <span className="text-xs text-[#A8A8A8]">{session.time}</span>
+                    <span className="text-sm text-[#A8A8A8]">{session.time}</span>
                   </div>
                 ))}
               </div>
@@ -227,7 +227,7 @@ export default function LandingPage() {
 
         <footer className="flex items-center justify-between gap-4 border-t border-[#1A1A1A] px-6 py-6 sm:px-8 lg:px-10">
           <p className="text-xs text-[#F5F5F5]">© {new Date().getFullYear()} Ato. All rights reserved.</p>
-          <button type="button" onClick={handleBackToTop} className={secondaryButtonClassName}>
+          <button type="button" onClick={handleBackToTop} className={`${secondaryButtonClassName} cursor-pointer`}>
             Back to top
           </button>
         </footer>
