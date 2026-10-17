@@ -1,3 +1,5 @@
+import { createElement, useEffect, useRef, useState } from "react";
+import type { CSSProperties, ElementType, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Play, Square } from "lucide-react";
 
@@ -21,6 +23,64 @@ const primaryButtonClassName =
 
 const secondaryButtonClassName =
   "inline-flex items-center justify-center gap-2 rounded-md border border-[#2A2A2A] bg-[#121212] px-4 py-2 text-sm font-medium text-[#F5F5F5] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]";
+
+/**
+ * Scroll-triggered reveal. Fades, lifts and un-blurs its content once when it
+ * enters the viewport. Uses only opacity/transform/filter so it stays on the
+ * compositor and remains smooth. Respects prefers-reduced-motion.
+ */
+type RevealProps = {
+  as?: ElementType;
+  delay?: number; // ms
+  className?: string;
+  style?: CSSProperties;
+  children: ReactNode;
+};
+
+function Reveal({ as = "div", delay = 0, className = "", style, children }: RevealProps) {
+  const ref = useRef<HTMLElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return createElement(
+    as,
+    {
+      ref,
+      style: { transitionDelay: `${delay}ms`, ...style },
+      className: [
+        "transition-[opacity,transform,filter] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform,filter]",
+        "motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:blur-none motion-reduce:transition-none",
+        visible ? "translate-y-0 opacity-100 blur-0" : "translate-y-8 opacity-0 blur-[6px]",
+        className,
+      ].join(" "),
+    },
+    children,
+  );
+}
 
 const greetings = [
   { title: "Good morning, John", subtitle: "Ready to get started? 😊" },
@@ -109,43 +169,41 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090909] text-white">
+    <div className="min-h-screen bg-[#090909] text-white relative">
       <section className="flex w-full flex-col bg-[#090909]">
         <div className="flex min-h-[110vh] items-start px-6 pb-0 pt-[70vh] sm:px-8 lg:px-10">
           <div className={`${containerClassName} flex flex-col items-start justify-between gap-12 md:flex-row md:items-center`}>
             <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              Track your study.
-              <br />
-              See your progress.
+              <Reveal as="span" className="block">
+                Track your study.
+              </Reveal>
+              <Reveal as="span" delay={140} className="block">
+                See your progress.
+              </Reveal>
             </h1>
-
-            <div className="flex w-full max-w-xs flex-col gap-3 md:max-w-sm" aria-hidden="true">
-              <div className="h-2.5 w-full rounded-full bg-[#1A1A1A]">
-                <div className="h-full w-1/3 rounded-full bg-white" />
-              </div>
-              <div className="ml-6 h-2.5 w-[90%] rounded-full bg-[#1A1A1A]" />
-            </div>
           </div>
         </div>
 
         <div className="px-6 py-8 sm:px-8 lg:px-10 lg:pb-32">
           <div className={containerClassName}>
-            <p className="text-sm text-[#A8A8A8] sm:text-left sm:text-base">
+            <Reveal as="p" className="text-sm text-[#A8A8A8] sm:text-left sm:text-base">
               Ato gives real-time feedback to help motivate you in your studies.
-            </p>
+            </Reveal>
 
             <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:[&>*:nth-child(2)]:justify-self-center lg:[&>*:nth-child(3)]:justify-self-end">
-              {greetings.map((greeting) => (
+              {greetings.map((greeting, index) => (
                 <div
                   key={greeting.title}
                   className="rounded-lg p-2 sm:text-left lg:px-0"
                 >
-                  <h2 className="text-2xl font-semibold tracking-tight">{greeting.title}</h2>
-                  <p className="mt-2 text-sm text-[#F5F5F5]">
+                  <Reveal as="h2" delay={index * 140} className="text-xl lg:text-2xl font-semibold tracking-tight">
+                    {greeting.title}
+                  </Reveal>
+                  <Reveal as="p" delay={index * 140 + 120} className="mt-2 text-sm text-[#F5F5F5]">
                     {greeting.subtitle}{" "}
                     {greeting.highlight && <span className="font-bold">{greeting.highlight}</span>}{" "}
                     {greeting.suffix}
-                  </p>
+                  </Reveal>
                 </div>
               ))}
             </div>
@@ -155,9 +213,11 @@ export default function LandingPage() {
 
       <section className={`flex w-full flex-col justify-center bg-[#090909] px-6 py-20 sm:px-8 sm:py-24 lg:min-h-screen lg:px-10`}>
         <div className={containerClassName}>
-          <h2 className={`${sectionHeadingClassName} text-white`}>Tracking made simple</h2>
+          <Reveal as="h2" className={`${sectionHeadingClassName} text-white`}>
+            Tracking made simple
+          </Reveal>
           <div className="grid grid-cols-1 divide-y divide-[#1F1F1F] lg:-mx-8 lg:grid-cols-3 lg:divide-x lg:divide-y-0 mt-16">
-            {steps.map((step) => (
+            {steps.map((step, index) => (
               <div
                 key={step.title}
                 className="flex flex-col-reverse gap-10 py-10 first:pt-0 last:pb-0 lg:flex-col lg:px-8 lg:py-0"
@@ -167,10 +227,16 @@ export default function LandingPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-medium tracking-tight text-white">{step.title}</h2>
-                  <p className="mt-3 text-sm leading-6 text-[#A8A8A8] sm:text-base">
+                  <Reveal as="h2" delay={index * 120} className="text-xl font-medium tracking-tight text-white">
+                    {step.title}
+                  </Reveal>
+                  <Reveal
+                    as="p"
+                    delay={index * 120 + 120}
+                    className="mt-3 text-sm leading-6 text-[#A8A8A8] sm:text-base"
+                  >
                     {step.description} <span className="font-semibold text-white">{step.highlight}</span>
-                  </p>
+                  </Reveal>
                 </div>
               </div>
             ))}
@@ -180,22 +246,32 @@ export default function LandingPage() {
 
       <section className={`${sectionClassName} lg:min-h-screen`}>
         <div className={containerClassName}>
-          <h2 className={`${sectionHeadingClassName} text-white`}>Review your progress</h2>
-          
-          <p className={`${sectionTextClassName} mt-6 max-w-sm`}>Track your progress, no matter the day, month, or year.</p>
+          <Reveal as="h2" className={`${sectionHeadingClassName} text-white`}>
+            Review your progress
+          </Reveal>
+
+          <Reveal as="p" delay={120} className={`${sectionTextClassName} mt-6 max-w-sm`}>
+            Track your progress, no matter the day, month, or year.
+          </Reveal>
 
           <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
             <div className="flex flex-col justify-center">
-              <p className="text-sm font-medium text-[#5A5A5A]">Tue Oct 06 2026</p>
-              <p className="mt-2 text-4xl font-medium tracking-tight">15min</p>
-              <p className="mt-2 text-sm text-[#8A8A8A]">
+              <Reveal as="p" className="text-sm font-medium text-[#5A5A5A]">
+                Tue Oct 06 2026
+              </Reveal>
+              <Reveal as="p" delay={120} className="mt-2 text-4xl font-medium tracking-tight">
+                15min
+              </Reveal>
+              <Reveal as="p" delay={240} className="mt-2 text-sm text-[#8A8A8A]">
                 Nice work - <span className="font-semibold text-white">15min</span> today
-              </p>
+              </Reveal>
             </div>
 
             <div>
               <div className="flex items-center justify-between gap-4">
-                <p className="text-sm font-medium text-[#5A5A5A]">Session History - Tue Oct 06 2026</p>
+                <Reveal as="p" className="text-sm font-medium text-[#5A5A5A]">
+                  Session History - Tue Oct 06 2026
+                </Reveal>
                 <button type="button" className={`shrink-0 whitespace-nowrap ${secondaryButtonClassName}`}>
                   <Calendar className="h-3.5 w-3.5" />
                   <span>View by Date</span>
@@ -217,9 +293,9 @@ export default function LandingPage() {
 
       <section className="flex min-h-[95vh] w-full flex-col bg-[#090909]">
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center sm:px-8 lg:px-10">
-          <h2 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
+          <Reveal as="h2" className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Start tracking your progress now
-          </h2>
+          </Reveal>
           <Link to="/" className={`${primaryButtonClassName} mt-12`}>
             Get Started
           </Link>
@@ -227,7 +303,7 @@ export default function LandingPage() {
 
         <footer className="flex items-center justify-between gap-4 border-t border-[#1A1A1A] px-6 py-6 sm:px-8 lg:px-10">
           <p className="text-xs text-[#F5F5F5]">© {new Date().getFullYear()} Ato. All rights reserved.</p>
-          <button type="button" onClick={handleBackToTop} className={`${secondaryButtonClassName} cursor-pointer`}>
+          <button type="button" onClick={handleBackToTop} className={`${secondaryButtonClassName} cursor-pointer shrink-0 whitespace-nowrap`}>
             Back to top
           </button>
         </footer>
