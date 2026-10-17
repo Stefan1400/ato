@@ -24,14 +24,9 @@ const primaryButtonClassName =
 const secondaryButtonClassName =
   "inline-flex items-center justify-center gap-2 rounded-md border border-[#2A2A2A] bg-[#121212] px-4 py-2 text-sm font-medium text-[#F5F5F5] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#1A1A1A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#090909]";
 
-/**
- * Scroll-triggered reveal. Fades, lifts and un-blurs its content once when it
- * enters the viewport. Uses only opacity/transform/filter so it stays on the
- * compositor and remains smooth. Respects prefers-reduced-motion.
- */
 type RevealProps = {
   as?: ElementType;
-  delay?: number; // ms
+  delay?: number;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
