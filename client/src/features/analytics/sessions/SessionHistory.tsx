@@ -35,19 +35,18 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
     <div className="mb-4 mt-10 flex items-center justify-between gap-4 text-[#474747] font-medium lg:mt-0">
       <div className='flex items-center justify-center'>Session History - {selectedDate.toDateString()}</div>
       {onOpenDateSelector && (
-        <div className="hidden lg:block flex items-center justify-center">
+        <div className="hidden lg:block items-center justify-center">
           <ViewByDate onOpen={onOpenDateSelector} />
         </div>
       )}
     </div>
   );
 
-  // loading / error / empty states
   if (isLoading) {
     return (
       <div className="w-full lg:flex lg:h-full lg:flex-col">
         {header}
-        <div className="text-white mt-60 lg:mt-0">Loading sessions...</div>
+        <div className="text-white mt-60 lg:mt-0 text-center lg:text-left">Loading sessions...</div>
       </div>
     );
   }
@@ -56,7 +55,7 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
     return (
       <div className="w-full lg:flex lg:h-full lg:flex-col">
         {header}
-        <div className="text-white mt-60 lg:mt-0">Error loading sessions</div>
+        <div className="text-white mt-60 lg:mt-0 text-center lg:text-left">Error loading sessions</div>
         <button
           type="button"
           onClick={() => refetch()}
@@ -70,14 +69,13 @@ export default function SessionHistory({ selectedDate, onOpenDateSelector }: Ses
 
   if (!sessionsData || sessionsData.length === 0) {
     return (
-      <div className="w-full lg:flex lg:h-full lg:flex-col">
+      <div className="w-full lg:flex lg:h-full lg:flex-col text-center lg:text-left">
         {header}
         <div className="text-white mt-60 lg:mt-0">No sessions found for this date.</div>
       </div>
     );
   }
 
-  // Sort sessions by start time (oldest first)
   const sortedSessions = sessionsData
     ? [...sessionsData].sort(
         (b, a) =>
