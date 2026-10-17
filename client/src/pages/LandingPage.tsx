@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Calendar, Play, Square } from "lucide-react";
 
 const sectionClassName =
-  "flex w-full flex-col justify-start bg-[#090909] px-6 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
+  "flex w-full flex-col justify-start px-6 pt-20 sm:px-8 sm:pb-24 sm:pt-24 lg:px-10 lg:pt-[16vh]";
 
 const containerClassName = "mx-auto w-full max-w-6xl";
 
@@ -164,8 +164,10 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090909] text-white relative">
-      <section className="flex w-full flex-col bg-[#090909]">
+    <div className="min-h-screen isolate bg-[#090909]/95 text-white relative">
+      <div className="page-background-gradient"></div>
+
+      <section className="flex w-full flex-col">
         <div className="flex min-h-[110vh] items-start px-6 pb-0 pt-[70vh] sm:px-8 lg:px-10">
           <div className={`${containerClassName} flex flex-col items-start justify-between gap-12 md:flex-row md:items-center`}>
             <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
@@ -206,7 +208,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className={`flex w-full flex-col justify-center bg-[#090909] px-6 py-20 sm:px-8 sm:py-24 lg:min-h-screen lg:px-10`}>
+      <section className={`flex w-full flex-col justify-center px-6 py-20 sm:px-8 sm:py-24 lg:min-h-screen lg:px-10`}>
         <div className={containerClassName}>
           <Reveal as="h2" className={`${sectionHeadingClassName} text-white`}>
             Tracking made simple
@@ -286,7 +288,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="flex min-h-[95vh] w-full flex-col bg-[#090909]">
+      <section className="flex min-h-[95vh] w-full flex-col">
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center sm:px-8 lg:px-10">
           <Reveal as="h2" className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Start tracking your progress now

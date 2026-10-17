@@ -29,7 +29,9 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#090909] px-6 py-25 text-white sm:px-8 lg:px-10">
+    <div className="relative isolate flex min-h-screen items-center justify-center bg-[#090909]/95 px-6 py-25 text-white sm:px-8 lg:px-10">
+      <div className="page-background-gradient"></div>
+      
       <div className="w-full max-w-xl rounded-[28px] border border-[#2A2A2A] bg-[#090909] p-8 py-20 shadow-[0_16px_60px_rgba(0,0,0,0.35)] sm:p-10">
         <div className="flex flex-col items-center justify-center text-center">
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Welcome to ato</h1>
