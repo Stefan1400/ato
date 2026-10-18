@@ -250,7 +250,7 @@ describe('Popup', () => {
 
       expect(screen.queryByText('Please enter "delete my account"')).not.toBeInTheDocument();
 
-      expect(screen.getByTestId('location')).toHaveTextContent('/signup');
+      expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
 
       expect(toggleMenu).toHaveBeenCalled();
 
@@ -334,7 +334,7 @@ describe('Popup', () => {
 
       expect(mockDeleteUserMutation).toHaveBeenCalled();
 
-      expect(screen.getByTestId('location')).not.toHaveTextContent('/signup');
+      expect(screen.getByTestId('location')).not.toHaveTextContent('/get-started');
 
       expect(mockShowToast).toHaveBeenCalledWith({
          type: 'error', 

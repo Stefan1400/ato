@@ -58,7 +58,7 @@ describe('WelcomePage', () => {
 
    it('navigates user to /login', async () => {
       render(
-         <MemoryRouter initialEntries={['/']}>
+         <MemoryRouter initialEntries={['/get-started']}>
             <AuthContext.Provider value={{ 
                user: undefined, 
                isLoading: false, 
@@ -78,7 +78,7 @@ describe('WelcomePage', () => {
 
    it('calls the create guest mutation', async () => {
       render(
-         <MemoryRouter initialEntries={['/']}>
+         <MemoryRouter initialEntries={['/get-started']}>
             <AuthContext.Provider value={{ 
                user: undefined, 
                isLoading: false, 
@@ -103,7 +103,7 @@ describe('WelcomePage', () => {
       });
       
       render(
-         <MemoryRouter initialEntries={['/']}>
+         <MemoryRouter initialEntries={['/get-started']}>
             <AuthContext.Provider value={{ 
                user: undefined, 
                isLoading: false, 
@@ -136,7 +136,7 @@ describe('WelcomePage', () => {
       const setUser = vi.fn();
       
       render(
-         <MemoryRouter initialEntries={['/']}>
+         <MemoryRouter initialEntries={['/get-started']}>
             <AuthContext.Provider value={{ 
                user: undefined, 
                isLoading: false, 
@@ -174,7 +174,7 @@ describe('WelcomePage', () => {
       const setUser = vi.fn();
       
       render(
-         <MemoryRouter initialEntries={['/']}>
+         <MemoryRouter initialEntries={['/get-started']}>
             <AuthContext.Provider value={{ 
                user: undefined, 
                isLoading: false, 
@@ -195,6 +195,6 @@ describe('WelcomePage', () => {
          duration: 3000
       });
 
-      expect(screen.getByTestId('location')).toHaveTextContent('/');
+      expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
    });
 });

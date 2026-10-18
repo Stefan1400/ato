@@ -2,7 +2,7 @@ import { expect, describe, it, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import MenuDropdown from "./MenuDropdown";
 import { AuthContext } from "../app/AuthProvider";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, useLocation } from "react-router-dom";
 import { userEvent } from "@testing-library/user-event";
 
 const { mockUseLogout, mockMutate, mockShowToast } = vi.hoisted(() => ({
@@ -20,6 +20,12 @@ vi.mock('./Toast.tsx', () => ({
       showToast: mockShowToast
    }), 
 }));
+
+function LocationDisplay() {
+   const location = useLocation();
+
+   return <div data-testid="location">{location.pathname}</div>;
+}
 
 describe("MenuDropdown", () => {
    beforeEach(() => {
@@ -77,6 +83,22 @@ describe("MenuDropdown", () => {
 
       expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
       expect(screen.queryByText('Sign In')).not.toBeInTheDocument();
+   });
+
+   it('keeps the logged-out Home link pointed at /', () => {
+      render(
+         <MemoryRouter>
+            <AuthContext.Provider value={{ user: undefined, isLoading: false, setUser: vi.fn() }}>
+               <MenuDropdown
+                  toggleMenu={vi.fn()}
+                  menuOpen={true}
+                  toggleDeleteAccountPopup={vi.fn()}
+               />
+            </AuthContext.Provider>
+         </MemoryRouter>
+      );
+
+      expect(screen.getByRole('link', { name: /Home/i })).toHaveAttribute('href', '/');
    });
 
    it('renders signing out screen when logout is pending', () => {
@@ -181,6 +203,7 @@ describe("MenuDropdown", () => {
                   menuOpen={true}
                   toggleDeleteAccountPopup={vi.fn()}
                />
+               <LocationDisplay />
             </AuthContext.Provider>
          </MemoryRouter>
       );
@@ -190,6 +213,7 @@ describe("MenuDropdown", () => {
 
       expect(mockMutate).toHaveBeenCalled();
       expect(toggleMenu).toHaveBeenCalled();
+      expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
 
       expect(mockShowToast).toHaveBeenCalledWith({
          type: 'success', message: 'Logged out successfully', duration: 3000

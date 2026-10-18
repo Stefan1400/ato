@@ -73,7 +73,7 @@ describe('NotFoundPage', () => {
       expect(screen.getByTestId('location')).toHaveTextContent('/dashboard');
    });
 
-   it('navigates unauthorized users to /', async () => {
+   it('navigates unauthorized users to /get-started', async () => {
       render(
          <MemoryRouter initialEntries={['/random-page']}>
             <AuthContext.Provider value={{ 
@@ -91,6 +91,6 @@ describe('NotFoundPage', () => {
 
       await user.click(screen.getByRole('link', { name: /Go to Welcome Page/i }));
 
-      expect(screen.getByTestId('location')).toHaveTextContent('/');
+      expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
    });
 });

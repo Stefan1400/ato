@@ -27,7 +27,7 @@ function MenuDropdown({ toggleMenu, menuOpen, toggleDeleteAccountPopup }: MenuDr
         showToast({ type: 'success', message: 'Logged out successfully', duration: 3000 });
     
         toggleMenu();
-        navigate('/');
+        navigate('/get-started');
       },
       onError: () => {
         showToast({ type: 'error', message: 'Logout failed. Please try again.', duration: 3000 });

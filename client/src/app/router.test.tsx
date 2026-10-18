@@ -1,12 +1,16 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { AppRouter } from './router';
 import { AuthContext } from './AuthProvider';
 import type { AuthContextType } from './AuthProvider';
 
 vi.mock('../pages/WelcomePage', () => ({
    default: () => <div>Welcome Page</div>,
+}));
+
+vi.mock('../pages/LandingPage', () => ({
+   default: () => <div>Landing Page</div>,
 }));
 
 vi.mock('../pages/HomePage', () => ({
@@ -37,6 +41,12 @@ vi.mock('../components/LoadingScreen', () => ({
    default: ({ text }: { text: string }) => <div>{text}</div>,
 }));
 
+function LocationDisplay() {
+   const location = useLocation();
+
+   return <div data-testid="location">{location.pathname}</div>;
+}
+
 function renderRouter(
    path: string,
    authValue: AuthContextType
@@ -45,6 +55,7 @@ function renderRouter(
       <AuthContext.Provider value={authValue}>
          <MemoryRouter initialEntries={[path]}>
             <AppRouter />
+            <LocationDisplay />
          </MemoryRouter>
       </AuthContext.Provider>
    );
@@ -52,8 +63,18 @@ function renderRouter(
 
 describe('AppRouter', () => {
    describe('WelcomeRoute', () => {
-      it('renders the welcome page for unauthenticated users', () => {
+      it('renders the landing page at / for unauthenticated users', () => {
          renderRouter('/', {
+            user: undefined,
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Landing Page')).toBeInTheDocument();
+      });
+
+      it('renders the welcome page at /get-started for unauthenticated users', () => {
+         renderRouter('/get-started', {
             user: undefined,
             setUser: vi.fn(),
             isLoading: false,
@@ -72,7 +93,7 @@ describe('AppRouter', () => {
          expect(screen.getByText('Loading...')).toBeInTheDocument();
       });
 
-      it('redirects authenticated users to the dashboard', () => {
+      it('redirects authenticated users from / to the dashboard', () => {
          renderRouter('/', {
             user: { id: 74, email: 'user@gmail.com', account_type: 'user' },
             setUser: vi.fn(),
@@ -80,7 +101,42 @@ describe('AppRouter', () => {
          });
 
          expect(screen.getByText('Home Page')).toBeInTheDocument();
+         expect(screen.queryByText('Landing Page')).not.toBeInTheDocument();
+         expect(screen.getByTestId('location')).toHaveTextContent('/dashboard');
+      });
+
+      it('redirects authenticated guests from / to the dashboard', () => {
+         renderRouter('/', {
+            user: { id: 74, email: null, account_type: 'guest' },
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Home Page')).toBeInTheDocument();
+         expect(screen.getByTestId('location')).toHaveTextContent('/dashboard');
+      });
+
+      it('redirects authenticated users from /get-started to the dashboard', () => {
+         renderRouter('/get-started', {
+            user: { id: 74, email: 'user@gmail.com', account_type: 'user' },
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Home Page')).toBeInTheDocument();
          expect(screen.queryByText('Welcome Page')).not.toBeInTheDocument();
+         expect(screen.getByTestId('location')).toHaveTextContent('/dashboard');
+      });
+
+      it('redirects authenticated guests from /get-started to the dashboard', () => {
+         renderRouter('/get-started', {
+            user: { id: 74, email: null, account_type: 'guest' },
+            setUser: vi.fn(),
+            isLoading: false,
+         });
+
+         expect(screen.getByText('Home Page')).toBeInTheDocument();
+         expect(screen.getByTestId('location')).toHaveTextContent('/dashboard');
       });
    });
 
@@ -105,7 +161,7 @@ describe('AppRouter', () => {
          expect(screen.getByText('Loading...')).toBeInTheDocument();
       });
 
-      it('redirects unauthenticated users to the welcome page', () => {
+      it('redirects unauthenticated users to /get-started', () => {
          renderRouter('/dashboard', {
             user: undefined,
             setUser: vi.fn(),
@@ -113,6 +169,7 @@ describe('AppRouter', () => {
          });
 
          expect(screen.getByText('Welcome Page')).toBeInTheDocument();
+         expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
       });
    });
 
@@ -232,7 +289,7 @@ describe('AppRouter', () => {
          expect(screen.queryByText('Change Password Page')).not.toBeInTheDocument();
       });
 
-      it('redirects unauthenticated users from change password to the welcome page', () => {
+      it('redirects unauthenticated users from change password to /get-started', () => {
          renderRouter('/change-password', {
             user: undefined,
             setUser: vi.fn(),
@@ -240,6 +297,7 @@ describe('AppRouter', () => {
          });
 
          expect(screen.getByText('Welcome Page')).toBeInTheDocument();
+         expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
          expect(screen.queryByText('Change Password Page')).not.toBeInTheDocument();
       });
 

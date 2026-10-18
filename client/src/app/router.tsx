@@ -52,7 +52,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
    }
 
    if (!auth.user) {
-      return <Navigate to="/" replace />;
+      return <Navigate to="/get-started" replace />;
    }
 
    return children;
@@ -66,7 +66,7 @@ function RegularUserRoute({ children }: { children: React.ReactNode }) {
    }
 
    if (!auth.user) {
-      return <Navigate to="/" replace />;
+      return <Navigate to="/get-started" replace />;
    }
 
    if (auth.user.account_type !== 'user') {
@@ -79,13 +79,13 @@ function RegularUserRoute({ children }: { children: React.ReactNode }) {
 export function AppRouter() {
    return (
       <Routes>
-         <Route path="/get-started" element={
+         <Route path="/" element={
             <WelcomeRoute>
                <LandingPage />
             </WelcomeRoute>
          } />
          
-         <Route path="/" element={
+         <Route path="/get-started" element={
             <WelcomeRoute>
                <WelcomePage />
             </WelcomeRoute>

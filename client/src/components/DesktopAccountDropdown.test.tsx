@@ -247,7 +247,7 @@ describe('DesktopAccountDropdown', () => {
          duration: 3000
       });
 
-      expect(screen.getByTestId('location')).toHaveTextContent('/');
+      expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
    });
 
    it('handles sign out on error', async () => {

@@ -293,7 +293,7 @@ export default function LandingPage() {
           <Reveal as="h2" className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Start tracking your progress now
           </Reveal>
-          <Link to="/" className={`${primaryButtonClassName} mt-12`}>
+          <Link to="/get-started" className={`${primaryButtonClassName} mt-12`}>
             Get Started
           </Link>
         </div>

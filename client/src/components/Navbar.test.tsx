@@ -36,7 +36,7 @@ describe('Navbar', () => {
       const accountDropdown = screen.getByTestId('desktop-account-dropdown');
       const closeButton = screen.getByRole('button', { name: /toggle menu/i });
 
-      expect(screen.queryByRole('link', { name: /ato/i })).not.toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /ato/i })).toHaveAttribute('href', '/dashboard');
       expect(accountDropdown.parentElement).toBe(closeButton.parentElement);
       expect(closeButton.parentElement).toHaveClass('ml-auto');
    });
@@ -120,6 +120,30 @@ describe('Navbar', () => {
       await user.click(screen.getByRole('link', { name: /ato/}));
 
       expect(screen.getByTestId('location')).toHaveTextContent('/');
+   });
+
+   it("navigates to /get-started when an unauthorized user clicks Get Started", async () => {
+      render(
+         <MemoryRouter initialEntries={['/']}>
+            <AuthContext.Provider value={{
+               user: undefined,
+               isLoading: false,
+               setUser: vi.fn()
+            }}>
+               <Navbar
+                  toggleMenu={vi.fn()}
+                  menuOpen={false}
+                  toggleDeleteAccountPopup={vi.fn()}
+               />
+               <LocationDisplay />
+            </AuthContext.Provider>
+         </MemoryRouter>
+      );
+
+      const user = userEvent.setup();
+      await user.click(screen.getByRole('link', { name: /Get Started/i }));
+
+      expect(screen.getByTestId('location')).toHaveTextContent('/get-started');
    });
 
    it("renders menu toggle button for authorized users", () => {      

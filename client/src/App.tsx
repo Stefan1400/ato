@@ -13,7 +13,7 @@ export default function App() {
   const location = useLocation();
   const auth = useContext(AuthContext);
   const isAuthenticated = Boolean(auth?.user);
-  const hideMenu = !isAuthenticated && ['/', '/signup', '/login'].includes(location.pathname);
+  const hideMenu = !isAuthenticated && ['/', '/signup', '/login', '/get-started'].includes(location.pathname);
   
   const toggleMenu = () => {
     setMenuOpen(prev => !prev);

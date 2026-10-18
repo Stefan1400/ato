@@ -18,7 +18,7 @@ const primaryButtonClassName =
    const isAuthenticated = Boolean(auth?.user);
    const location = useLocation();
    const hideMenuToggle = !isAuthenticated && ['/', '/signup', '/login', '/get-started'].includes(location.pathname);
-   const showGetStarted = !isAuthenticated && location.pathname === '/get-started';
+   const showGetStarted = !isAuthenticated && location.pathname === '/';
 
    return (
       <nav className='fixed left-0 top-0 w-full h-16 px-4 lg:px-6 text-white z-1000 border-b border-[#2E2E2E] bg-[#090909]/95 backdrop-blur-sm'>
@@ -49,7 +49,7 @@ const primaryButtonClassName =
             </div>
             
             {showGetStarted && (
-               <Link to="/" className={`${primaryButtonClassName}`}>
+               <Link to="/get-started" className={`${primaryButtonClassName}`}>
                   Get Started
                </Link>
             )}

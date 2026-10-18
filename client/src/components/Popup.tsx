@@ -43,7 +43,7 @@ function Popup({ toggleDeleteAccountPopup, toggleMenu }: PopupTypes) {
          toggleDeleteAccountPopup();
          settypedString('');
          setError(false);
-         navigate('/signup');
+         navigate('/get-started');
          toggleMenu();
          showToast({ type: 'success', message: 'Account successfully deleted', duration: 3000 });
       },

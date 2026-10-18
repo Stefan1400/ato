@@ -49,6 +49,21 @@ describe('App', () => {
       expect(screen.queryByText('Analytics')).not.toBeInTheDocument();
    });
 
+   it('keeps the menu hidden on /get-started for logged-out users', () => {
+      render(
+         <MemoryRouter initialEntries={['/get-started']}>
+            <QueryClientProvider client={queryClient}>
+               <AuthContext.Provider value={{ user: undefined, isLoading: false, setUser: vi.fn() }}>
+                  <App />
+               </AuthContext.Provider>
+            </QueryClientProvider>
+         </MemoryRouter>
+      );
+
+      expect(screen.getByText('Welcome to ato')).toBeInTheDocument();
+      expect(screen.queryByText('Analytics')).not.toBeInTheDocument();
+   });
+
    it('renders delete account popup', async () => {
 
       render(
