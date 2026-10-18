@@ -6,9 +6,13 @@ type Toast = { id: string; type: ToastType; message: string };
 
 type ShowToastArgs = { type: ToastType; message: string; duration?: number };
 
-const ToastContext = createContext({ showToast: (opts: ShowToastArgs) => {} });
+type ToastContextValue = {
+  showToast: (opts: ShowToastArgs) => void;
+};
 
-export const useToast = () => useContext(ToastContext as React.Context<(typeof ToastContext extends React.Context<infer T> ? T : any)>);
+const ToastContext = createContext<ToastContextValue>({ showToast: () => {} });
+
+export const useToast = () => useContext(ToastContext);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   
@@ -48,10 +52,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               shadow-[0_0_30px_rgba(0,0,0,0.4)]
             "
           >
-            {/* LEFT SIDE */}
             <div className="flex items-center gap-4">
-
-              {/* ICON WRAPPER WITH GLOW */}
               
                 {toast.type === 'success' && (
                   <CircleCheck className="text-[#00C851] drop-shadow-[0_0_6px_rgba(0,200,81,0.2)]" />
@@ -63,7 +64,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                   <Info className="text-white/90 drop-shadow-[0_0_6px_rgba(255,255,255,0.1)]" />
                 )}
 
-              {/* MESSAGE */}
               <div
                 className={`
                   text-xs lg:text-sm font-medium tracking-wide
@@ -81,7 +81,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               </div>
             </div>
 
-            {/* CLOSE BUTTON */}
             <button
               onClick={() => removeToast(toast.id)}
               className="
@@ -89,7 +88,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 p-2 rounded-md
                 transition
                 hover:bg-white/5
-                hover:shadow-[0_0_10px_rgba(255,255,255,0.15) cursor-pointer
+                hover:shadow-[0_0_10px_rgba(255,255,255,0.15)] cursor-pointer
               "
               aria-label="close toast"
             >
