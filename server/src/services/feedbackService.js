@@ -16,8 +16,6 @@ const feedbackService = async (userId, ranges) => {
       ranges.today.end
    );
 
-   // calculating analytics
-
    const yesterdayAnalytics = analyzeSessions(yesterdaySessions);
    const todayAnalytics = analyzeSessions(todaySessions);
 

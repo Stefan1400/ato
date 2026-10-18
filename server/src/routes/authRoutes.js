@@ -15,27 +15,23 @@ const { registerSchema, loginSchema, changePasswordSchema } = require('../schema
 const authMiddleware = require('../middleware/auth');
 const validateRequest = require('../middleware/validateRequest');
 
-//register
 router.post(
    '/register', 
    validate(registerSchema),
    registerController
 );
 
-//login
 router.post(
    '/login',
    validate(loginSchema),
    loginController
 );
 
-//guest account
 router.post(
    '/guest',
    createGuestController
 );
 
-//convert guest to normal account
 router.post(
    '/convert',
    authMiddleware,
@@ -43,20 +39,17 @@ router.post(
    convertGuestToUserController
 );
 
-//logout
 router.post(
    '/logout',
    logoutController
 );
 
-//delete
 router.delete(
    '/',
    authMiddleware,
    deleteUserController
 );
 
-//change password
 router.patch(
    '/change-password',
    authMiddleware,
@@ -64,7 +57,6 @@ router.patch(
    changePasswordController
 );
 
-//get user
 router.get(
    '/',
    authMiddleware,

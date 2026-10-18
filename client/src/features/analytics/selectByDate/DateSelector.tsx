@@ -23,28 +23,16 @@ const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 function getCalendarDays(year: number, month: number) {
   const days: Array<Date | null> = [];
 
-  // What weekday does the month start on?
   const firstDayOfMonth = new Date(year, month, 1);
   const startWeekday = firstDayOfMonth.getDay();
 
-//   console.log('startWeekday', startWeekday);
-  
-
-  // Add empty cells before the 1st
   for (let i = 0; i < startWeekday; i++) {
     days.push(null);
-   //  console.log('days:', days);
   }
 
-  // How many days are in this month?
   const lastDayOfMonth = new Date(year, month + 1, 0);
-//   console.log('lastDayOfMonth', lastDayOfMonth);
-  
   const totalDays = lastDayOfMonth.getDate();
-//   console.log('totalDays', totalDays);
-  
 
-  // Add actual dates
   for (let day = 1; day <= totalDays; day++) {
     days.push(new Date(year, month, day));
     
