@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import RegisterPage from "../features/auth/RegisterPage";
 import LoginPage from "../features/auth/LoginPage";
@@ -76,9 +76,33 @@ function RegularUserRoute({ children }: { children: React.ReactNode }) {
    return children;
 }
 
+function PageTitle() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      "/": "Ato — Study Tracker",
+      "/get-started": "Get Started",
+      "/dashboard": "Dashboard",
+      "/analytics": "Analytics",
+      "/change-password": "Change Password",
+      "/login": "Sign In",
+      "/signup": "Sign Up",
+    };
+
+    document.title =
+      titles[location.pathname] ?? "Page Not Found";
+  }, [location.pathname]);
+
+  return null;
+}
+
 export function AppRouter() {
    return (
-      <Routes>
+      <>
+         <PageTitle />
+
+         <Routes>
          <Route path="/" element={
             <WelcomeRoute>
                <LandingPage />
@@ -117,5 +141,6 @@ export function AppRouter() {
          } />
          <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      </>
    );
 };

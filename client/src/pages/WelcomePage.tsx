@@ -34,7 +34,7 @@ export default function WelcomePage() {
       
       <div className="w-full max-w-xl rounded-[28px] border border-[#2A2A2A] bg-[#090909] p-8 py-20 shadow-[0_16px_60px_rgba(0,0,0,0.35)] sm:p-10">
         <div className="flex flex-col items-center justify-center text-center">
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Welcome to ato</h1>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Get Started</h1>
           <p className="mt-4 max-w-md text-base leading-7 text-[#A8A8A8] sm:text-lg">
             Log into an existing account or continue as guest
           </p>
