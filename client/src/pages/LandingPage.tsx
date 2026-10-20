@@ -142,8 +142,7 @@ function TimerCard({ variant, label, time, caption, showButton = true }: TimerCa
       </div>
 
       {showButton && (
-        <button
-          type="button"
+        <span
           className={timerButtonClassName}
           aria-label={variant === "ready" ? "Start timer" : "Stop timer"}
         >
@@ -152,7 +151,7 @@ function TimerCard({ variant, label, time, caption, showButton = true }: TimerCa
           ) : (
             <Square className="h-4 w-4 fill-white" />
           )}
-        </button>
+        </span>
       )}
     </div>
   );
@@ -269,10 +268,10 @@ export default function LandingPage() {
                 <Reveal as="p" className="text-sm font-medium text-[#5A5A5A]">
                   Session History - Tue Oct 06 2026
                 </Reveal>
-                <button type="button" className={`shrink-0 whitespace-nowrap ${secondaryButtonClassName}`}>
+                <span className={`shrink-0 whitespace-nowrap ${secondaryButtonClassName}`}>
                   <Calendar className="h-3.5 w-3.5" />
                   <span>View by Date</span>
-                </button>
+                </span>
               </div>
 
               <div className="mt-4 flex flex-col gap-3 cursor-default select-none">

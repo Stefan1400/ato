@@ -60,7 +60,7 @@ describe('App', () => {
          </MemoryRouter>
       );
 
-      expect(screen.getByText('Welcome to ato')).toBeInTheDocument();
+      expect(screen.getByText('Get Started')).toBeInTheDocument();
       expect(screen.queryByText('Analytics')).not.toBeInTheDocument();
    });
 

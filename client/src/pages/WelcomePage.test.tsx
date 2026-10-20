@@ -50,7 +50,7 @@ describe('WelcomePage', () => {
          </MemoryRouter>
       )
 
-      expect(screen.getByText('Welcome to ato')).toBeInTheDocument();
+      expect(screen.getByText('Get Started')).toBeInTheDocument();
       expect(screen.getByText('Log into an existing account or continue as guest')).toBeInTheDocument();
       expect(screen.getByText('Login')).toBeInTheDocument();
       expect(screen.getByText('Continue as Guest')).toBeInTheDocument();
