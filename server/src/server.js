@@ -1,4 +1,4 @@
-const PORT = 5000;
+const PORT = process.env.DB_PORT || 5000;
 
 const app = require('./app.js');
 
