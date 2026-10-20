@@ -270,7 +270,7 @@ export default function LandingPage() {
                 </Reveal>
                 <span className={`shrink-0 whitespace-nowrap ${secondaryButtonClassName}`}>
                   <Calendar className="h-3.5 w-3.5" />
-                  <span>View by Date</span>
+                  <span className="cursor-default select-none">View by Date</span>
                 </span>
               </div>
 
