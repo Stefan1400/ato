@@ -1,7 +1,7 @@
-const PORT = process.env.DB_PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 const app = require('./app.js');
 
-app.listen(PORT, () => {
-   console.log(`Server is listening on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+   console.log(`Server is listening on port ${PORT}`);
 });
