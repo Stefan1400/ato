@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:5000/api';
+const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export async function api<T>(
    url: string,
