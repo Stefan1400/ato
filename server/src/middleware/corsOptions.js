@@ -1,7 +1,7 @@
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5173',
-  'https://ato-38v5q38gt-stefan1400s-projects.vercel.app'
+  'https://ato-alpha.vercel.app',
 ];
 
 const corsOptions = {
