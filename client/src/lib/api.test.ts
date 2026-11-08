@@ -1,7 +1,14 @@
-import { expect, describe, it, vi, beforeEach } from "vitest";
-import { api } from "./api";
+import { expect, describe, it, vi, beforeEach, afterEach } from "vitest";
 
 const mockFetch = vi.fn();
+
+const loadApi = async (isProduction: boolean, apiUrl = "") => {
+   vi.resetModules();
+   vi.stubEnv("PROD", isProduction);
+   vi.stubEnv("VITE_API_URL", apiUrl);
+
+   return import("./api");
+};
 
 describe("api", () => {
    beforeEach(() => {
@@ -10,6 +17,7 @@ describe("api", () => {
    });
 
    it("calls the API with JSON data and returns the parsed response", async () => {
+      const { api } = await loadApi(false);
       const payload = {
          email: "user@example.com",
          password: "password123",
@@ -40,6 +48,7 @@ describe("api", () => {
    });
 
    it("sends FormData without JSON headers or stringifying", async () => {
+      const { api } = await loadApi(false);
       const formData = new FormData();
       formData.append(
          "file",
@@ -69,6 +78,7 @@ describe("api", () => {
    });
 
    it("makes a request without a body when no body is provided", async () => {
+      const { api } = await loadApi(false);
       const response = {
          ok: true,
          json: vi.fn().mockResolvedValue({ success: true }),
@@ -92,6 +102,7 @@ describe("api", () => {
    });
 
    it("includes custom headers in the request", async () => {
+      const { api } = await loadApi(false);
       const response = {
          ok: true,
          json: vi.fn().mockResolvedValue({ success: true }),
@@ -120,6 +131,7 @@ describe("api", () => {
    });
 
    it("throws a formatted error when the request fails", async () => {
+      const { api } = await loadApi(false);
       const payload = {
          email: "user@example.com",
          password: "password123",
@@ -140,4 +152,53 @@ describe("api", () => {
          "API request failed: 500 Internal Server Error - Something went wrong"
       );
    });
+
+   it("uses the relative same-origin API path in production despite a Render API override", async () => {
+      const { api } = await loadApi(true, "https://ato-eoe3.onrender.com/api");
+      mockFetch.mockResolvedValue({
+         ok: true,
+         json: vi.fn().mockResolvedValue({ fetchedSessions: [] }),
+      });
+
+      await api("/sessions?start=2026-11-08&end=2026-11-09", "GET");
+
+      expect(mockFetch).toHaveBeenCalledWith(
+         "/api/sessions?start=2026-11-08&end=2026-11-09",
+         expect.objectContaining({ credentials: "include" }),
+      );
+   });
+
+   it("uses localhost by default in development", async () => {
+      const { api } = await loadApi(false);
+      mockFetch.mockResolvedValue({
+         ok: true,
+         json: vi.fn().mockResolvedValue({}),
+      });
+
+      await api("/users/", "GET");
+
+      expect(mockFetch).toHaveBeenCalledWith(
+         "http://localhost:5000/api/users/",
+         expect.objectContaining({ credentials: "include" }),
+      );
+   });
+
+   it("retains a configured API URL in development", async () => {
+      const { api } = await loadApi(false, "http://localhost:5000/api");
+      mockFetch.mockResolvedValue({
+         ok: true,
+         json: vi.fn().mockResolvedValue({}),
+      });
+
+      await api("/users/", "GET");
+
+      expect(mockFetch).toHaveBeenCalledWith(
+         "http://localhost:5000/api/users/",
+         expect.objectContaining({ credentials: "include" }),
+      );
+   });
+});
+
+afterEach(() => {
+   vi.unstubAllEnvs();
 });
