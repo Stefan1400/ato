@@ -83,14 +83,18 @@ describe('AppRouter', () => {
          expect(screen.getByText('Welcome Page')).toBeInTheDocument();
       });
 
-      it('shows the loading screen while authentication is loading', () => {
-         renderRouter('/', {
+      it.each([
+         ['/', 'Landing Page'],
+         ['/get-started', 'Welcome Page'],
+      ])('renders %s while authentication is loading', (path, page) => {
+         renderRouter(path, {
             user: undefined,
             setUser: vi.fn(),
             isLoading: true,
          });
 
-         expect(screen.getByText('Loading...')).toBeInTheDocument();
+         expect(screen.getByText(page)).toBeInTheDocument();
+         expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
       });
 
       it('redirects authenticated users from / to the dashboard', () => {
@@ -236,14 +240,18 @@ describe('AppRouter', () => {
          expect(screen.queryByText('Login Page')).not.toBeInTheDocument();
       });
 
-      it('shows the loading screen while authentication is loading', () => {
-         renderRouter('/login', {
+      it.each([
+         ['/login', 'Login Page'],
+         ['/signup', 'Register Page'],
+      ])('renders %s while authentication is loading', (path, page) => {
+         renderRouter(path, {
             user: undefined,
             setUser: vi.fn(),
             isLoading: true,
          });
 
-         expect(screen.getByText('Loading...')).toBeInTheDocument();
+         expect(screen.getByText(page)).toBeInTheDocument();
+         expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
       });
    });
 
@@ -309,6 +317,17 @@ describe('AppRouter', () => {
          });
 
          expect(screen.getByText('Not Found Page')).toBeInTheDocument();
+      });
+
+      it('renders the not found page while authentication is loading', () => {
+         renderRouter('/this-route-does-not-exist', {
+            user: undefined,
+            setUser: vi.fn(),
+            isLoading: true,
+         });
+
+         expect(screen.getByText('Not Found Page')).toBeInTheDocument();
+         expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
       });
    });
 });

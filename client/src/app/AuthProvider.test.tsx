@@ -62,6 +62,9 @@ function TestConsumer() {
          <div data-testid="loading">
             {String(context?.isLoading)}
          </div>
+         <div data-testid="initialized">
+            {String(context?.isInitialized)}
+         </div>
       </div>
    );
 };
@@ -71,7 +74,7 @@ describe("AuthProvider", () => {
       vi.clearAllMocks();
    });
 
-   it("shows the loading screen while the user is loading", () => {
+   it("renders children while the user query is loading", () => {
       mockUseGetUser.mockReturnValue({
          data: undefined,
          isLoading: true,
@@ -83,8 +86,24 @@ describe("AuthProvider", () => {
          </AuthProvider>
       );
 
-      expect(screen.getByText("Loading...")).toBeInTheDocument();
-      expect(screen.queryByText("Protected content")).not.toBeInTheDocument();
+      expect(screen.getByText("Protected content")).toBeInTheDocument();
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+   });
+
+   it("exposes authentication loading and initialization state while checking the user", () => {
+      mockUseGetUser.mockReturnValue({
+         data: undefined,
+         isLoading: true,
+      });
+
+      render(
+         <AuthProvider>
+            <TestConsumer />
+         </AuthProvider>
+      );
+
+      expect(screen.getByTestId("loading")).toHaveTextContent("true");
+      expect(screen.getByTestId("initialized")).toHaveTextContent("false");
    });
 
    it("provides the user and loading state through AuthContext", () => {
@@ -101,6 +120,7 @@ describe("AuthProvider", () => {
 
       expect(screen.getByTestId("user")).toHaveTextContent("user@example.com");
       expect(screen.getByTestId("loading")).toHaveTextContent("false");
+      expect(screen.getByTestId("initialized")).toHaveTextContent("true");
    });
 
    it.each([
@@ -164,6 +184,25 @@ describe("AuthProvider", () => {
 
       rerender(
          <MemoryRouter initialEntries={["/analytics"]}>
+            <AuthProvider>
+               <AppRouter />
+            </AuthProvider>
+         </MemoryRouter>
+      );
+
+      expect(screen.getByText("Welcome Page")).toBeInTheDocument();
+      expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+   });
+
+   it("keeps a public page available when the initial user request fails", () => {
+      mockUseGetUser.mockReturnValue({
+         data: undefined,
+         isLoading: false,
+         error: new Error("Backend unavailable"),
+      });
+
+      render(
+         <MemoryRouter initialEntries={["/get-started"]}>
             <AuthProvider>
                <AppRouter />
             </AuthProvider>

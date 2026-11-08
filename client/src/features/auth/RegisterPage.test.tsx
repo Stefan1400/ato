@@ -31,7 +31,10 @@ function LocationDisplay() {
 	return <div data-testid='location'>{location.pathname}</div>;
 };
 
-function renderRegisterPage(user?: { id: number; email: string | null; account_type?: string }) {
+function renderRegisterPage(
+	user?: { id: number; email: string | null; account_type?: string },
+	isInitialized = true,
+) {
 	const setUser = vi.fn();
 
 	const view = render(
@@ -39,6 +42,7 @@ function renderRegisterPage(user?: { id: number; email: string | null; account_t
 			<AuthContext.Provider value={{
 				user,
 				isLoading: false,
+				isInitialized,
 				setUser
 			}}>
 				<RegisterPage />
@@ -101,6 +105,7 @@ describe('RegisterPage', () => {
 				<AuthContext.Provider value={{
 					user: undefined,
 					isLoading: false,
+					isInitialized: true,
 					setUser: vi.fn()
 				}}>
 					<RegisterPage />
@@ -135,10 +140,22 @@ describe('RegisterPage', () => {
 			message: 'Please fix the errors',
 			duration: 3000,
 		});
-      
+
 		expect(mockRegisterMutation).not.toHaveBeenCalled();
 		expect(mockConvertGuestMutation).not.toHaveBeenCalled();
 		expect(screen.getByRole('button', { name: 'Sign up' })).toBeEnabled();
+	});
+
+	it('keeps signup available but prevents submission while authentication is initializing', async () => {
+		renderRegisterPage(undefined, false);
+
+		expect(screen.getByRole('heading', { name: 'Sign up' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Sign up' })).toBeDisabled();
+
+		await submitValidRegistration();
+
+		expect(mockRegisterMutation).not.toHaveBeenCalled();
+		expect(mockConvertGuestMutation).not.toHaveBeenCalled();
 	});
 
 	it('validates email format and password length', async () => {

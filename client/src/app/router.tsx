@@ -15,7 +15,7 @@ function WelcomeRoute({ children }: { children: React.ReactNode }) {
    const auth = useContext(AuthContext);
 
    if (!auth) return null;
-   if (auth.isLoading) return <LoadingScreen text="Loading..." />;
+   if (auth.isLoading) return children;
 
    if (auth.user) {
       return <Navigate to="/dashboard" replace />;
@@ -29,7 +29,7 @@ function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
    const location = useLocation();
 
    if (!auth) return null;
-   if (auth.isLoading) return <LoadingScreen text="Loading..." />;
+   if (auth.isLoading) return children;
 
    if (auth.user) {
       const allowedGuestPaths = ['/signup', '/login'];

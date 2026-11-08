@@ -1,11 +1,11 @@
 import { createContext, useEffect, useState } from "react";
 import type { User } from "../features/auth/auth.types";
 import { useGetUser } from "../features/auth/useAuth";
-import LoadingScreen from "../components/LoadingScreen";
 
 export type AuthContextType = {
    user: User | undefined;
    isLoading: boolean;
+   isInitialized?: boolean;
    setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
 };
 
@@ -29,10 +29,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
    const isAuthLoading = isLoading || !isInitialized;
 
-   if (isAuthLoading) return <LoadingScreen text='Loading...' />
-
    return (
-      <AuthContext.Provider value={{ user, isLoading: isAuthLoading, setUser }}>
+      <AuthContext.Provider value={{ user, isLoading: isAuthLoading, isInitialized, setUser }}>
          { children }
       </AuthContext.Provider>
    );

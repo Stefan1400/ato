@@ -3,28 +3,46 @@ import { registerUser, loginUser, createGuestUser, convertGuestAccount, getUser,
 import { useContext } from "react";
 import { AuthContext } from "../../app/AuthProvider";
 import type { AuthContextType } from "../../app/AuthProvider";
+import type { User } from "./auth.types";
 
-export const useRegister = () => {   
+const updateUserQuery = async (queryClient: ReturnType<typeof useQueryClient>, user: User) => {
+    await queryClient.cancelQueries({ queryKey: ["user"] });
+    queryClient.setQueryData(["user"], user);
+};
+
+export const useRegister = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
-       mutationFn: registerUser
+       mutationFn: registerUser,
+       onSuccess: ({ user }) => updateUserQuery(queryClient, user),
    });
 };
 
 export const useLogin = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
-        mutationFn: loginUser
+        mutationFn: loginUser,
+        onSuccess: ({ user }) => updateUserQuery(queryClient, user),
     });
 };
 
 export const useCreateGuest = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
-        mutationFn: createGuestUser
+        mutationFn: createGuestUser,
+        onSuccess: ({ user }) => updateUserQuery(queryClient, user),
     });
 };
 
 export const useConvertGuest = () => {
+    const queryClient = useQueryClient();
+
     return useMutation({
-        mutationFn: convertGuestAccount
+        mutationFn: convertGuestAccount,
+        onSuccess: ({ user }) => updateUserQuery(queryClient, user),
     });
 };
 

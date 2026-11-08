@@ -106,6 +106,10 @@ describe("useLogin", () => {
       email: "newuser@gmail.com",
       password: "password123",
    };
+   const registerRequest = {
+      email: "newuser@gmail.com",
+      password: "password123",
+   };
 
    beforeEach(() => {
       vi.clearAllMocks();
@@ -130,6 +134,56 @@ describe("useLogin", () => {
          );
       });
    });
+
+   it.each(["login", "registration"])(
+      "prevents the initial user query from overwriting a successful %s",
+      async (authType) => {
+         let resolveInitialUser!: (user: typeof loggedInUser.user) => void;
+         mockGetUser.mockImplementation(
+            () => new Promise((resolve) => {
+               resolveInitialUser = resolve;
+            })
+         );
+         mockLoginUser.mockResolvedValue(loggedInUser);
+         mockRegisterUser.mockResolvedValue(loggedInUser);
+
+         const { result } = renderHook(
+            () => ({
+               userQuery: useGetUser(),
+               login: useLogin(),
+               register: useRegister(),
+            }),
+            { wrapper }
+         );
+
+         await waitFor(() => {
+            expect(mockGetUser).toHaveBeenCalled();
+         });
+
+         await act(async () => {
+            if (authType === "login") {
+               result.current.login.mutate(loginRequest);
+            } else {
+               result.current.register.mutate(registerRequest);
+            }
+         });
+
+         await waitFor(() => {
+            expect(queryClient.getQueryData(["user"])).toEqual(loggedInUser.user);
+         });
+
+         await act(async () => {
+            resolveInitialUser({
+               id: 99,
+               email: "older-user@example.com",
+               account_type: "user",
+            });
+            await Promise.resolve();
+         });
+
+         expect(queryClient.getQueryData(["user"])).toEqual(loggedInUser.user);
+      }
+   );
 });
 
 describe("useCreateGuest", () => {
