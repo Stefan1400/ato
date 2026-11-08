@@ -1,18 +1,13 @@
 const User = require('../models/authModels');
 const { hashValue, compareValue } = require('../utils/hash');
 const { createToken, getJwtSecret } = require('../utils/jwt');
+const { setAuthCookie, clearAuthCookie } = require('../config/authCookie');
 
 const sendAuthResponse = (res, user, statusCode, message) => {
    const { password_hash, ...userData } = user;
    const token = createToken(userData);
 
-   res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      path: '/',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-   });
+   setAuthCookie(res, token);
 
    return res.status(statusCode).json({
       message,
@@ -130,12 +125,7 @@ const convertGuestToUserController = async (req, res, next) => {
 const logoutController = async (req, res, next) => {
    try {
 
-      res.clearCookie('token', {
-         httpOnly: true,
-         secure: process.env.NODE_ENV === 'production',
-         sameSite: 'lax',
-         path: '/',
-      });
+      clearAuthCookie(res);
 
       return res.status(200).json({
          message: 'Successfully logged out'
@@ -157,11 +147,7 @@ const deleteUserController = async (req, res, next) => {
          return res.status(400).json({ message: 'User deletion unsuccessful' });
       };
 
-      res.clearCookie('token', {
-         httpOnly: true,
-         secure: process.env.NODE_ENV === 'production',
-         sameSite: 'lax',
-      });
+      clearAuthCookie(res);
 
       return res.status(200).json({
          message: 'User successfully deleted',

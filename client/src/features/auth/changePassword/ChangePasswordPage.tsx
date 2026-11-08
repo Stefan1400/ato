@@ -73,9 +73,19 @@ function ChangePasswordPage() {
                   newPassword: '',
                   confirmNewPassword: '',
                });
-               logoutMutation.mutate();
-               navigate('/login');
-               showToast({ type: 'success', message: 'Password changed successfully', duration: 3000 });
+               logoutMutation.mutate(undefined, {
+                  onSuccess: () => {
+                     navigate('/login');
+                     showToast({ type: 'success', message: 'Password changed successfully', duration: 3000 });
+                  },
+                  onError: () => {
+                     showToast({
+                        type: 'error',
+                        message: 'Password changed, but sign out failed. Please try signing out again.',
+                        duration: 3000,
+                     });
+                  },
+               });
             },
             onError: () => {
                showToast({ type: 'error', message: 'Failed to change password', duration: 3000 });

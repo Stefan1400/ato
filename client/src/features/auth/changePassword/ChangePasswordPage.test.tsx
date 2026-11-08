@@ -239,19 +239,55 @@ describe('ChangePasswordPage', () => {
          callbacks.onSuccess({ user: userData });
       });
 
+      expect(screen.getByPlaceholderText('Current password')).toHaveValue('');
+      expect(screen.getByPlaceholderText('New password')).toHaveValue('');
+      expect(screen.getByPlaceholderText('Confirm new password')).toHaveValue('');
+
+      expect(mockLogoutMutation).toHaveBeenCalledWith(undefined, expect.objectContaining({
+         onSuccess: expect.any(Function),
+         onError: expect.any(Function),
+      }));
+      expect(mockShowToast).not.toHaveBeenCalled();
+      expect(screen.getByTestId('location')).toHaveTextContent('/change-password');
+
+      const [, logoutCallbacks] = mockLogoutMutation.mock.calls[0];
+      act(() => {
+         logoutCallbacks.onSuccess();
+      });
+
       expect(mockShowToast).toHaveBeenCalledWith({
          type: 'success',
          message: 'Password changed successfully',
          duration: 3000,
       });
-
-      expect(screen.getByPlaceholderText('Current password')).toHaveValue('');
-      expect(screen.getByPlaceholderText('New password')).toHaveValue('');
-      expect(screen.getByPlaceholderText('Confirm new password')).toHaveValue('');
-
-      expect(mockLogoutMutation).toHaveBeenCalled();
-
       expect(screen.getByTestId('location')).toHaveTextContent('/login');
+   });
+
+   it('reports logout failure without navigating or showing successful password-change feedback', async () => {
+      renderChangePasswordPage();
+
+      await submitValidPasswordChange();
+
+      const [, passwordChangeCallbacks] = mockChangePasswordMutation.mock.calls[0];
+      act(() => {
+         passwordChangeCallbacks.onSuccess();
+      });
+
+      const [, logoutCallbacks] = mockLogoutMutation.mock.calls[0];
+      act(() => {
+         logoutCallbacks.onError(new Error('Logout failed'));
+      });
+
+      expect(mockShowToast).toHaveBeenCalledWith({
+         type: 'error',
+         message: 'Password changed, but sign out failed. Please try signing out again.',
+         duration: 3000,
+      });
+      expect(mockShowToast).not.toHaveBeenCalledWith(expect.objectContaining({
+         type: 'success',
+         message: 'Password changed successfully',
+      }));
+      expect(screen.getByTestId('location')).toHaveTextContent('/change-password');
    });
 
    it('shows an error toast when password change fails', async () => {
